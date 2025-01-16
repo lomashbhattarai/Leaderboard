@@ -17,6 +17,7 @@ import Stocks from "./pages/Stocks";
 import StockDetail from "./pages/StockDetail";
 import SharedPortfolio from "./pages/SharedPortfolio";
 import { StockProvider } from "./contexts/StockContext";
+import UserMenu from "./components/UserMenu";
 
 const theme = createTheme();
 
@@ -40,7 +41,7 @@ function App() {
               <LocalizationProvider dateAdapter={AdapterDateFns}>
                 <CssBaseline />
                 <div className="container mx-auto p-4">
-                  <nav className="mb-4">
+                  <nav className="mb-4 flex justify-between items-center">
                     <ul className="flex space-x-4">
                       <li>
                         <Link to="/" className="hover:text-blue-600">
@@ -79,6 +80,7 @@ function App() {
                         </Link>
                       </li>
                     </ul>
+                    <UserMenu />
                   </nav>
 
                   <Routes>
