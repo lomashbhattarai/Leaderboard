@@ -19,6 +19,10 @@ interface CSVModalProps {
   onClose: () => void;
   data: string[][];
   onImport: () => void;
+  customColumn?: {
+    name: string;
+    render: (rowData: string[], tableData: string[][]) => string;
+  };
 }
 
 const CSVModal: React.FC<CSVModalProps> = ({
@@ -26,6 +30,7 @@ const CSVModal: React.FC<CSVModalProps> = ({
   onClose,
   data,
   onImport,
+  customColumn,
 }) => {
   return (
     <Dialog open={isOpen} onClose={onClose} maxWidth="md" fullWidth>
@@ -38,6 +43,7 @@ const CSVModal: React.FC<CSVModalProps> = ({
                 {data[0]?.map((header, index) => (
                   <TableCell key={index}>{header}</TableCell>
                 ))}
+                {customColumn && <TableCell>{customColumn.name}</TableCell>}
               </TableRow>
             </TableHead>
             <TableBody>
@@ -46,6 +52,9 @@ const CSVModal: React.FC<CSVModalProps> = ({
                   {row.map((cell, cellIndex) => (
                     <TableCell key={cellIndex}>{cell}</TableCell>
                   ))}
+                  {customColumn && (
+                    <TableCell>{customColumn.render(row, data)}</TableCell>
+                  )}
                 </TableRow>
               ))}
             </TableBody>

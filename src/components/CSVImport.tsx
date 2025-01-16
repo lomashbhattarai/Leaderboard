@@ -5,11 +5,18 @@ import CSVModal from "./CSVModal";
 interface CSVImportProps {
   handleImport: (csvData: string[][]) => void;
   label?: string;
+  columnsToImport?: string[];
+  customColumn?: {
+    name: string;
+    render: (rowData: string[], tableData: string[][]) => string;
+  };
 }
 
 const CSVImport: React.FC<CSVImportProps> = ({
   handleImport,
   label = "Import CSV",
+  columnsToImport,
+  customColumn,
 }) => {
   const [csvData, setCsvData] = useState<string[][]>([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -22,7 +29,27 @@ const CSVImport: React.FC<CSVImportProps> = ({
         const csv = e.target?.result as string;
         const lines = csv.split("\n");
         const parsedData = lines.map((line) => line.split(","));
-        setCsvData(parsedData);
+        const cleanedData = parsedData.map((row) =>
+          row.map((cell) => cell.replace(/^"(.*)"$/, "$1"))
+        );
+
+        if (
+          columnsToImport &&
+          columnsToImport.length > 0 &&
+          cleanedData.length > 0
+        ) {
+          const headers = cleanedData[0];
+          const columnIndices = columnsToImport
+            .map((col) => headers.indexOf(col))
+            .filter((index) => index !== -1);
+
+          const filteredData = cleanedData.map((row) =>
+            columnIndices.map((index) => row[index])
+          );
+          setCsvData(filteredData);
+        } else {
+          setCsvData(cleanedData);
+        }
         setIsModalOpen(true);
       };
       reader.readAsText(file);
@@ -53,6 +80,7 @@ const CSVImport: React.FC<CSVImportProps> = ({
         onClose={() => setIsModalOpen(false)}
         data={csvData}
         onImport={onImport}
+        customColumn={customColumn}
       />
     </div>
   );

@@ -1,10 +1,13 @@
 import React from "react";
-import { Link, Tab, Typography } from "@mui/material";
+import { Alert, Button, Link, Tab, Typography } from "@mui/material";
 import { ColumnConfig } from "../components/common/TableView";
 import TableView from "../components/common/TableView";
-import { useUsers, useCreateUser, useUser } from "../api/queries";
-import { Link as RouterLink } from "react-router-dom";
+import { useUsers } from "../api/queries";
+import { Link as RouterLink, useNavigate } from "react-router-dom";
 import { Portfolio } from "../types/api";
+import MeroshareImport from "../components/MeroshareImport";
+import { usePortfolio } from "../hooks/usePortfolio";
+import { useAuthContext } from "../contexts/AuthContext";
 
 interface PortfolioPerformance {
   id: string;
@@ -38,6 +41,9 @@ const mockData: PortfolioPerformance[] = [
 
 const Leaderboard: React.FC = () => {
   const { data: users, isLoading, isError } = useUsers();
+  const { addPortfolio } = usePortfolio();
+  const { user } = useAuthContext();
+  const navigate = useNavigate();
 
   const formatPerformance = (value: number) => {
     const color = value >= 0 ? "text-green-600" : "text-red-600";
@@ -83,15 +89,41 @@ const Leaderboard: React.FC = () => {
     },
   ];
 
-  console.log({
-    users,
-  });
-
   return (
     <div>
-      <Typography variant="h4" component="h1" className="mb-6">
-        Portfolio Leaderboard (Coming Soon)
-      </Typography>
+      <Alert severity="info" className="mb-4">
+        Participate in the leaderboard by importing your portfolio. Only the
+        allocation of your portfolio in percentage term will be shared with the
+        community.
+      </Alert>
+
+      {user ? (
+        <MeroshareImport
+          addPortfolio={addPortfolio}
+          columnsToImport={[
+            "S.N",
+            "Scrip",
+            "Current Balance",
+            "Last Transaction Price (LTP)",
+            "Value at LTP",
+          ]}
+        />
+      ) : (
+        <Button
+          variant="contained"
+          color="primary"
+          onClick={() => navigate("/signup")}
+        >
+          Sign up to participate
+        </Button>
+      )}
+
+      <div className="mt-10">
+        <Typography variant="h4" component="h1" className="mb-6">
+          Portfolio Leaderboard (Coming Soon)
+        </Typography>
+      </div>
+
       <TableView columns={columns} tableData={mockData} />
       <div className="mt-10">
         <Typography variant="h4" component="h1" className="mb-6">
@@ -105,20 +137,17 @@ const Leaderboard: React.FC = () => {
               key: "fullName",
             },
             {
-              label: "Email",
-              key: "email",
-            },
-            {
               label: "Portfolios",
               key: "portfolios",
               render: (portfolios) => {
-                return portfolios
-                  .slice(-1)
-                  .map((portfolio: Portfolio) => (
-                    <RouterLink to={`/portfolio/${portfolio.id}`}>
-                      {portfolio.name}
-                    </RouterLink>
-                  ));
+                return portfolios.slice(-1).map((portfolio: Portfolio) => (
+                  <RouterLink
+                    to={`/portfolio/${portfolio.id}`}
+                    className="text-blue-600 hover:underline"
+                  >
+                    {portfolio.name}
+                  </RouterLink>
+                ));
               },
             },
           ]}

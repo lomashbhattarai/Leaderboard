@@ -84,9 +84,11 @@ function App() {
                   </nav>
 
                   <Routes>
+                    {/* <Route path="/" element={<Leaderboard />} /> */}
+                    <Route path="/" element={<Home />} />
+
                     <Route path="/login" element={<Login />} />
                     <Route path="/signup" element={<Signup />} />
-                    <Route path="/" element={<Home />} />
                     <Route
                       path="/portfolio/:id"
                       element={<SharedPortfolio />}

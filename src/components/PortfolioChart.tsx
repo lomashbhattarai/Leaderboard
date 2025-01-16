@@ -7,12 +7,10 @@ import {
   Tooltip,
   Legend,
 } from "recharts";
-import { ScriptInPortfolio } from "../types/portfolio";
 import { formatAmount } from "../utils/helper";
 import { PortfolioStock } from "../types/api";
 
 interface Props {
-  portfolio: ScriptInPortfolio[];
   portfolioStocksFromDb: PortfolioStock[];
 }
 
@@ -26,10 +24,7 @@ const COLORS = [
   "#ffc658",
 ];
 
-const PortfolioChart: React.FC<Props> = ({
-  portfolio,
-  portfolioStocksFromDb,
-}) => {
+const PortfolioChart: React.FC<Props> = ({ portfolioStocksFromDb }) => {
   // Transform portfolio data for the pie chart
   const chartData = portfolioStocksFromDb.map((item) => ({
     name: item.stock?.symbol,

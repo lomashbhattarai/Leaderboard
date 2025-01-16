@@ -8,18 +8,17 @@ import ReportsAnalysis from "../components/ReportsAnalysis";
 import BankReportScanner from "../components/BankReportScanner";
 import { usePortfolio } from "../hooks/usePortfolio";
 import { Alert, Stack } from "@mui/material";
-import TableView from "../components/common/TableView";
 
 const Portfolio: React.FC = () => {
-  const { portfolio, portfolioStocksFromDb, addPortfolio } = usePortfolio();
+  const { portfolioStocksFromDb, addPortfolio } = usePortfolio();
 
   return (
     <div className="portfolio-container">
       <div className="portfolio-grid">
         <Alert severity="info" className="mb-4">
-          Login to your Meroshare account and go to "My Portfolio" page. CLick
+          Login to your Meroshare account and go to "My Portfolio" page. Click
           on the "CSV" button to import the CSV of your portfolio to your
-          computer/mobile. Upload the CSV file by clicking the button below.
+          computer. Upload the CSV file by clicking the button below.
         </Alert>
 
         <MeroshareImport addPortfolio={addPortfolio} />
@@ -37,17 +36,11 @@ const Portfolio: React.FC = () => {
           }}
           className="mt-16"
         >
-          <PortfolioValue portfolio={portfolio} />
-          <PortfolioChart
-            portfolio={portfolio}
-            portfolioStocksFromDb={portfolioStocksFromDb}
-          />
+          <PortfolioValue portfolioStocksFromDb={portfolioStocksFromDb} />
+          <PortfolioChart portfolioStocksFromDb={portfolioStocksFromDb} />
         </Stack>
 
-        <PortfolioTable
-          portfolio={portfolio}
-          portfolioStocksFromDb={portfolioStocksFromDb}
-        />
+        <PortfolioTable portfolioStocksFromDb={portfolioStocksFromDb} />
 
         {/* <StopLoss />
         <ReportsAnalysis />

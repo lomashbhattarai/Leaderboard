@@ -4,7 +4,12 @@ import { ScriptInPortfolio } from "../types/portfolio";
 
 const MeroshareImport: React.FC<{
   addPortfolio: (portfolio: ScriptInPortfolio[]) => void;
-}> = ({ addPortfolio }) => {
+  columnsToImport?: string[];
+  customColumn?: {
+    name: string;
+    render: (rowData: string[], tableData: string[][]) => string;
+  };
+}> = ({ addPortfolio, columnsToImport, customColumn }) => {
   const handleImport = (csvData: string[][]) => {
     const cleanValue = (value: string) => {
       return value?.replace(/^"(.*)"$/, "$1") || "";
@@ -28,6 +33,8 @@ const MeroshareImport: React.FC<{
     <CSVImport
       label="Upload your Meroshare Portfolio CSV"
       handleImport={handleImport}
+      columnsToImport={columnsToImport}
+      customColumn={customColumn}
     />
   );
 };
