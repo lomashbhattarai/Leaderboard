@@ -8,7 +8,7 @@ export const portfolioKeys = {
   all: ['portfolios'] as const,
   lists: () => [...portfolioKeys.all, 'list'] as const,
   detail: (id: number) => [...portfolioKeys.all, 'detail', id] as const,
-  userPortfolios: (userId: number) => [...portfolioKeys.all, 'user', userId] as const,
+  userPortfolios: () => [...portfolioKeys.all, 'userPortfolios'] as const,
   public: (id: number) => [...portfolioKeys.all, 'public', id] as const,
 };
 
@@ -33,12 +33,12 @@ export const usePortfolio = (id: number) => {
   });
 };
 
-export const useUserPortfolios = (userId: number) => {
+export const useUserPortfolios = () => {
   return useQuery<Portfolio[]>({
-    queryKey: portfolioKeys.userPortfolios(userId),
+    queryKey: portfolioKeys.userPortfolios(),
     queryFn: async () => {
-      const { data } = await apiClient.get<Portfolio[]>(`/users/${userId}/portfolios`);
-      return data;
+      const { data } = await apiClient.get<{ status: string, portfolios: Portfolio[] }>(ENDPOINTS.PORTFOLIOS.USER_PORTFOLIO());
+      return data.portfolios;
     },
   });
 };
@@ -65,7 +65,7 @@ export const useCreatePortfolio = () => {
     onSuccess: (data) => {
       queryClient.invalidateQueries({ queryKey: portfolioKeys.lists() });
       queryClient.invalidateQueries({ 
-        queryKey: portfolioKeys.userPortfolios(data.userId) 
+        queryKey: portfolioKeys.userPortfolios() 
       });
     },
   });
@@ -86,7 +86,7 @@ export const useUpdatePortfolio = (id: number) => {
       queryClient.invalidateQueries({ queryKey: portfolioKeys.detail(id) });
       queryClient.invalidateQueries({ queryKey: portfolioKeys.lists() });
       queryClient.invalidateQueries({ 
-        queryKey: portfolioKeys.userPortfolios(data.userId) 
+        queryKey: portfolioKeys.userPortfolios() 
       });
     },
   });

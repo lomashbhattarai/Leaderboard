@@ -74,8 +74,8 @@ const PORTFOLIO_TABLE_HEADERS_FROM_DB = [
     key: "valueAtPreviousClosing",
   },
   {
-    label: "Last Transaction Price",
-    key: "lastTransactionPrice",
+    label: "Last Closing Price",
+    key: "latestClosingPrice",
   },
   {
     label: "Value at LTP",

@@ -25,7 +25,10 @@ const MeroshareImport: React.FC<{
   };
 
   return (
-    <CSVImport label="Import from Meroshare" handleImport={handleImport} />
+    <CSVImport
+      label="Upload your Meroshare Portfolio CSV"
+      handleImport={handleImport}
+    />
   );
 };
 

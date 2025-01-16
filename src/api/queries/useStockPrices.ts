@@ -15,10 +15,10 @@ export const useStockPrices = (stockId: number) => {
   return useQuery<StockPrice[]>({
     queryKey: stockPriceKeys.lists(stockId),
     queryFn: async () => {
-      const { data } = await apiClient.get<StockPrice[]>(
+      const { data } = await apiClient.get<{ status: string; prices: StockPrice[] }>(
         ENDPOINTS.STOCK_PRICES.LIST(stockId)
       );
-      return data;
+      return data.prices;
     },
   });
 };
@@ -27,10 +27,10 @@ export const useStockPrice = (stockId: number, id: number) => {
   return useQuery<StockPrice>({
     queryKey: stockPriceKeys.detail(stockId, id),
     queryFn: async () => {
-      const { data } = await apiClient.get<StockPrice>(
+      const { data } = await apiClient.get<{ status: string; price: StockPrice }>(
         ENDPOINTS.STOCK_PRICES.DETAIL(stockId, id)
       );
-      return data;
+      return data.price;
     },
   });
 };
@@ -41,11 +41,11 @@ export const useCreateStockPrice = (stockId: number) => {
   
   return useMutation<StockPrice, Error, StockPriceDTO>({
     mutationFn: async (priceData) => {
-      const { data } = await apiClient.post<StockPrice>(
+      const { data } = await apiClient.post<{ status: string; price: StockPrice }>(
         ENDPOINTS.STOCK_PRICES.CREATE(stockId),
         priceData
       );
-      return data;
+      return data.price;
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ 
@@ -60,11 +60,11 @@ export const useUpdateStockPrice = (stockId: number, id: number) => {
 
   return useMutation<StockPrice, Error, Partial<StockPriceDTO>>({
     mutationFn: async (priceData) => {
-      const { data } = await apiClient.patch<StockPrice>(
+      const { data } = await apiClient.patch<{ status: string; price: StockPrice }>(
         ENDPOINTS.STOCK_PRICES.UPDATE(stockId, id),
         priceData
       );
-      return data;
+      return data.price;
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ 

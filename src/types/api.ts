@@ -88,6 +88,7 @@ export interface PortfolioStock {
   updatedAt: string
   portfolio?: Portfolio // Optional since it might not always be included
   stock?: Stock // Optional since it might not always be included
+  latestClosingPrice?: number
 }
 
 // For creating/updating a portfolio stock
@@ -127,5 +128,6 @@ export interface BulkPortfolioCreationPayload {
   stocks: Array<{
     stockSymbol: string;
     quantity: number;
+    lastTransactionPrice: number;
   }>;
 }

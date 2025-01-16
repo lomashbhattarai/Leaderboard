@@ -90,7 +90,7 @@ const Leaderboard: React.FC = () => {
   return (
     <div>
       <Typography variant="h4" component="h1" className="mb-6">
-        Portfolio Leaderboard
+        Portfolio Leaderboard (Coming Soon)
       </Typography>
       <TableView columns={columns} tableData={mockData} />
       <div className="mt-10">
@@ -112,11 +112,13 @@ const Leaderboard: React.FC = () => {
               label: "Portfolios",
               key: "portfolios",
               render: (portfolios) => {
-                return portfolios.map((portfolio: Portfolio) => (
-                  <RouterLink to={`/portfolio/${portfolio.id}`}>
-                    {portfolio.name}
-                  </RouterLink>
-                ));
+                return portfolios
+                  .slice(-1)
+                  .map((portfolio: Portfolio) => (
+                    <RouterLink to={`/portfolio/${portfolio.id}`}>
+                      {portfolio.name}
+                    </RouterLink>
+                  ));
               },
             },
           ]}

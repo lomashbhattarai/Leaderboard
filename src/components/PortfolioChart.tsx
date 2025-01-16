@@ -9,9 +9,11 @@ import {
 } from "recharts";
 import { ScriptInPortfolio } from "../types/portfolio";
 import { formatAmount } from "../utils/helper";
+import { PortfolioStock } from "../types/api";
 
 interface Props {
   portfolio: ScriptInPortfolio[];
+  portfolioStocksFromDb: PortfolioStock[];
 }
 
 const COLORS = [
@@ -24,11 +26,14 @@ const COLORS = [
   "#ffc658",
 ];
 
-const PortfolioChart: React.FC<Props> = ({ portfolio }) => {
+const PortfolioChart: React.FC<Props> = ({
+  portfolio,
+  portfolioStocksFromDb,
+}) => {
   // Transform portfolio data for the pie chart
-  const chartData = portfolio.map((item) => ({
-    name: item.script,
-    value: item.valueAtLTP,
+  const chartData = portfolioStocksFromDb.map((item) => ({
+    name: item.stock?.symbol,
+    value: item.quantity * (item.latestClosingPrice || 1),
   }));
 
   if (chartData.length === 0) {

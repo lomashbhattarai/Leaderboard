@@ -23,6 +23,7 @@ export const ENDPOINTS = {
     UPDATE: (id: number) => `/portfolios/${id}`,
     DELETE: (id: number) => `/portfolios/${id}`,
     PUBLIC: (id: number) => `/api/portfolio/${id}/public`,
+    USER_PORTFOLIO: () => `/user/portfolios`,
   },
   PORTFOLIO_STOCKS: {
     LIST: (portfolioId: number) => `/portfolios/${portfolioId}/stocks`,
@@ -32,11 +33,11 @@ export const ENDPOINTS = {
     DELETE: (portfolioId: number, id: number) => `/portfolios/${portfolioId}/stocks/${id}`,
   },
   STOCK_PRICES: {
-    LIST: (stockId: number) => `/stocks/${stockId}/prices`,
-    DETAIL: (stockId: number, id: number) => `/stocks/${stockId}/prices/${id}`,
-    CREATE: (stockId: number) => `/stocks/${stockId}/prices`,
-    UPDATE: (stockId: number, id: number) => `/stocks/${stockId}/prices/${id}`,
-    DELETE: (stockId: number, id: number) => `/stocks/${stockId}/prices/${id}`,
+    LIST: (stockId: number) => `/api/stocks/${stockId}/prices`,
+    DETAIL: (stockId: number, id: number) => `/api/stocks/${stockId}/prices/${id}`,
+    CREATE: (stockId: number) => `/api/stocks/${stockId}/prices`,
+    UPDATE: (stockId: number, id: number) => `/api/stocks/${stockId}/prices/${id}`,
+    DELETE: (stockId: number, id: number) => `/api/stocks/${stockId}/prices/${id}`,
   },
 } as const;
 
