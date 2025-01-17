@@ -2,92 +2,76 @@ import React from "react";
 import { Alert, Button, Link, Tab, Typography } from "@mui/material";
 import { ColumnConfig } from "../components/common/TableView";
 import TableView from "../components/common/TableView";
-import { useUsers } from "../api/queries";
+import { useUsers, useLeaderboard } from "../api/queries";
 import { Link as RouterLink, useNavigate } from "react-router-dom";
 import { Portfolio } from "../types/api";
 import MeroshareImport from "../components/MeroshareImport";
 import { usePortfolio } from "../hooks/usePortfolio";
 import { useAuthContext } from "../contexts/AuthContext";
 
-interface PortfolioPerformance {
-  id: string;
-  rank: number;
-  ownerName: string;
-  description: string;
-  performance: {
-    daily: number;
-    weekly: number;
-    monthly: number;
-    yearly: number;
-  };
-}
+const formatPerformance = (value: number) => {
+  const color = value >= 0 ? "text-green-600" : "text-red-600";
+  return value;
+  return value ? (
+    <span className={color}>
+      {value >= 0 ? "+" : ""}
+      {value.toFixed(2)}%
+    </span>
+  ) : (
+    <span className="text-gray-500">N/A</span>
+  );
+};
 
-// Mock data - replace with actual data from your backend
-const mockData: PortfolioPerformance[] = [
+const columns: ColumnConfig[] = [
   {
-    id: "1",
-    rank: 1,
-    ownerName: "John Doe",
-    description: "Growth Portfolio",
-    performance: {
-      daily: 2.5,
-      weekly: 5.8,
-      monthly: 12.3,
-      yearly: 28.7,
-    },
+    label: "Portfolio",
+    key: "portfolioName",
   },
-  // Add more mock data as needed
+  {
+    label: "1 Day",
+    key: "performance1D",
+    align: "right",
+    getValue: (row) => row.performance1D,
+    render: (value) => formatPerformance(value),
+  },
+  {
+    label: "1 Week",
+    key: "performance1W",
+    align: "right",
+    getValue: (row) => row.performance1W,
+    render: (value) => formatPerformance(value),
+  },
+  {
+    label: "1 Month",
+    key: "performance1M",
+    align: "right",
+    getValue: (row) => row.performance1M,
+    render: (value) => formatPerformance(value),
+  },
+  {
+    label: "1 Year",
+    key: "performance1Y",
+    align: "right",
+    getValue: (row) => row.performance1Y,
+    render: (value) => formatPerformance(value),
+  },
 ];
 
 const Leaderboard: React.FC = () => {
-  const { data: users, isLoading, isError } = useUsers();
+  const {
+    data: users,
+    isLoading: isUsersLoading,
+    isError: isUsersError,
+  } = useUsers();
+  const {
+    data: leaderboardData,
+    isLoading: isLeaderboardLoading,
+    isError: isLeaderboardError,
+  } = useLeaderboard();
+
   const { addPortfolio } = usePortfolio();
   const { user } = useAuthContext();
   const navigate = useNavigate();
-
-  const formatPerformance = (value: number) => {
-    const color = value >= 0 ? "text-green-600" : "text-red-600";
-    return (
-      <span className={color}>
-        {value >= 0 ? "+" : ""}
-        {value.toFixed(2)}%
-      </span>
-    );
-  };
-
-  const columns: ColumnConfig[] = [
-    { label: "Rank", key: "rank" },
-    { label: "Owner", key: "ownerName" },
-    { label: "Description", key: "description" },
-    {
-      label: "1 Day",
-      key: "performance.daily",
-      align: "right",
-      getValue: (row) => row.performance.daily,
-      render: (value) => formatPerformance(value),
-    },
-    {
-      label: "1 Week",
-      key: "performance.weekly",
-      align: "right",
-      getValue: (row) => row.performance.weekly,
-      render: (value) => formatPerformance(value),
-    },
-    {
-      label: "1 Month",
-      key: "performance.monthly",
-      align: "right",
-      getValue: (row) => row.performance.monthly,
-      render: (value) => formatPerformance(value),
-    },
-    {
-      label: "1 Year",
-      key: "performance.yearly",
-      align: "right",
-      getValue: (row) => row.performance.weekly,
-      render: (value) => formatPerformance(value),
-    },
-  ];
 
   return (
     <div>
@@ -120,38 +104,46 @@ const Leaderboard: React.FC = () => {
 
       <div className="mt-10">
         <Typography variant="h4" component="h1" className="mb-6">
-          Portfolio Leaderboard (Coming Soon)
+          Portfolio Leaderboard
         </Typography>
+        {isLeaderboardError ? (
+          <Alert severity="error">Failed to load leaderboard data</Alert>
+        ) : (
+          <TableView columns={columns} tableData={leaderboardData || []} />
+        )}
       </div>
 
-      <TableView columns={columns} tableData={mockData} />
       <div className="mt-10">
         <Typography variant="h4" component="h1" className="mb-6">
           Users{" "}
         </Typography>
-        <TableView
-          tableData={users || []}
-          columns={[
-            {
-              label: "Name",
-              key: "fullName",
-            },
-            {
-              label: "Portfolios",
-              key: "portfolios",
-              render: (portfolios) => {
-                return portfolios.slice(-1).map((portfolio: Portfolio) => (
-                  <RouterLink
-                    to={`/portfolio/${portfolio.id}`}
-                    className="text-blue-600 hover:underline"
-                  >
-                    {portfolio.name}
-                  </RouterLink>
-                ));
+        {isUsersError ? (
+          <Alert severity="error">Failed to load users data</Alert>
+        ) : (
+          <TableView
+            tableData={users || []}
+            columns={[
+              {
+                label: "Name",
+                key: "fullName",
               },
-            },
-          ]}
-        />
+              {
+                label: "Portfolios",
+                key: "portfolios",
+                render: (portfolios) => {
+                  return portfolios.slice(-1).map((portfolio: Portfolio) => (
+                    <RouterLink
+                      to={`/portfolio/${portfolio.id}`}
+                      className="text-blue-600 hover:underline"
+                    >
+                      {portfolio.name}
+                    </RouterLink>
+                  ));
+                },
+              },
+            ]}
+          />
+        )}
       </div>
     </div>
   );

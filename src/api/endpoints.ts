@@ -42,3 +42,7 @@ export const ENDPOINTS = {
 } as const;
 
 export const API_URL = "http://localhost:3333/api"; 
+
+export const LEADERBOARD = {
+  GET: '/public/portfolios/leaderboard'
+} as const; 

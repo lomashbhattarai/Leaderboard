@@ -131,3 +131,16 @@ export interface BulkPortfolioCreationPayload {
     lastTransactionPrice: number;
   }>;
 }
+
+export interface LeaderboardEntry {
+  portfolioId: number;
+  portfolioName: string;
+  performance1D: number;
+  performance1W: number;
+  performance1M: number;
+  performance1Y: number;
+  rank1D: number;
+  rank1W: number;
+  rank1M: number;
+  rank1Y: number;
+}
