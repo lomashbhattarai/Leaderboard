@@ -3,7 +3,8 @@ import { Button } from "@mui/material";
 import CSVModal from "./CSVModal";
 
 interface CSVImportProps {
-  handleImport: (csvData: string[][]) => void;
+  handleImport?: (csvData: string[][]) => void;
+  handleFileImport?: (file: File) => void;
   label?: string;
   columnsToImport?: string[];
   customColumn?: {
@@ -14,16 +15,19 @@ interface CSVImportProps {
 
 const CSVImport: React.FC<CSVImportProps> = ({
   handleImport,
+  handleFileImport,
   label = "Import CSV",
   columnsToImport,
   customColumn,
 }) => {
+  const [csvFile, setCsvFile] = useState<File | null>(null);
   const [csvData, setCsvData] = useState<string[][]>([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const handleFileUpload = (event: ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (file) {
+      setCsvFile(file);
       const reader = new FileReader();
       reader.onload = (e) => {
         const csv = e.target?.result as string;
@@ -57,7 +61,10 @@ const CSVImport: React.FC<CSVImportProps> = ({
   };
 
   const onImport = () => {
-    handleImport(csvData);
+    handleImport?.(csvData);
+    if (csvFile) {
+      handleFileImport?.(csvFile);
+    }
     setIsModalOpen(false);
   };
 

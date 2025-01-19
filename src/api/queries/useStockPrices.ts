@@ -90,4 +90,19 @@ export const useDeleteStockPrice = (stockId: number) => {
       });
     },
   });
+};
+
+export const useUploadStockPrices = () => {
+  return useMutation({
+    mutationFn: (data: File) => {
+      const formData = new FormData();
+      formData.append('csv_file', data);
+      
+      return apiClient.post(ENDPOINTS.STOCK_PRICES.UPLOAD_CSV, formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      });
+    },
+  });
 }; 

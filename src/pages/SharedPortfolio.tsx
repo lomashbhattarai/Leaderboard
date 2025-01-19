@@ -1,5 +1,5 @@
 import React from "react";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import {
   PieChart,
   Pie,
@@ -43,7 +43,14 @@ const SharedPortfolio: React.FC = () => {
             <tbody>
               {publicPortfolio.portfolioStocks?.map((stockInPortfolio) => (
                 <tr key={stockInPortfolio.symbol}>
-                  <td>{stockInPortfolio.symbol}</td>
+                  <td>
+                    <Link
+                      to={`/stock/${stockInPortfolio.symbol}`}
+                      className="hover:text-blue-600"
+                    >
+                      {stockInPortfolio.symbol}
+                    </Link>
+                  </td>
                   <td className="text-right">
                     {stockInPortfolio.percentage.toFixed(2)}%
                   </td>

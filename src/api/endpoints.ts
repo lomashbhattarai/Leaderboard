@@ -38,6 +38,7 @@ export const ENDPOINTS = {
     CREATE: (stockId: number) => `/api/stocks/${stockId}/prices`,
     UPDATE: (stockId: number, id: number) => `/api/stocks/${stockId}/prices/${id}`,
     DELETE: (stockId: number, id: number) => `/api/stocks/${stockId}/prices/${id}`,
+    UPLOAD_CSV: '/api/stocks/prices/upload-csv',
   },
 } as const;
 

@@ -26,6 +26,20 @@ const columns: ColumnConfig[] = [
   {
     label: "Portfolio",
     key: "portfolioName",
+    render: (value, row) => {
+      return (
+        <RouterLink
+          to={`/portfolio/${row.portfolioId}`}
+          className="text-blue-600 hover:underline"
+        >
+          {value}
+        </RouterLink>
+      );
+    },
+  },
+  {
+    label: "Owner",
+    key: "userName",
   },
   {
     label: "1 Day",
@@ -113,7 +127,7 @@ const Leaderboard: React.FC = () => {
         )}
       </div>
 
-      <div className="mt-10">
+      {/* <div className="mt-10">
         <Typography variant="h4" component="h1" className="mb-6">
           Users{" "}
         </Typography>
@@ -144,7 +158,7 @@ const Leaderboard: React.FC = () => {
             ]}
           />
         )}
-      </div>
+      </div> */}
     </div>
   );
 };
