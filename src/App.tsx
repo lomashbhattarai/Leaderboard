@@ -138,13 +138,26 @@ function Home() {
     <div>
       <h1 className="text-3xl font-bold mb-4">Welcome to the Leaderboard</h1>
       <p>Choose an option from the navigation menu above.</p>
-
       {/* <div>TODO - wealth tracker</div>
       <div>Tax calculator</div>
       <div>Expense management</div>
       <div>Feature request</div>
       <div>Books: to be read</div>
       <div>Books: recommended</div> */}
+      <strong>New Features Coming Soon:</strong>
+      <ul>
+        <li>Set stop loss for a stock (auto sell)</li>
+        <li>Set target price for a stock (auto buy/sell)</li>
+        <li>1d, 1w, 1m, 1y performance of individual stock</li>
+        <li>1d, 1w, 1m, 1y performance of portfolio</li>
+        <li>1d, 1w, 1m, 1y performance of leaderboard</li>
+        <li>tags for stocks</li>
+        <li> communtiy</li>
+        <li> Set portfolio to private/public</li>
+        <li> pay to view portfolio</li>
+        <li> Add stocks to portfolio from Website</li>
+        <li> Edit stocks in portfolio from Website</li>
+      </ul>
     </div>
   );
 }

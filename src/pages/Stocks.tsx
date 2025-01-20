@@ -25,10 +25,10 @@ const Stocks = () => {
         <h1 className="text-2xl font-bold">
           Nepal Stock Exchange Listed Companies
         </h1>
-        {/* <CSVImport
+        <CSVImport
           handleFileImport={handleFileImport}
           label="Upload Today's Prices"
-        /> */}
+        />
       </div>
       <div className="grid gap-4">
         <TableView
