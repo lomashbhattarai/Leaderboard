@@ -2,6 +2,7 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { apiClient } from '../client';
 import { ENDPOINTS } from '../endpoints';
 import type { PortfolioStock, PortfolioStockDTO } from '../../types/api';
+import { portfolioKeys } from './usePortfolios';
 
 // Query keys
 export const portfolioStockKeys = {
@@ -51,6 +52,9 @@ export const useCreatePortfolioStock = (portfolioId: number) => {
       queryClient.invalidateQueries({ 
         queryKey: portfolioStockKeys.lists(portfolioId) 
       });
+      queryClient.invalidateQueries({ 
+        queryKey: portfolioKeys.userPortfolios() 
+      });
     },
   });
 };
@@ -73,6 +77,9 @@ export const useUpdatePortfolioStock = (portfolioId: number, id: number) => {
       queryClient.invalidateQueries({ 
         queryKey: portfolioStockKeys.lists(portfolioId) 
       });
+      queryClient.invalidateQueries({ 
+        queryKey: portfolioKeys.userPortfolios() 
+      });
     },
   });
 };
@@ -87,6 +94,9 @@ export const useDeletePortfolioStock = (portfolioId: number) => {
     onSuccess: () => {
       queryClient.invalidateQueries({ 
         queryKey: portfolioStockKeys.lists(portfolioId) 
+      });
+      queryClient.invalidateQueries({ 
+        queryKey: portfolioKeys.userPortfolios() 
       });
     },
   });

@@ -82,8 +82,8 @@ export interface PortfolioStock {
   portfolioId: number
   stockId: number
   quantity: number
-  buyPrice: number
-  buyDate: string // DateTime will be serialized as ISO string
+  buyPrice?: number
+  buyDate?: string // DateTime will be serialized as ISO string
   createdAt: string
   updatedAt: string
   portfolio?: Portfolio // Optional since it might not always be included
@@ -96,8 +96,8 @@ export interface PortfolioStockDTO {
   portfolioId: number
   stockId: number
   quantity: number
-  buyPrice: number
-  buyDate: string
+  buyPrice?: number
+  buyDate?: string
 }
 
 export interface StockPrice {

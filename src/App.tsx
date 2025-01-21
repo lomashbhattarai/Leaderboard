@@ -48,22 +48,6 @@ function App() {
                           Home
                         </Link>
                       </li>
-                      {/* <li>
-                        <Link
-                          to="/earnings-tracker"
-                          className="hover:text-blue-600"
-                        >
-                          Earnings Tracker
-                        </Link>
-                      </li>
-                      <li>
-                        <Link
-                          to="/wealth-tracker"
-                          className="hover:text-blue-600"
-                        >
-                          Wealth Tracker
-                        </Link>
-                      </li> */}
                       <li>
                         <Link to="/portfolio" className="hover:text-blue-600">
                           Meroshare Portfolio
@@ -77,6 +61,22 @@ function App() {
                       <li>
                         <Link to="/stocks" className="hover:text-blue-600">
                           Stocks
+                        </Link>
+                      </li>
+                      <li>
+                        <Link
+                          to="/earnings-tracker"
+                          className="hover:text-blue-600"
+                        >
+                          Earnings Tracker
+                        </Link>
+                      </li>
+                      <li>
+                        <Link
+                          to="/wealth-tracker"
+                          className="hover:text-blue-600"
+                        >
+                          Wealth Tracker
                         </Link>
                       </li>
                     </ul>
@@ -155,8 +155,6 @@ function Home() {
         <li> communtiy</li>
         <li> Set portfolio to private/public</li>
         <li> pay to view portfolio</li>
-        <li> Add stocks to portfolio from Website</li>
-        <li> Edit stocks in portfolio from Website</li>
       </ul>
     </div>
   );

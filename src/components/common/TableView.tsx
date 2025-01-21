@@ -7,8 +7,10 @@ import {
   TableRow,
   Paper,
   TableFooter,
-  Button,
+  IconButton,
 } from "@mui/material";
+import EditIcon from "@mui/icons-material/Edit";
+import DeleteIcon from "@mui/icons-material/Delete";
 
 export interface ColumnConfig {
   label: string;
@@ -18,19 +20,27 @@ export interface ColumnConfig {
   getValue?: (row: any) => any;
 }
 
+interface TableViewProps {
+  columns: ColumnConfig[];
+  tableData: any[];
+  title?: string;
+  onDeleteTransaction?: (index: number) => void;
+  showFooter?: boolean;
+  onEdit?: (row: any) => void;
+  onDelete?: (id: number) => void;
+  showActions?: boolean;
+}
+
 const TableView = ({
   columns,
   tableData,
   title,
   onDeleteTransaction,
   showFooter = false,
-}: {
-  columns: ColumnConfig[];
-  tableData: any[];
-  title?: string;
-  onDeleteTransaction?: (index: number) => void;
-  showFooter?: boolean;
-}) => {
+  onEdit,
+  onDelete,
+  showActions = false,
+}: TableViewProps) => {
   return (
     <TableContainer component={Paper}>
       {title && <h2>{title}</h2>}
@@ -42,7 +52,9 @@ const TableView = ({
                 {column.label}
               </TableCell>
             ))}
-            {onDeleteTransaction && <TableCell />}
+            {(showActions || onDeleteTransaction) && (
+              <TableCell>Actions</TableCell>
+            )}
           </TableRow>
         </TableHead>
         <TableBody>
@@ -62,11 +74,35 @@ const TableView = ({
                     : row[column.key]}
                 </TableCell>
               ))}
-              {onDeleteTransaction && (
+              {(showActions || onDeleteTransaction) && (
                 <TableCell>
-                  <Button onClick={() => onDeleteTransaction(rowIndex)}>
-                    Delete
-                  </Button>
+                  {showActions && (
+                    <>
+                      <IconButton
+                        onClick={() => onEdit?.(row)}
+                        size="small"
+                        aria-label="edit"
+                      >
+                        <EditIcon />
+                      </IconButton>
+                      <IconButton
+                        onClick={() => onDelete?.(row.id)}
+                        size="small"
+                        aria-label="delete"
+                      >
+                        <DeleteIcon />
+                      </IconButton>
+                    </>
+                  )}
+                  {onDeleteTransaction && !showActions && (
+                    <IconButton
+                      onClick={() => onDeleteTransaction(rowIndex)}
+                      size="small"
+                      aria-label="delete"
+                    >
+                      <DeleteIcon />
+                    </IconButton>
+                  )}
                 </TableCell>
               )}
             </TableRow>
@@ -79,7 +115,7 @@ const TableView = ({
                 Total:
               </TableCell>
               <TableCell>total X</TableCell>
-              {onDeleteTransaction && <TableCell />}
+              {(showActions || onDeleteTransaction) && <TableCell />}
             </TableRow>
           </TableFooter>
         )}

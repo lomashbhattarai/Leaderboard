@@ -42,16 +42,25 @@ const PORTFOLIO_TABLE_HEADERS_FROM_DB = [
   },
 ];
 
-const PortfolioTable: React.FC<{
+interface PortfolioTableProps {
   portfolioStocksFromDb: PortfolioStock[];
-}> = ({ portfolioStocksFromDb }) => {
+  onEdit: (stock: PortfolioStock) => void;
+  onDelete: (stockId: number) => void;
+}
+
+const PortfolioTable: React.FC<PortfolioTableProps> = ({
+  portfolioStocksFromDb,
+  onEdit,
+  onDelete,
+}) => {
   return (
-    <div>
-      <TableView
-        columns={PORTFOLIO_TABLE_HEADERS_FROM_DB}
-        tableData={portfolioStocksFromDb}
-      />
-    </div>
+    <TableView
+      columns={PORTFOLIO_TABLE_HEADERS_FROM_DB}
+      tableData={portfolioStocksFromDb}
+      onEdit={onEdit}
+      onDelete={onDelete}
+      showActions={true}
+    />
   );
 };
 
