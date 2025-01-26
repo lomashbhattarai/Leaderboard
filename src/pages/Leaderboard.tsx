@@ -9,16 +9,18 @@ import MeroshareImport from "../components/MeroshareImport";
 import { usePortfolio } from "../hooks/usePortfolio";
 import { useAuthContext } from "../contexts/AuthContext";
 
-const formatPerformance = (value: number) => {
-  const color = value >= 0 ? "text-green-600" : "text-red-600";
-  return value;
-  return value ? (
+const formatPerformance = (value: number | string) => {
+  if (!value && value !== 0) {
+    return <span className="text-gray-500">N/A</span>;
+  }
+
+  const numValue = typeof value === "string" ? parseFloat(value) : value;
+  const color = numValue >= 0 ? "text-green-600" : "text-red-600";
+  return (
     <span className={color}>
-      {value >= 0 ? "+" : ""}
-      {value.toFixed(2)}%
+      {numValue >= 0 ? "+" : ""}
+      {numValue.toFixed(2)}%
     </span>
-  ) : (
-    <span className="text-gray-500">N/A</span>
   );
 };
 
