@@ -8,6 +8,7 @@ import { Portfolio } from "../types/api";
 import MeroshareImport from "../components/MeroshareImport";
 import { usePortfolio } from "../hooks/usePortfolio";
 import { useAuthContext } from "../contexts/AuthContext";
+import { formatDistanceToNow } from "date-fns";
 
 const formatPerformance = (value: number | string) => {
   if (!value && value !== 0) {
@@ -70,6 +71,13 @@ const columns: ColumnConfig[] = [
     align: "right",
     getValue: (row) => row.performance1Y,
     render: (value) => formatPerformance(value),
+  },
+  {
+    label: "Updated At",
+    key: "updatedAt",
+    render: (value) => {
+      return `Updated ${formatDistanceToNow(new Date(value))} ago`;
+    },
   },
 ];
 
