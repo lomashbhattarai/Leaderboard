@@ -9,6 +9,9 @@ import {
   ResponsiveContainer,
 } from "recharts";
 import { usePublicPortfolio } from "../api/queries/usePortfolios";
+import TableView, { ColumnConfig } from "../components/common/TableView";
+import { Link as RouterLink } from "react-router-dom";
+import { formatPerformance } from "./Leaderboard";
 
 const SharedPortfolio: React.FC = () => {
   const { id } = useParams<{ id: string }>();
@@ -18,6 +21,45 @@ const SharedPortfolio: React.FC = () => {
     isLoading,
     error,
   } = usePublicPortfolio(Number(id));
+
+  const columns: ColumnConfig[] = [
+    {
+      label: "Symbol",
+      key: "symbol",
+      render: (value) => (
+        <RouterLink
+          to={`/stock/${value}`}
+          className="text-blue-600 hover:underline"
+        >
+          {value}
+        </RouterLink>
+      ),
+    },
+    {
+      label: "1D",
+      key: "dailyPerformancePercentage",
+      align: "right",
+      render: () => "NA",
+    },
+    {
+      label: "1W",
+      key: "weeklyPerformancePercentage",
+      align: "right",
+      render: (value) => formatPerformance(value),
+    },
+    {
+      label: "1M",
+      key: "monthlyPerformancePercentage",
+      align: "right",
+      render: () => "NA",
+    },
+    {
+      label: "Allocation (%)",
+      key: "percentage",
+      align: "right",
+      render: (value) => `${value.toFixed(2)}%`,
+    },
+  ];
 
   if (isLoading) return <div>Loading...</div>;
   if (error) return <div>Error loading portfolio</div>;
@@ -33,31 +75,10 @@ const SharedPortfolio: React.FC = () => {
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div className="bg-white p-4 rounded shadow">
           <h2 className="text-xl font-semibold mb-3">Allocation Table</h2>
-          <table className="w-full">
-            <thead>
-              <tr>
-                <th className="text-left">Symbol</th>
-                <th className="text-right">Allocation (%)</th>
-              </tr>
-            </thead>
-            <tbody>
-              {publicPortfolio.portfolioStocks?.map((stockInPortfolio) => (
-                <tr key={stockInPortfolio.symbol}>
-                  <td>
-                    <Link
-                      to={`/stock/${stockInPortfolio.symbol}`}
-                      className="hover:text-blue-600"
-                    >
-                      {stockInPortfolio.symbol}
-                    </Link>
-                  </td>
-                  <td className="text-right">
-                    {stockInPortfolio.percentage.toFixed(2)}%
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
+          <TableView
+            columns={columns}
+            tableData={publicPortfolio.portfolioStocks || []}
+          />
         </div>
 
         <div className="bg-white p-4 rounded shadow">

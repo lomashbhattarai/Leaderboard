@@ -69,6 +69,7 @@ export interface PublicPortfolioStock {
   name: string
   symbol: string
   percentage: number
+  weeklyPerformancePercentage: number
 }
 
 // For creating/updating a portfolio

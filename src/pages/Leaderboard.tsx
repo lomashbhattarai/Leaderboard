@@ -10,7 +10,7 @@ import { usePortfolio } from "../hooks/usePortfolio";
 import { useAuthContext } from "../contexts/AuthContext";
 import { formatDistanceToNow } from "date-fns";
 
-const formatPerformance = (value: number | string) => {
+export const formatPerformance = (value: number | string) => {
   if (!value && value !== 0) {
     return <span className="text-gray-500">N/A</span>;
   }
