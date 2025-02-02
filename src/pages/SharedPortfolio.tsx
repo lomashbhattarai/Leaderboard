@@ -4,7 +4,7 @@ import {
   PieChart,
   Pie,
   Cell,
-  Tooltip,
+  Tooltip as RechartTooltip,
   Legend,
   ResponsiveContainer,
 } from "recharts";
@@ -12,6 +12,8 @@ import { usePublicPortfolio } from "../api/queries/usePortfolios";
 import TableView, { ColumnConfig } from "../components/common/TableView";
 import { Link as RouterLink } from "react-router-dom";
 import { formatPerformance } from "./Leaderboard";
+import Tooltip from "../components/common/Tooltip";
+import { format } from "date-fns";
 
 const SharedPortfolio: React.FC = () => {
   const { id } = useParams<{ id: string }>();
@@ -36,6 +38,12 @@ const SharedPortfolio: React.FC = () => {
       ),
     },
     {
+      label: "Closing Price",
+      key: "latestPrice",
+      align: "right",
+      render: (value) => `${value}`,
+    },
+    {
       label: "1D",
       key: "dailyPerformancePercentage",
       align: "right",
@@ -45,7 +53,28 @@ const SharedPortfolio: React.FC = () => {
       label: "1W",
       key: "weeklyPerformancePercentage",
       align: "right",
-      render: (value) => formatPerformance(value),
+      render: (value, row) => {
+        const { weekAgoPrice, latestPrice, weekAgoDate, latestDate } = row;
+
+        const formattedValue = formatPerformance(value);
+        return (
+          <Tooltip
+            content={
+              <div className="text-xs text-gray-300 mt-1">
+                <div>
+                  {format(new Date(weekAgoDate), "do MMMM")}: {weekAgoPrice}
+                </div>
+                <div>
+                  {format(new Date(latestDate), "do MMMM")}: {latestPrice}
+                </div>
+              </div>
+            }
+            position="top"
+          >
+            {formattedValue}
+          </Tooltip>
+        );
+      },
     },
     {
       label: "1M",
@@ -104,7 +133,7 @@ const SharedPortfolio: React.FC = () => {
                   />
                 ))}
               </Pie>
-              <Tooltip />
+              <RechartTooltip />
               {/* <Legend /> */}
             </PieChart>
           </ResponsiveContainer>

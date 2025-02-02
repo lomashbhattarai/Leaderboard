@@ -42,7 +42,18 @@ const TableView = ({
   showActions = false,
 }: TableViewProps) => {
   return (
-    <TableContainer component={Paper}>
+    <TableContainer
+      component={Paper}
+      sx={{
+        overflow: "visible",
+        "& .MuiTable-root": {
+          overflow: "visible",
+        },
+        "& .MuiTableCell-root": {
+          overflow: "visible",
+        },
+      }}
+    >
       {title && <h2>{title}</h2>}
       <Table size="small">
         <TableHead>
