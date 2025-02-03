@@ -90,14 +90,14 @@ const PortfolioStockForm: React.FC<PortfolioStockFormProps> = ({
           onChange={handleChange}
         />
         <TextField
-          label="Buy Price"
+          label="Buy Price (Optional)"
           name="buyPrice"
           type="number"
           value={formData.buyPrice || ""}
           onChange={handleChange}
         />
         <DatePicker
-          label="Buy Date"
+          label="Buy Date (Optional)"
           value={formData.buyDate ? new Date(formData.buyDate) : null}
           onChange={(date) =>
             handleChange(null, "buyDate", date?.toISOString())
