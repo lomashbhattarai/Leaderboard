@@ -6,6 +6,8 @@ interface CSVImportProps {
   handleImport?: (csvData: string[][]) => void;
   handleFileImport?: (file: File) => void;
   label?: string;
+  variant?: "contained" | "outlined" | "text";
+  color?: "primary" | "secondary" | "error" | "info" | "success" | "warning";
   columnsToImport?: string[];
   customColumn?: {
     name: string;
@@ -19,6 +21,8 @@ const CSVImport: React.FC<CSVImportProps> = ({
   label = "Import CSV",
   columnsToImport,
   customColumn,
+  variant = "contained",
+  color = "primary",
 }) => {
   const [csvFile, setCsvFile] = useState<File | null>(null);
   const [csvData, setCsvData] = useState<string[][]>([]);
@@ -78,7 +82,7 @@ const CSVImport: React.FC<CSVImportProps> = ({
         onChange={handleFileUpload}
       />
       <label htmlFor="raised-button-file">
-        <Button variant="contained" component="span">
+        <Button variant={variant} color={color} component="span">
           {label}
         </Button>
       </label>

@@ -11,6 +11,8 @@ import {
 } from "@mui/material";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
+import { useTheme } from "../../contexts/ThemeContext";
+import { getCommonStyles } from "../../themes/commonComponents";
 
 export interface ColumnConfig {
   label: string;
@@ -41,16 +43,43 @@ const TableView = ({
   onDelete,
   showActions = false,
 }: TableViewProps) => {
+  const { currentTheme } = useTheme();
+  const styles = getCommonStyles(currentTheme);
+
   return (
     <TableContainer
       component={Paper}
       sx={{
-        overflow: "visible",
+        ...styles.table.container,
         "& .MuiTable-root": {
-          overflow: "visible",
+          borderCollapse: "separate",
+          borderSpacing: "0",
         },
         "& .MuiTableCell-root": {
-          overflow: "visible",
+          ...styles.table.cell,
+        },
+        "& .MuiTableHead-root": {
+          position: "sticky",
+          top: 0,
+          zIndex: 2,
+        },
+        "& .MuiTableHead-root .MuiTableRow-root": {
+          ...styles.table.header,
+        },
+        "& .MuiTableBody-root .MuiTableRow-root": {
+          ...styles.table.row,
+        },
+        "& .MuiTableFooter-root .MuiTableRow-root": {
+          ...styles.table.footer,
+        },
+        "& .MuiIconButton-root": {
+          ...styles.interactive.button,
+          padding: "4px",
+          marginLeft: "4px",
+        },
+        "& .MuiTableRow-root:focus-within": {
+          outline: `2px solid ${currentTheme.accent.secondary}`,
+          outlineOffset: "-2px",
         },
       }}
     >

@@ -120,8 +120,29 @@ const Portfolio: React.FC = () => {
           computer. Upload the CSV file by clicking the button below.
         </Alert>
 
-        <MeroshareImport addPortfolio={addPortfolio} />
         {/* <div>Print Portfolio summary</div> */}
+
+        <Stack direction="row" spacing={2} className="mb-4" alignItems="center">
+          <Button
+            variant="contained"
+            color="primary"
+            onClick={() => setIsDrawerOpen(true)}
+          >
+            Add Stock to Portfolio
+          </Button>
+          <Typography color="text.secondary">Or</Typography>
+          <MeroshareImport
+            addPortfolio={addPortfolio}
+            buttonVariant="outlined"
+            buttonColor="primary"
+          />
+        </Stack>
+
+        <PortfolioTable
+          portfolioStocksFromDb={portfolioStocksFromDb}
+          onEdit={handleEdit}
+          onDelete={handleDelete}
+        />
 
         <Stack
           direction={{ xs: "column", md: "row" }}
@@ -138,22 +159,6 @@ const Portfolio: React.FC = () => {
           <PortfolioValue portfolioStocksFromDb={portfolioStocksFromDb} />
           <PortfolioChart portfolioStocksFromDb={portfolioStocksFromDb} />
         </Stack>
-
-        <Stack direction="row" spacing={2} className="mb-4">
-          <Button
-            variant="contained"
-            color="primary"
-            onClick={() => setIsDrawerOpen(true)}
-          >
-            Add Stock to Portfolio
-          </Button>
-        </Stack>
-
-        <PortfolioTable
-          portfolioStocksFromDb={portfolioStocksFromDb}
-          onEdit={handleEdit}
-          onDelete={handleDelete}
-        />
 
         {stockDrawer}
 

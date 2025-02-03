@@ -1,5 +1,14 @@
 import React from "react";
-import { Alert, Button, Link, Tab, Typography } from "@mui/material";
+import {
+  Alert,
+  Button,
+  Link,
+  Tab,
+  Typography,
+  IconButton,
+  Menu,
+  MenuItem,
+} from "@mui/material";
 import { ColumnConfig } from "../components/common/TableView";
 import TableView from "../components/common/TableView";
 import { useUsers, useLeaderboard } from "../api/queries";
@@ -9,6 +18,8 @@ import MeroshareImport from "../components/MeroshareImport";
 import { usePortfolio } from "../hooks/usePortfolio";
 import { useAuthContext } from "../contexts/AuthContext";
 import { formatDistanceToNow } from "date-fns";
+import PaletteIcon from "@mui/icons-material/Palette";
+import { spaceThemes } from "../themes/spaceThemes";
 
 export const formatPerformance = (value: number | string) => {
   if (!value && value !== 0) {
@@ -99,6 +110,12 @@ const Leaderboard: React.FC = () => {
 
   return (
     <div>
+      <div className="flex justify-between items-center mb-4">
+        <Typography variant="h4" component="h1">
+          NEPSE Leaderboard
+        </Typography>
+      </div>
+
       <Alert severity="info" className="mb-4">
         Participate in the leaderboard by importing your portfolio. Only the
         allocation of your portfolio in percentage term will be shared with the
@@ -127,48 +144,14 @@ const Leaderboard: React.FC = () => {
       )}
 
       <div className="mt-10">
-        <Typography variant="h4" component="h1" className="mb-6">
-          Portfolio Leaderboard
-        </Typography>
         {isLeaderboardError ? (
           <Alert severity="error">Failed to load leaderboard data</Alert>
         ) : (
-          <TableView columns={columns} tableData={leaderboardData || []} />
+          <div>
+            <TableView columns={columns} tableData={leaderboardData || []} />
+          </div>
         )}
       </div>
-
-      {/* <div className="mt-10">
-        <Typography variant="h4" component="h1" className="mb-6">
-          Users{" "}
-        </Typography>
-        {isUsersError ? (
-          <Alert severity="error">Failed to load users data</Alert>
-        ) : (
-          <TableView
-            tableData={users || []}
-            columns={[
-              {
-                label: "Name",
-                key: "fullName",
-              },
-              {
-                label: "Portfolios",
-                key: "portfolios",
-                render: (portfolios) => {
-                  return portfolios.slice(-1).map((portfolio: Portfolio) => (
-                    <RouterLink
-                      to={`/portfolio/${portfolio.id}`}
-                      className="text-blue-600 hover:underline"
-                    >
-                      {portfolio.name}
-                    </RouterLink>
-                  ));
-                },
-              },
-            ]}
-          />
-        )}
-      </div> */}
     </div>
   );
 };

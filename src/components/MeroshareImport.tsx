@@ -9,7 +9,21 @@ const MeroshareImport: React.FC<{
     name: string;
     render: (rowData: string[], tableData: string[][]) => string;
   };
-}> = ({ addPortfolio, columnsToImport, customColumn }) => {
+  buttonVariant?: "contained" | "outlined" | "text";
+  buttonColor?:
+    | "primary"
+    | "secondary"
+    | "error"
+    | "info"
+    | "success"
+    | "warning";
+}> = ({
+  addPortfolio,
+  columnsToImport,
+  customColumn,
+  buttonVariant,
+  buttonColor,
+}) => {
   const handleImport = (csvData: string[][]) => {
     const cleanValue = (value: string) => {
       return value?.replace(/^"(.*)"$/, "$1") || "";
@@ -32,6 +46,8 @@ const MeroshareImport: React.FC<{
   return (
     <CSVImport
       label="Upload your Meroshare Portfolio CSV"
+      variant={buttonVariant}
+      color={buttonColor}
       handleImport={handleImport}
       columnsToImport={columnsToImport}
       customColumn={customColumn}

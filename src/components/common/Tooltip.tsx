@@ -1,4 +1,6 @@
 import React, { useState } from "react";
+import { useTheme } from "../../contexts/ThemeContext";
+import { getCommonStyles } from "../../themes/commonComponents";
 
 interface TooltipProps {
   children: React.ReactNode;
@@ -13,6 +15,8 @@ const Tooltip: React.FC<TooltipProps> = ({
   className = "",
   position = "top",
 }) => {
+  const { currentTheme } = useTheme();
+  const styles = getCommonStyles(currentTheme);
   const [isVisible, setIsVisible] = useState(false);
 
   const positionClasses = {
@@ -31,8 +35,9 @@ const Tooltip: React.FC<TooltipProps> = ({
       {children}
       {isVisible && (
         <div
+          style={styles.tooltip}
           className={`
-            absolute z-50 px-3 py-2 text-sm text-white bg-gray-800 
+            absolute z-50 px-3 py-2 text-sm
             rounded-md shadow-lg whitespace-nowrap
             ${positionClasses[position]}
             ${className}
@@ -40,8 +45,9 @@ const Tooltip: React.FC<TooltipProps> = ({
         >
           {content}
           <div
+            style={{ background: styles.tooltip.background }}
             className={`
-              absolute w-2 h-2 bg-gray-800 transform rotate-45
+              absolute w-2 h-2 transform rotate-45
               ${
                 position === "top"
                   ? "bottom-[-4px] left-1/2 -translate-x-1/2"

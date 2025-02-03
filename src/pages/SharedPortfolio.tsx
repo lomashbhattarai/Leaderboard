@@ -47,7 +47,18 @@ const SharedPortfolio: React.FC = () => {
       label: "1D",
       key: "dailyPerformancePercentage",
       align: "right",
-      render: () => "NA",
+      render: (value, row) => {
+        const { latestPrice, latestDate, dayAgoPrice, dayAgoDate } = row;
+        return (
+          <PriceChangeTooltip
+            previousPrice={dayAgoPrice}
+            previousDate={dayAgoDate}
+            latestPrice={latestPrice}
+            latestDate={latestDate}
+            value={value}
+          />
+        );
+      },
     },
     {
       label: "1W",
@@ -55,34 +66,14 @@ const SharedPortfolio: React.FC = () => {
       align: "right",
       render: (value, row) => {
         const { weekAgoPrice, latestPrice, weekAgoDate, latestDate } = row;
-
-        const formattedValue = formatPerformance(value);
         return (
-          <Tooltip
-            content={
-              <div className="text-xs text-gray-300 mt-1">
-                <div>
-                  {weekAgoDate
-                    ? `${format(
-                        new Date(weekAgoDate),
-                        "do MMMM"
-                      )}: ${weekAgoPrice}`
-                    : "No historical data"}
-                </div>
-                <div>
-                  {latestDate
-                    ? `${format(
-                        new Date(latestDate),
-                        "do MMMM"
-                      )}: ${latestPrice}`
-                    : "No historical data"}
-                </div>
-              </div>
-            }
-            position="top"
-          >
-            {formattedValue}
-          </Tooltip>
+          <PriceChangeTooltip
+            previousPrice={weekAgoPrice}
+            previousDate={weekAgoDate}
+            latestPrice={latestPrice}
+            latestDate={latestDate}
+            value={value}
+          />
         );
       },
     },
@@ -90,7 +81,18 @@ const SharedPortfolio: React.FC = () => {
       label: "1M",
       key: "monthlyPerformancePercentage",
       align: "right",
-      render: () => "NA",
+      render: (value, row) => {
+        const { monthAgoPrice, latestPrice, monthAgoDate, latestDate } = row;
+        return (
+          <PriceChangeTooltip
+            previousPrice={monthAgoPrice}
+            previousDate={monthAgoDate}
+            latestPrice={latestPrice}
+            latestDate={latestDate}
+            value={value}
+          />
+        );
+      },
     },
     {
       label: "Allocation (%)",
@@ -167,3 +169,41 @@ const COLORS = [
 ];
 
 export default SharedPortfolio;
+
+const PriceChangeTooltip = ({
+  previousPrice,
+  previousDate,
+  latestPrice,
+  latestDate,
+  value,
+}: {
+  previousPrice: number;
+  previousDate: string;
+  latestPrice: number;
+  latestDate: string;
+  value: number;
+}) => {
+  const formattedValue = formatPerformance(value);
+
+  return (
+    <Tooltip
+      content={
+        <div className="text-xs text-gray-300 mt-1">
+          <div>
+            {previousDate
+              ? `${format(new Date(previousDate), "do MMMM")}: ${previousPrice}`
+              : "No historical data"}
+          </div>
+          <div>
+            {latestDate
+              ? `${format(new Date(latestDate), "do MMMM")}: ${latestPrice}`
+              : "No historical data"}
+          </div>
+        </div>
+      }
+      position="top"
+    >
+      {formattedValue}
+    </Tooltip>
+  );
+};

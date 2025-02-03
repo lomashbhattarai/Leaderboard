@@ -4,10 +4,6 @@ import { PortfolioStock } from "../types/api";
 
 const PORTFOLIO_TABLE_HEADERS_FROM_DB = [
   {
-    label: "ID",
-    key: "id",
-  },
-  {
     label: "Stock",
     key: "stock",
     getValue: (portfolioStock: PortfolioStock) => portfolioStock.stock?.symbol,
