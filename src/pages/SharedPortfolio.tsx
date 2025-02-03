@@ -62,10 +62,20 @@ const SharedPortfolio: React.FC = () => {
             content={
               <div className="text-xs text-gray-300 mt-1">
                 <div>
-                  {format(new Date(weekAgoDate), "do MMMM")}: {weekAgoPrice}
+                  {weekAgoDate
+                    ? `${format(
+                        new Date(weekAgoDate),
+                        "do MMMM"
+                      )}: ${weekAgoPrice}`
+                    : "No historical data"}
                 </div>
                 <div>
-                  {format(new Date(latestDate), "do MMMM")}: {latestPrice}
+                  {latestDate
+                    ? `${format(
+                        new Date(latestDate),
+                        "do MMMM"
+                      )}: ${latestPrice}`
+                    : "No historical data"}
                 </div>
               </div>
             }
