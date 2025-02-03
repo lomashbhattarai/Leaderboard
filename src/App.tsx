@@ -75,9 +75,9 @@ const AppContent = () => {
             <li>
               <Link to="/portfolio">Meroshare Portfolio</Link>
             </li>
-            <li>
+            {/* <li>
               <Link to="/leaderboard">NEPSE Leaderboard</Link>
-            </li>
+            </li> */}
             <li>
               <Link to="/stocks">Stocks</Link>
             </li>
@@ -124,7 +124,7 @@ const AppContent = () => {
 
         <Routes>
           {/* <Route path="/" element={<Leaderboard />} /> */}
-          <Route path="/" element={<Home />} />
+          <Route path="/" element={<Leaderboard />} />
 
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<Signup />} />
