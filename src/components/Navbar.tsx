@@ -1,5 +1,5 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link, NavLink } from "react-router-dom";
 import {
   IconButton,
   Menu,
@@ -27,11 +27,30 @@ const Navbar = () => {
         currentTheme.name === "Default Theme"
           ? "rgba(0, 0, 0, 0.87)"
           : "#ffffff",
-      transition: "color 0.2s ease",
+      transition: "all 0.2s ease",
+      padding: "4px 0",
+      position: "relative",
       "&:hover": {
         opacity: 0.8,
         color: currentTheme.accent.primary,
       },
+      "&.active": {
+        color: currentTheme.accent.primary,
+        "&:after": {
+          content: '""',
+          position: "absolute",
+          bottom: 0,
+          left: 0,
+          right: 0,
+          height: "2px",
+          backgroundColor: currentTheme.accent.primary,
+          animation: "slideIn 0.2s ease-out",
+        },
+      },
+    },
+    "@keyframes slideIn": {
+      from: { transform: "scaleX(0)" },
+      to: { transform: "scaleX(1)" },
     },
   };
 
@@ -55,7 +74,7 @@ const Navbar = () => {
     >
       {navLinks.map((link) => (
         <li key={link.to}>
-          <Link
+          <NavLink
             to={link.to}
             onClick={() => isMobile && setMobileMenu(null)}
             style={{
@@ -66,7 +85,7 @@ const Navbar = () => {
             }}
           >
             {link.label}
-          </Link>
+          </NavLink>
         </li>
       ))}
     </ul>
