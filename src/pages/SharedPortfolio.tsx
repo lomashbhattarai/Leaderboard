@@ -114,15 +114,14 @@ const SharedPortfolio: React.FC = () => {
       </h1>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <div>
-          <h2 className="text-xl font-semibold mb-3">Allocation Table</h2>
+        <div className="w-full">
           <TableView
             columns={columns}
             tableData={publicPortfolio.portfolioStocks || []}
           />
         </div>
 
-        <div>
+        <div className="w-full">
           {/* <h2 className="text-xl font-semibold mb-3">Allocation Chart</h2> */}
           <ResponsiveContainer width="100%" height={400}>
             <PieChart>

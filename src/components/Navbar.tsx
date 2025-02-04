@@ -37,7 +37,7 @@ const Navbar = () => {
 
   const navLinks = [
     { to: "/", label: "Home" },
-    { to: "/portfolio", label: "Meroshare Portfolio" },
+    { to: "/portfolio", label: "My Portfolio" },
     { to: "/stocks", label: "Stocks" },
     { to: "/earnings-tracker", label: "Earnings Tracker" },
     { to: "/wealth-tracker", label: "Wealth Tracker" },

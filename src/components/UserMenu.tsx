@@ -5,12 +5,14 @@ import MenuItem from "@mui/material/MenuItem";
 import IconButton from "@mui/material/IconButton";
 import Tooltip from "@mui/material/Tooltip";
 import { useAuthContext } from "../contexts/AuthContext";
+import { Button } from "@mui/material";
+import { useNavigate } from "react-router-dom";
 
 const UserMenu: React.FC = () => {
   const { user, logout } = useAuthContext();
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
 
-  console.log(user);
+  const navigate = useNavigate();
 
   const handleMenu = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
@@ -22,7 +24,7 @@ const UserMenu: React.FC = () => {
 
   return (
     <>
-      {user && (
+      {user ? (
         <div>
           <Tooltip title="Account settings">
             <IconButton onClick={handleMenu} size="small">
@@ -50,6 +52,16 @@ const UserMenu: React.FC = () => {
               Logout
             </MenuItem>
           </Menu>
+        </div>
+      ) : (
+        <div>
+          <Button
+            variant="contained"
+            color="primary"
+            onClick={() => navigate("/login")}
+          >
+            Login
+          </Button>
         </div>
       )}
     </>

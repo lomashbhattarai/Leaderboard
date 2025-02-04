@@ -8,6 +8,7 @@ import {
   IconButton,
   Menu,
   MenuItem,
+  Box,
 } from "@mui/material";
 import { ColumnConfig } from "../components/common/TableView";
 import TableView from "../components/common/TableView";
@@ -20,6 +21,7 @@ import { useAuthContext } from "../contexts/AuthContext";
 import { formatDistanceToNow } from "date-fns";
 import PaletteIcon from "@mui/icons-material/Palette";
 import { spaceThemes } from "../themes/spaceThemes";
+import EmojiEventsIcon from "@mui/icons-material/EmojiEvents";
 
 export const formatPerformance = (value: number | string) => {
   if (!value && value !== 0) {
@@ -37,6 +39,36 @@ export const formatPerformance = (value: number | string) => {
 };
 
 const columns: ColumnConfig[] = [
+  {
+    label: "Rank",
+    key: "rank",
+    align: "center",
+    render: (_, row, index) => {
+      if (index === 0) {
+        return (
+          <Box
+            sx={{
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+            }}
+          >
+            <EmojiEventsIcon
+              sx={{
+                color: "#FFD700", // Gold color
+                animation: "bounce 2s infinite",
+                "@keyframes bounce": {
+                  "0%, 100%": { transform: "translateY(0)" },
+                  "50%": { transform: "translateY(-3px)" },
+                },
+              }}
+            />
+          </Box>
+        );
+      }
+      return index + 1;
+    },
+  },
   {
     label: "Portfolio",
     key: "portfolioName",
