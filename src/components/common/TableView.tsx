@@ -112,7 +112,7 @@ const TableView = ({
                   </Typography>
                   <Typography
                     variant="body2"
-                    align={column.align || "left"}
+                    align={column.align || "right"}
                     sx={{
                       flex: 1,
                       wordBreak: "break-word",
@@ -146,6 +146,7 @@ const TableView = ({
                         onClick={() => onEdit?.(row)}
                         size="small"
                         aria-label="edit"
+                        sx={{ color: currentTheme.accent.secondary }}
                       >
                         <EditIcon />
                       </IconButton>
@@ -153,6 +154,7 @@ const TableView = ({
                         onClick={() => onDelete?.(row.id)}
                         size="small"
                         aria-label="delete"
+                        sx={{ color: currentTheme.accent.secondary }}
                       >
                         <DeleteIcon />
                       </IconButton>
@@ -307,6 +309,7 @@ const TableView = ({
                           ? "fixed-column"
                           : ""
                       }
+                      sx={{ color: currentTheme.accent.secondary }}
                     >
                       {column.render
                         ? column.render(

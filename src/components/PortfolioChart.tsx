@@ -31,6 +31,39 @@ const PortfolioChart: React.FC<Props> = ({ portfolioStocksFromDb }) => {
     value: item.quantity * (item.latestClosingPrice || 1),
   }));
 
+  // Get the window width to determine chart dimensions
+  const [chartDimensions, setChartDimensions] = React.useState({
+    height: 500,
+    outerRadius: 200,
+  });
+
+  React.useEffect(() => {
+    const handleResize = () => {
+      const width = window.innerWidth;
+      if (width < 768) {
+        // mobile breakpoint
+        setChartDimensions({
+          height: 300,
+          outerRadius: 100,
+        });
+      } else {
+        setChartDimensions({
+          height: 500,
+          outerRadius: 200,
+        });
+      }
+    };
+
+    // Set initial dimensions
+    handleResize();
+
+    // Add event listener
+    window.addEventListener("resize", handleResize);
+
+    // Cleanup
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
   if (chartData.length === 0) {
     return <div>No portfolio data available</div>;
   }
@@ -38,8 +71,11 @@ const PortfolioChart: React.FC<Props> = ({ portfolioStocksFromDb }) => {
   return (
     <div className="portfolio-chart">
       <h2>Portfolio Distribution</h2>
-      <div className="chart-container" style={{ width: "100%", height: 500 }}>
-        <ResponsiveContainer width="100%" height={500}>
+      <div
+        className="chart-container"
+        style={{ width: "100%", height: chartDimensions.height }}
+      >
+        <ResponsiveContainer width="100%" height={chartDimensions.height}>
           <PieChart>
             <Pie
               data={chartData}
@@ -49,7 +85,7 @@ const PortfolioChart: React.FC<Props> = ({ portfolioStocksFromDb }) => {
               label={({ name, percent }) =>
                 `${name} (${(percent * 100).toFixed(1)}%)`
               }
-              outerRadius={200}
+              outerRadius={chartDimensions.outerRadius}
               // innerRadius={60}
               fill="#8884d8"
               nameKey="name"

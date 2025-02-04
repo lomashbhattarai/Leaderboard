@@ -14,6 +14,7 @@ import { Link as RouterLink } from "react-router-dom";
 import { formatPerformance } from "./Leaderboard";
 import Tooltip from "../components/common/Tooltip";
 import { format } from "date-fns";
+import { Stack, Box } from "@mui/material";
 
 const SharedPortfolio: React.FC = () => {
   const { id } = useParams<{ id: string }>();
@@ -102,6 +103,38 @@ const SharedPortfolio: React.FC = () => {
     },
   ];
 
+  // Add chart dimensions state
+  const [chartDimensions, setChartDimensions] = React.useState({
+    height: 400,
+    outerRadius: 150,
+  });
+
+  React.useEffect(() => {
+    const handleResize = () => {
+      const width = window.innerWidth;
+      if (width < 768) {
+        setChartDimensions({
+          height: 300,
+          outerRadius: 100,
+        });
+      } else {
+        setChartDimensions({
+          height: 400,
+          outerRadius: 130,
+        });
+      }
+    };
+
+    // Set initial dimensions
+    handleResize();
+
+    // Add event listener
+    window.addEventListener("resize", handleResize);
+
+    // Cleanup
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
   if (isLoading) return <div>Loading...</div>;
   if (error) return <div>Error loading portfolio</div>;
   if (!publicPortfolio) return <div>No portfolio found</div>;
@@ -113,17 +146,30 @@ const SharedPortfolio: React.FC = () => {
         {publicPortfolio.name}
       </h1>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <div className="w-full">
+      <Stack
+        direction={{ xs: "column", md: "row" }}
+        spacing={4}
+        sx={{ width: "100%" }}
+      >
+        <Box
+          sx={{
+            flex: "0 0 60%",
+            order: { xs: 2, md: 1 },
+          }}
+        >
           <TableView
             columns={columns}
             tableData={publicPortfolio.portfolioStocks || []}
           />
-        </div>
+        </Box>
 
-        <div className="w-full">
-          {/* <h2 className="text-xl font-semibold mb-3">Allocation Chart</h2> */}
-          <ResponsiveContainer width="100%" height={400}>
+        <Box
+          sx={{
+            flex: "0 0 40%",
+            order: { xs: 1, md: 2 },
+          }}
+        >
+          <ResponsiveContainer width="100%" height={chartDimensions.height}>
             <PieChart>
               <Pie
                 data={publicPortfolio.portfolioStocks}
@@ -131,7 +177,7 @@ const SharedPortfolio: React.FC = () => {
                 nameKey="symbol"
                 cx="50%"
                 cy="50%"
-                outerRadius={150}
+                outerRadius={chartDimensions.outerRadius}
                 fill="#8884d8"
                 label={({ symbol, percent }) =>
                   `${symbol} ${(percent * 100).toFixed(0)}%`
@@ -145,11 +191,10 @@ const SharedPortfolio: React.FC = () => {
                 ))}
               </Pie>
               <RechartTooltip />
-              {/* <Legend /> */}
             </PieChart>
           </ResponsiveContainer>
-        </div>
-      </div>
+        </Box>
+      </Stack>
     </div>
   );
 };

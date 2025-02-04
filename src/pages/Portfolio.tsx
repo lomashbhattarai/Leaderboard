@@ -149,8 +149,12 @@ const Portfolio: React.FC = () => {
           spacing={4}
           width="100%"
           sx={{
-            "& > *": {
-              flex: 1,
+            "& > *:first-of-type": {
+              flex: 0.4,
+              minWidth: { xs: "100%", md: "auto" },
+            },
+            "& > *:last-of-type": {
+              flex: 0.6,
               minWidth: { xs: "100%", md: "auto" },
             },
           }}

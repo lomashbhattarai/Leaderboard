@@ -13,29 +13,33 @@ const PORTFOLIO_TABLE_HEADERS_FROM_DB = [
     key: "quantity",
   },
   {
-    label: "Buy Price",
-    key: "buyPrice",
-  },
-  {
-    label: "Buy Date",
-    key: "buyDate",
-  },
-  {
-    label: "Previous Closing Price",
-    key: "previousClosingPrice",
-  },
-  {
-    label: "Value at Previous Closing",
-    key: "valueAtPreviousClosing",
-  },
-  {
-    label: "Last Closing Price",
+    label: "Closing Price",
     key: "latestClosingPrice",
   },
   {
     label: "Value at LTP",
     key: "valueAtLTP",
   },
+  {
+    label: "1 Day",
+    key: "performance1D",
+  },
+  {
+    label: "1 Week",
+    key: "performance1W",
+  },
+  {
+    label: "1 Month",
+    key: "performance1M",
+  },
+  {
+    label: "Buy Price",
+    key: "buyPrice",
+  },
+  // {
+  //   label: "Buy Date",
+  //   key: "buyDate",
+  // },
 ];
 
 interface PortfolioTableProps {
