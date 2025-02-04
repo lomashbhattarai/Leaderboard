@@ -83,8 +83,7 @@ const AppContent = () => {
   const containerStyle = {
     color: currentTheme.accent.primary,
     backdropFilter: "blur(10px)",
-    width: "100%",
-    overflowX: "hidden" as const,
+    //width: "100%",
   };
 
   return (
