@@ -49,6 +49,7 @@ interface TableViewProps {
   onDelete?: (id: number) => void;
   showActions?: boolean;
   responsive?: ResponsiveOptions;
+  customCardComponent?: (row: any, index: number) => React.ReactNode;
 }
 
 const TableView = ({
@@ -65,6 +66,7 @@ const TableView = ({
     minWidth: 120,
     breakpoint: 600, // default breakpoint
   },
+  customCardComponent,
 }: TableViewProps) => {
   const { currentTheme } = useTheme();
   const styles = getCommonStyles(currentTheme);
@@ -91,87 +93,91 @@ const TableView = ({
           }}
         >
           <CardContent>
-            <Stack spacing={1}>
-              {columns.map((column, colIndex) => (
-                <Stack
-                  key={colIndex}
-                  direction="row"
-                  spacing={1}
-                  justifyContent="space-between"
-                  alignItems="center"
-                >
-                  <Typography
-                    variant="body2"
-                    sx={{
-                      fontWeight: "bold",
-                      minWidth: "40%",
-                      color: currentTheme.accent.primary,
-                    }}
+            {customCardComponent ? (
+              customCardComponent(row, rowIndex)
+            ) : (
+              <Stack spacing={1}>
+                {columns.map((column, colIndex) => (
+                  <Stack
+                    key={colIndex}
+                    direction="row"
+                    spacing={1}
+                    justifyContent="space-between"
+                    alignItems="center"
                   >
-                    {column.label}:
-                  </Typography>
-                  <Typography
-                    variant="body2"
-                    align={column.align || "right"}
-                    sx={{
-                      flex: 1,
-                      wordBreak: "break-word",
-                      color: currentTheme.accent.primary,
-                    }}
+                    <Typography
+                      variant="body2"
+                      sx={{
+                        fontWeight: "bold",
+                        minWidth: "40%",
+                        color: currentTheme.accent.primary,
+                      }}
+                    >
+                      {column.label}:
+                    </Typography>
+                    <Typography
+                      variant="body2"
+                      align={column.align || "right"}
+                      sx={{
+                        flex: 1,
+                        wordBreak: "break-word",
+                        color: currentTheme.accent.primary,
+                      }}
+                    >
+                      {column.render
+                        ? column.render(
+                            column.getValue
+                              ? column.getValue(row)
+                              : row[column.key],
+                            row,
+                            rowIndex
+                          )
+                        : column.getValue
+                        ? column.getValue(row)
+                        : row[column.key]}
+                    </Typography>
+                  </Stack>
+                ))}
+                {(showActions || onDeleteTransaction) && (
+                  <Stack
+                    direction="row"
+                    spacing={1}
+                    justifyContent="flex-end"
+                    sx={{ mt: 1 }}
                   >
-                    {column.render
-                      ? column.render(
-                          column.getValue
-                            ? column.getValue(row)
-                            : row[column.key],
-                          row,
-                          rowIndex
-                        )
-                      : column.getValue
-                      ? column.getValue(row)
-                      : row[column.key]}
-                  </Typography>
-                </Stack>
-              ))}
-              {(showActions || onDeleteTransaction) && (
-                <Stack
-                  direction="row"
-                  spacing={1}
-                  justifyContent="flex-end"
-                  sx={{ mt: 1 }}
-                >
-                  {showActions && (
-                    <>
+                    {showActions && (
+                      <>
+                        <IconButton
+                          onClick={() => onEdit?.(row)}
+                          size="small"
+                          aria-label="edit"
+                          sx={{ color: currentTheme.accent.secondary }}
+                        >
+                          <EditIcon />
+                        </IconButton>
+                        <IconButton
+                          onClick={() => onDelete?.(row.id)}
+                          size="small"
+                          aria-label="delete"
+                          sx={{ color: currentTheme.accent.secondary }}
+                        >
+                          <DeleteIcon />
+                        </IconButton>
+                      </>
+                    )}
+                    {onDeleteTransaction && !showActions && (
                       <IconButton
-                        onClick={() => onEdit?.(row)}
-                        size="small"
-                        aria-label="edit"
-                        sx={{ color: currentTheme.accent.secondary }}
-                      >
-                        <EditIcon />
-                      </IconButton>
-                      <IconButton
-                        onClick={() => onDelete?.(row.id)}
+                        onClick={() => onDeleteTransaction(rowIndex)}
                         size="small"
                         aria-label="delete"
-                        sx={{ color: currentTheme.accent.secondary }}
                       >
                         <DeleteIcon />
                       </IconButton>
-                    </>
-                  )}
-                  {onDeleteTransaction && !showActions && (
-                    <IconButton
-                      onClick={() => onDeleteTransaction(rowIndex)}
-                      size="small"
-                      aria-label="delete"
-                    >
-                      <DeleteIcon />
-                    </IconButton>
-                  )}
-                </Stack>
-              )}
-            </Stack>
+                    )}
+                  </Stack>
+                )}
+              </Stack>
+            )}
           </CardContent>
         </Card>
       ))}

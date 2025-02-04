@@ -14,6 +14,7 @@ import {
   Drawer,
   IconButton,
   Typography,
+  Box,
 } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 import PortfolioStockForm from "../components/PortfolioStockForm";
@@ -25,6 +26,7 @@ import {
 import { useQueryClient } from "@tanstack/react-query";
 import { portfolioKeys } from "../api/queries/usePortfolios";
 import type { PortfolioStock, PortfolioStockDTO } from "../types/api";
+import { useTheme } from "../contexts/ThemeContext";
 
 const Portfolio: React.FC = () => {
   const queryClient = useQueryClient();
@@ -39,6 +41,8 @@ const Portfolio: React.FC = () => {
     selectedStock?.id || 0
   );
   const deleteStock = useDeletePortfolioStock(portfolioId);
+
+  const { currentTheme } = useTheme();
 
   const handleDrawerClose = () => {
     setIsDrawerOpen(false);
@@ -122,15 +126,22 @@ const Portfolio: React.FC = () => {
 
         {/* <div>Print Portfolio summary</div> */}
 
-        <Stack direction="row" spacing={2} className="mb-4" alignItems="center">
-          <Button
-            variant="contained"
-            color="primary"
-            onClick={() => setIsDrawerOpen(true)}
-          >
-            Add Stock to Portfolio
-          </Button>
-          <Typography color="text.secondary">Or</Typography>
+        <Stack
+          direction={{ xs: "column", md: "row" }}
+          spacing={2}
+          className="mb-4"
+          alignItems="center"
+        >
+          <Stack direction="row" spacing={2} alignItems="center">
+            <Button
+              variant="contained"
+              color="primary"
+              onClick={() => setIsDrawerOpen(true)}
+            >
+              Add Stock to Portfolio
+            </Button>
+            <Typography color={currentTheme.accent.primary}>Or</Typography>
+          </Stack>
           <MeroshareImport
             addPortfolio={addPortfolio}
             buttonVariant="outlined"
@@ -138,30 +149,39 @@ const Portfolio: React.FC = () => {
           />
         </Stack>
 
-        <PortfolioTable
-          portfolioStocksFromDb={portfolioStocksFromDb}
-          onEdit={handleEdit}
-          onDelete={handleDelete}
-        />
+        <Stack>
+          <Box
+            sx={{
+              order: { xs: 2, md: 1 }, // On mobile (xs) show later, on desktop (md) show first
+            }}
+          >
+            <PortfolioTable
+              portfolioStocksFromDb={portfolioStocksFromDb}
+              onEdit={handleEdit}
+              onDelete={handleDelete}
+            />
+          </Box>
 
-        <Stack
-          direction={{ xs: "column", md: "row" }}
-          spacing={4}
-          width="100%"
-          sx={{
-            "& > *:first-of-type": {
-              flex: 0.4,
-              minWidth: { xs: "100%", md: "auto" },
-            },
-            "& > *:last-of-type": {
-              flex: 0.6,
-              minWidth: { xs: "100%", md: "auto" },
-            },
-          }}
-          className="mt-16"
-        >
-          <PortfolioValue portfolioStocksFromDb={portfolioStocksFromDb} />
-          <PortfolioChart portfolioStocksFromDb={portfolioStocksFromDb} />
+          <Stack
+            direction={{ xs: "column", md: "row" }}
+            spacing={4}
+            width="100%"
+            sx={{
+              order: { xs: 1, md: 2 }, // On mobile (xs) show first, on desktop (md) show later
+              "& > *:first-of-type": {
+                flex: 0.4,
+                minWidth: { xs: "100%", md: "auto" },
+              },
+              "& > *:last-of-type": {
+                flex: 0.6,
+                minWidth: { xs: "100%", md: "auto" },
+              },
+            }}
+            className="mt-8"
+          >
+            <PortfolioValue portfolioStocksFromDb={portfolioStocksFromDb} />
+            <PortfolioChart portfolioStocksFromDb={portfolioStocksFromDb} />
+          </Stack>
         </Stack>
 
         {stockDrawer}

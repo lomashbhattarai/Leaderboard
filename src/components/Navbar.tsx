@@ -77,12 +77,21 @@ const Navbar = () => {
           <NavLink
             to={link.to}
             onClick={() => isMobile && setMobileMenu(null)}
-            style={{
+            style={({ isActive }) => ({
               color:
                 currentTheme.name === "Default Theme"
                   ? "rgba(0, 0, 0, 0.87)"
                   : "#ffffff",
-            }}
+              backgroundColor:
+                isActive && isMobile
+                  ? currentTheme.name === "Default Theme"
+                    ? "rgba(0, 0, 0, 0.04)"
+                    : "rgba(255, 255, 255, 0.08)"
+                  : "transparent",
+              display: "block",
+              padding: isMobile ? "8px 12px" : "4px 0",
+              borderRadius: isMobile ? "4px" : "0",
+            })}
           >
             {link.label}
           </NavLink>
@@ -173,6 +182,7 @@ const Navbar = () => {
               currentTheme.name === "Default Theme"
                 ? "rgba(0, 0, 0, 0.87)"
                 : "#ffffff",
+            padding: "8px 16px",
           },
         }}
       >

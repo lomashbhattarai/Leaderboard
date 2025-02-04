@@ -107,6 +107,7 @@ const SharedPortfolio: React.FC = () => {
   const [chartDimensions, setChartDimensions] = React.useState({
     height: 400,
     outerRadius: 150,
+    fontSize: "14px",
   });
 
   React.useEffect(() => {
@@ -116,11 +117,13 @@ const SharedPortfolio: React.FC = () => {
         setChartDimensions({
           height: 300,
           outerRadius: 100,
+          fontSize: "11px",
         });
       } else {
         setChartDimensions({
           height: 400,
           outerRadius: 130,
+          fontSize: "14px",
         });
       }
     };
@@ -167,6 +170,7 @@ const SharedPortfolio: React.FC = () => {
           sx={{
             flex: "0 0 40%",
             order: { xs: 1, md: 2 },
+            fontSize: chartDimensions.fontSize,
           }}
         >
           <ResponsiveContainer width="100%" height={chartDimensions.height}>

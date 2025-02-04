@@ -9,6 +9,7 @@ import {
   Menu,
   MenuItem,
   Box,
+  Stack,
 } from "@mui/material";
 import { ColumnConfig } from "../components/common/TableView";
 import TableView from "../components/common/TableView";
@@ -22,6 +23,7 @@ import { formatDistanceToNow } from "date-fns";
 import PaletteIcon from "@mui/icons-material/Palette";
 import { spaceThemes } from "../themes/spaceThemes";
 import EmojiEventsIcon from "@mui/icons-material/EmojiEvents";
+import LeaderboardCard from "../components/LeaderboardCard";
 
 export const formatPerformance = (value: number | string) => {
   if (!value && value !== 0) {
@@ -179,7 +181,18 @@ const Leaderboard: React.FC = () => {
           <Alert severity="error">Failed to load leaderboard data</Alert>
         ) : (
           <div>
-            <TableView columns={columns} tableData={leaderboardData || []} />
+            <TableView
+              columns={columns}
+              tableData={leaderboardData || []}
+              customCardComponent={(row, index) => (
+                <LeaderboardCard row={row} index={index} />
+              )}
+              // responsive={{
+              //   fixedFirstColumn: true,
+              //   minWidth: 120,
+              //   breakpoint: 600,
+              // }}
+            />
           </div>
         )}
       </div>

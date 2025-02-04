@@ -144,4 +144,6 @@ export interface LeaderboardEntry {
   rank1W: number;
   rank1M: number;
   rank1Y: number;
+  userName: string;
+  updatedAt: string;
 }

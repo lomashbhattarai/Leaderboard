@@ -35,6 +35,7 @@ const PortfolioChart: React.FC<Props> = ({ portfolioStocksFromDb }) => {
   const [chartDimensions, setChartDimensions] = React.useState({
     height: 500,
     outerRadius: 200,
+    fontSize: "14px",
   });
 
   React.useEffect(() => {
@@ -44,12 +45,14 @@ const PortfolioChart: React.FC<Props> = ({ portfolioStocksFromDb }) => {
         // mobile breakpoint
         setChartDimensions({
           height: 300,
-          outerRadius: 100,
+          outerRadius: 80,
+          fontSize: "11px",
         });
       } else {
         setChartDimensions({
           height: 500,
           outerRadius: 200,
+          fontSize: "14px",
         });
       }
     };
@@ -73,7 +76,11 @@ const PortfolioChart: React.FC<Props> = ({ portfolioStocksFromDb }) => {
       <h2>Portfolio Distribution</h2>
       <div
         className="chart-container"
-        style={{ width: "100%", height: chartDimensions.height }}
+        style={{
+          width: "100%",
+          height: chartDimensions.height,
+          fontSize: chartDimensions.fontSize,
+        }}
       >
         <ResponsiveContainer width="100%" height={chartDimensions.height}>
           <PieChart>
