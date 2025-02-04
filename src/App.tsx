@@ -17,16 +17,11 @@ import Stocks from "./pages/Stocks";
 import StockDetail from "./pages/StockDetail";
 import SharedPortfolio from "./pages/SharedPortfolio";
 import { StockProvider } from "./contexts/StockContext";
-import UserMenu from "./components/UserMenu";
 import { ThemeProvider as SpaceThemeProvider } from "./contexts/ThemeContext";
 import { ThemeProvider as MuiThemeProvider } from "@mui/material/styles";
 import { useTheme } from "./contexts/ThemeContext";
 import SpaceBackground from "./components/SpaceBackground";
-import { alpha } from "@mui/material/styles";
-import { IconButton, Menu, MenuItem, Box } from "@mui/material";
-import PaletteIcon from "@mui/icons-material/Palette";
-import React from "react";
-import { spaceThemes } from "./themes/spaceThemes";
+import Navbar from "./components/Navbar";
 
 const theme = createTheme();
 
@@ -41,91 +36,15 @@ const queryClient = new QueryClient({
 });
 
 const AppContent = () => {
-  const { currentTheme, setTheme, availableThemes } = useTheme();
-  const [themeMenu, setThemeMenu] = React.useState<null | HTMLElement>(null);
-
-  const navStyle = {
-    "& a": {
-      // This will target all Links inside nav
-      color:
-        currentTheme.name === "Default Theme"
-          ? "rgba(0, 0, 0, 0.87)"
-          : "#ffffff",
-      transition: "color 0.2s ease",
-      "&:hover": {
-        opacity: 0.8,
-        color: currentTheme.accent.primary,
-      },
-    },
-  };
+  const { currentTheme } = useTheme();
 
   const content = (
     <>
       <SpaceBackground theme={currentTheme} />
-      <div className="container mx-auto p-4">
-        <Box
-          component="nav"
-          className="mb-4 flex justify-between items-center"
-          sx={navStyle}
-        >
-          <ul className="flex space-x-4">
-            <li>
-              <Link to="/">Home</Link>
-            </li>
-            <li>
-              <Link to="/portfolio">Meroshare Portfolio</Link>
-            </li>
-            {/* <li>
-              <Link to="/leaderboard">NEPSE Leaderboard</Link>
-            </li> */}
-            <li>
-              <Link to="/stocks">Stocks</Link>
-            </li>
-            <li>
-              <Link to="/earnings-tracker">Earnings Tracker</Link>
-            </li>
-            <li>
-              <Link to="/wealth-tracker">Wealth Tracker</Link>
-            </li>
-          </ul>
-          <div className="flex items-center space-x-2">
-            <IconButton
-              onClick={(e) => setThemeMenu(e.currentTarget)}
-              style={{
-                color:
-                  currentTheme.name === "Default Theme"
-                    ? "rgba(0, 0, 0, 0.87)"
-                    : "#ffffff",
-              }}
-            >
-              <PaletteIcon />
-            </IconButton>
-            <UserMenu />
-          </div>
-        </Box>
-
-        <Menu
-          anchorEl={themeMenu}
-          open={Boolean(themeMenu)}
-          onClose={() => setThemeMenu(null)}
-        >
-          {availableThemes.map((themeName) => (
-            <MenuItem
-              key={themeName}
-              onClick={() => {
-                setTheme(themeName);
-                setThemeMenu(null);
-              }}
-            >
-              {spaceThemes[themeName].name}
-            </MenuItem>
-          ))}
-        </Menu>
-
+      <div className="w-full px-4 max-w-[1200px] mx-auto">
+        <Navbar />
         <Routes>
-          {/* <Route path="/" element={<Leaderboard />} /> */}
           <Route path="/" element={<Leaderboard />} />
-
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<Signup />} />
           <Route path="/portfolio/:id" element={<SharedPortfolio />} />
@@ -164,16 +83,20 @@ const AppContent = () => {
   const containerStyle = {
     color: currentTheme.accent.primary,
     backdropFilter: "blur(10px)",
+    width: "100%",
+    overflowX: "hidden" as const,
   };
 
   return (
     <>
       <SpaceBackground theme={currentTheme} />
       {currentTheme.name === "Default Theme" ? (
-        <div className="container mx-auto p-4">{content}</div>
+        <div className="w-full overflow-x-hidden">
+          <div className="w-full px-4 max-w-[1200px] mx-auto">{content}</div>
+        </div>
       ) : (
         <div style={containerStyle}>
-          <div className="container mx-auto p-4">{content}</div>
+          <div className="w-full px-4 max-w-[1200px] mx-auto">{content}</div>
         </div>
       )}
     </>

@@ -104,7 +104,7 @@ const Leaderboard: React.FC = () => {
     isError: isLeaderboardError,
   } = useLeaderboard();
 
-  const { addPortfolio } = usePortfolio();
+  const { addPortfolio, portfolioId } = usePortfolio();
   const { user } = useAuthContext();
   const navigate = useNavigate();
 
@@ -116,23 +116,22 @@ const Leaderboard: React.FC = () => {
         </Typography>
       </div>
 
-      <Alert severity="info" className="mb-4">
-        Participate in the leaderboard by importing your portfolio. Only the
-        allocation of your portfolio in percentage term will be shared with the
-        community.
-      </Alert>
+      {!portfolioId && (
+        <Alert severity="info" className="mb-4">
+          Participate in the leaderboard by adding your portfolio.
+        </Alert>
+      )}
 
       {user ? (
-        <MeroshareImport
-          addPortfolio={addPortfolio}
-          columnsToImport={[
-            "S.N",
-            "Scrip",
-            "Current Balance",
-            "Last Transaction Price (LTP)",
-            "Value at LTP",
-          ]}
-        />
+        portfolioId ? null : (
+          <Button
+            variant="contained"
+            color="primary"
+            onClick={() => navigate("/portfolio")}
+          >
+            Add Your Portfolio
+          </Button>
+        )
       ) : (
         <Button
           variant="contained"
