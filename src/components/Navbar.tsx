@@ -54,7 +54,7 @@ const Navbar = () => {
     },
   };
 
-  const navLinks = [
+  let navLinks = [
     { to: "/", label: "Home" },
     { to: "/portfolio", label: "My Portfolio" },
     { to: "/stocks", label: "Stocks" },
@@ -62,9 +62,15 @@ const Navbar = () => {
     { to: "/wealth-tracker", label: "Wealth Tracker" },
   ];
 
+  if (isMobile) {
+    navLinks = navLinks.slice(0, 2);
+  }
+
   const renderNavLinks = () => (
     <ul
-      className={`${isMobile ? "flex flex-col space-y-2" : "flex space-x-4"}`}
+      className={`${
+        isMobile && false ? "flex flex-col space-y-2" : "flex space-x-4"
+      }`}
       style={{
         color:
           currentTheme.name === "Default Theme"
@@ -76,21 +82,21 @@ const Navbar = () => {
         <li key={link.to}>
           <NavLink
             to={link.to}
-            onClick={() => isMobile && setMobileMenu(null)}
+            onClick={() => isMobile && false && setMobileMenu(null)}
             style={({ isActive }) => ({
               color:
                 currentTheme.name === "Default Theme"
                   ? "rgba(0, 0, 0, 0.87)"
                   : "#ffffff",
               backgroundColor:
-                isActive && isMobile
+                isActive && isMobile && false
                   ? currentTheme.name === "Default Theme"
                     ? "rgba(0, 0, 0, 0.04)"
                     : "rgba(255, 255, 255, 0.08)"
                   : "transparent",
               display: "block",
-              padding: isMobile ? "8px 12px" : "4px 0",
-              borderRadius: isMobile ? "4px" : "0",
+              padding: isMobile && false ? "8px 12px" : "4px 0",
+              borderRadius: isMobile && false ? "4px" : "0",
             })}
           >
             {link.label}
@@ -100,6 +106,36 @@ const Navbar = () => {
     </ul>
   );
 
+  const menuForMobile = (
+    <>
+      <IconButton
+        onClick={(e) => setMobileMenu(e.currentTarget)}
+        style={{
+          color:
+            currentTheme.name === "Default Theme"
+              ? "rgba(0, 0, 0, 0.87)"
+              : "#ffffff",
+        }}
+      >
+        <MenuIcon />
+      </IconButton>
+      <div className="flex items-center space-x-2">
+        <IconButton
+          onClick={(e) => setThemeMenu(e.currentTarget)}
+          style={{
+            color:
+              currentTheme.name === "Default Theme"
+                ? "rgba(0, 0, 0, 0.87)"
+                : "#ffffff",
+          }}
+        >
+          <PaletteIcon />
+        </IconButton>
+        <UserMenu />
+      </div>
+    </>
+  );
+
   return (
     <>
       <Box
@@ -107,10 +143,11 @@ const Navbar = () => {
         className="mb-4 flex justify-between items-center w-full"
         sx={navStyle}
       >
-        {isMobile ? (
-          <>
+        <>
+          <div className="flex-1 min-w-0">{renderNavLinks()}</div>
+          <div className="flex items-center space-x-2 ml-4">
             <IconButton
-              onClick={(e) => setMobileMenu(e.currentTarget)}
+              onClick={(e) => setThemeMenu(e.currentTarget)}
               style={{
                 color:
                   currentTheme.name === "Default Theme"
@@ -118,46 +155,15 @@ const Navbar = () => {
                     : "#ffffff",
               }}
             >
-              <MenuIcon />
+              <PaletteIcon />
             </IconButton>
-            <div className="flex items-center space-x-2">
-              <IconButton
-                onClick={(e) => setThemeMenu(e.currentTarget)}
-                style={{
-                  color:
-                    currentTheme.name === "Default Theme"
-                      ? "rgba(0, 0, 0, 0.87)"
-                      : "#ffffff",
-                }}
-              >
-                <PaletteIcon />
-              </IconButton>
-              <UserMenu />
-            </div>
-          </>
-        ) : (
-          <>
-            <div className="flex-1 min-w-0">{renderNavLinks()}</div>
-            <div className="flex items-center space-x-2 ml-4">
-              <IconButton
-                onClick={(e) => setThemeMenu(e.currentTarget)}
-                style={{
-                  color:
-                    currentTheme.name === "Default Theme"
-                      ? "rgba(0, 0, 0, 0.87)"
-                      : "#ffffff",
-                }}
-              >
-                <PaletteIcon />
-              </IconButton>
-              <UserMenu />
-            </div>
-          </>
-        )}
+            <UserMenu />
+          </div>
+        </>
       </Box>
 
       {/* Mobile Navigation Menu */}
-      <Menu
+      {/* <Menu
         anchorEl={mobileMenu}
         open={Boolean(mobileMenu)}
         onClose={() => setMobileMenu(null)}
@@ -187,7 +193,7 @@ const Navbar = () => {
         }}
       >
         {isMobile && renderNavLinks()}
-      </Menu>
+      </Menu> */}
 
       {/* Theme Menu */}
       <Menu
