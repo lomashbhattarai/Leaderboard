@@ -90,6 +90,19 @@ export interface PortfolioStock {
   portfolio?: Portfolio // Optional since it might not always be included
   stock?: Stock // Optional since it might not always be included
   latestClosingPrice?: number
+  latestDate?: string
+  dayAgoPrice?: number
+  dayAgoDate?: string
+  weekAgoPrice?: number
+  weekAgoDate?: string
+  monthAgoPrice?: number
+  monthAgoDate?: string
+  yearAgoPrice?: number
+  yearAgoDate?: string
+  performance1D?: number
+  performance1W?: number
+  performance1M?: number
+  performance1Y?: number
 }
 
 // For creating/updating a portfolio stock
