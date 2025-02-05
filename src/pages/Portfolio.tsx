@@ -30,7 +30,8 @@ import { useTheme } from "../contexts/ThemeContext";
 
 const Portfolio: React.FC = () => {
   const queryClient = useQueryClient();
-  const { portfolioStocksFromDb, portfolioId, addPortfolio } = usePortfolio();
+  const { portfolioStocksFromDb, portfolioId, addPortfolio, portfolioName } =
+    usePortfolio();
   const [isDrawerOpen, setIsDrawerOpen] = React.useState(false);
   const [selectedStock, setSelectedStock] =
     React.useState<PortfolioStock | null>(null);
@@ -118,13 +119,13 @@ const Portfolio: React.FC = () => {
   return (
     <div className="portfolio-container">
       <div className="portfolio-grid">
-        <Alert severity="info" className="mb-4">
-          Login to your Meroshare account and go to "My Portfolio" page. Click
-          on the "CSV" button to import the CSV of your portfolio to your
-          computer. Upload the CSV file by clicking the button below.
-        </Alert>
-
-        {/* <div>Print Portfolio summary</div> */}
+        {!portfolioId && (
+          <Alert severity="info" className="mb-4">
+            Login to your Meroshare account and go to "My Portfolio" page. Click
+            on the "CSV" button to import the CSV of your portfolio to your
+            computer. Upload the CSV file by clicking the button below.
+          </Alert>
+        )}
 
         <Stack
           direction={{ xs: "column", md: "row" }}
@@ -179,7 +180,10 @@ const Portfolio: React.FC = () => {
             }}
             className="mt-8"
           >
-            <PortfolioValue portfolioStocksFromDb={portfolioStocksFromDb} />
+            <PortfolioValue
+              portfolioName={portfolioName}
+              portfolioStocksFromDb={portfolioStocksFromDb}
+            />
             <PortfolioChart portfolioStocksFromDb={portfolioStocksFromDb} />
           </Stack>
         </Stack>

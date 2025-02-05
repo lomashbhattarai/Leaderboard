@@ -51,5 +51,6 @@ export const usePortfolio = () => {
     addPortfolio,
     portfolioStocksFromDb: portfolios?.[0]?.portfolioStocks || [],
     portfolioId: portfolios?.[0]?.id || 0,
+    portfolioName: portfolios?.[0]?.name || "",
   };
 };
