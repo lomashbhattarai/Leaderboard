@@ -222,6 +222,7 @@ const TableView = ({
             maxWidth: "100%",
             overflowX: "auto",
             position: "relative",
+            overflow: "visible",
             "& .MuiTable-root": {
               borderCollapse: "separate",
               borderSpacing: "0",
@@ -233,7 +234,7 @@ const TableView = ({
               ...styles.table.cell,
               padding: { xs: "8px 12px", sm: "16px" },
               whiteSpace: "nowrap",
-              overflow: "hidden",
+              overflow: "visible",
               textOverflow: "ellipsis",
               maxWidth: responsive.minWidth,
             },
@@ -315,7 +316,9 @@ const TableView = ({
                           ? "fixed-column"
                           : ""
                       }
-                      sx={{ color: currentTheme.accent.secondary }}
+                      sx={{
+                        color: currentTheme.accent.secondary,
+                      }}
                     >
                       {column.render
                         ? column.render(

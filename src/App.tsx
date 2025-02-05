@@ -65,7 +65,7 @@ const AppContent = () => {
             }
           />
           <Route
-            path="/portfolio"
+            path="/my-portfolio"
             element={
               <ProtectedRoute>
                 <Portfolio />
@@ -132,8 +132,7 @@ function Home() {
     <div>
       <h1 className="text-3xl font-bold mb-4">Welcome to NEPSE Leader</h1>
       <p>Choose an option from the navigation menu above.</p>
-      {/* <div>TODO - wealth tracker</div>
-      <div>Tax calculator</div>
+      {/* <div>Tax calculator</div>
       <div>Expense management</div>
       <div>Feature request</div>
       <div>Books: to be read</div>

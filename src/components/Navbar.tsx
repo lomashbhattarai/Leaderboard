@@ -56,7 +56,7 @@ const Navbar = () => {
 
   let navLinks = [
     { to: "/", label: "Home" },
-    { to: "/portfolio", label: "My Portfolio" },
+    { to: "/my-portfolio", label: "My Portfolio" },
     { to: "/stocks", label: "Stocks" },
     { to: "/earnings-tracker", label: "Earnings Tracker" },
     { to: "/wealth-tracker", label: "Wealth Tracker" },

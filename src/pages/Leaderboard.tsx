@@ -78,7 +78,7 @@ const columns: ColumnConfig[] = [
       return (
         <RouterLink
           to={`/portfolio/${row.portfolioId}`}
-          className="text-blue-600 hover:underline"
+          className="text-blue-600 hover:underline truncate block"
         >
           {value}
         </RouterLink>

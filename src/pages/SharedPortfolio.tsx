@@ -236,7 +236,7 @@ const PriceChangeTooltip = ({
   return (
     <Tooltip
       content={
-        <div className="text-xs text-gray-300 mt-1">
+        <>
           <div>
             {previousDate
               ? `${format(new Date(previousDate), "do MMMM")}: ${previousPrice}`
@@ -247,7 +247,7 @@ const PriceChangeTooltip = ({
               ? `${format(new Date(latestDate), "do MMMM")}: ${latestPrice}`
               : "No historical data"}
           </div>
-        </div>
+        </>
       }
       position="top"
     >
