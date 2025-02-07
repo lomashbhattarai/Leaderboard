@@ -22,6 +22,7 @@ import { ThemeProvider as MuiThemeProvider } from "@mui/material/styles";
 import { useTheme } from "./contexts/ThemeContext";
 import SpaceBackground from "./components/SpaceBackground";
 import Navbar from "./components/Navbar";
+import StopLossPage from "./pages/StopLossPage";
 
 const theme = createTheme();
 
@@ -76,6 +77,7 @@ const AppContent = () => {
             <Route path="/leaderboard" element={<Leaderboard />} />
             <Route path="/stocks" element={<Stocks />} />
             <Route path="/stock/:symbol" element={<StockDetail />} />
+            <Route path="/stop-loss/:stockSymbol" element={<StopLossPage />} />
           </Routes>
         </div>
       </div>

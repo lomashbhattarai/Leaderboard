@@ -160,3 +160,46 @@ export interface LeaderboardEntry {
   userName: string;
   updatedAt: string;
 }
+
+export type BrokerCredential = {
+  id: number
+  userId: number
+  brokerUsername: string
+  brokerPassword: string
+  isActive: boolean
+  createdAt: string
+  updatedAt: string
+}
+
+export type BrokerCredentialDTO = Omit<BrokerCredential, 'id' | 'userId' | 'createdAt' | 'updatedAt'>
+
+export enum StopLossType {
+  ABSOLUTE = 'ABSOLUTE',
+  PERCENTAGE = 'PERCENTAGE',
+}
+
+export enum StopLossStatus {
+  PENDING = 'PENDING',
+  TRIGGERED = 'TRIGGERED',
+  EXECUTING = 'EXECUTING',
+  EXECUTED = 'EXECUTED',
+  FAILED = 'FAILED',
+  CANCELLED = 'CANCELLED',
+}
+
+export type StopLoss = {
+  id: number
+  portfolioStockId: number
+  type: StopLossType
+  value: number
+  quantity: number
+  isActive: boolean
+  status: StopLossStatus
+  triggeredAt: string | null
+  executedAt: string | null
+  failureReason: string | null
+  createdAt: string
+  updatedAt: string
+}
+
+export type StopLossDTO = Omit<StopLoss, 'id' | 'portfolioStockId' | 'status' | 'triggeredAt' | 'executedAt' | 'failureReason' | 'createdAt' | 'updatedAt'>
