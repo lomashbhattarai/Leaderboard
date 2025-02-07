@@ -158,7 +158,7 @@ const Navbar = () => {
               <img
                 src="/assets/branding/nepse-leader-transparent.png"
                 alt="Logo"
-                className="h-12 w-auto"
+                className="h-12 w-12 w-auto"
               />
             </Link>
             <div className="flex flex-grow w-full px-8 max-w-[1200px] mx-auto">
