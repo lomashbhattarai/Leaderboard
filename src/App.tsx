@@ -41,41 +41,43 @@ const AppContent = () => {
   const content = (
     <>
       <SpaceBackground theme={currentTheme} />
-      <div className="w-full px-4 max-w-[1200px] mx-auto">
+      <div className="w-full">
         <Navbar />
-        <Routes>
-          <Route path="/" element={<Leaderboard />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/signup" element={<Signup />} />
-          <Route path="/portfolio/:id" element={<SharedPortfolio />} />
-          <Route
-            path="/wealth-tracker"
-            element={
-              <ProtectedRoute>
-                <WealthTracker />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/earnings-tracker"
-            element={
-              <ProtectedRoute>
-                <EarningsTracker />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/my-portfolio"
-            element={
-              <ProtectedRoute>
-                <Portfolio />
-              </ProtectedRoute>
-            }
-          />
-          <Route path="/leaderboard" element={<Leaderboard />} />
-          <Route path="/stocks" element={<Stocks />} />
-          <Route path="/stock/:symbol" element={<StockDetail />} />
-        </Routes>
+        <div className="w-full px-4 max-w-[1200px] mx-auto">
+          <Routes>
+            <Route path="/" element={<Leaderboard />} />
+            <Route path="/login" element={<Login />} />
+            <Route path="/signup" element={<Signup />} />
+            <Route path="/portfolio/:id" element={<SharedPortfolio />} />
+            <Route
+              path="/wealth-tracker"
+              element={
+                <ProtectedRoute>
+                  <WealthTracker />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/earnings-tracker"
+              element={
+                <ProtectedRoute>
+                  <EarningsTracker />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/my-portfolio"
+              element={
+                <ProtectedRoute>
+                  <Portfolio />
+                </ProtectedRoute>
+              }
+            />
+            <Route path="/leaderboard" element={<Leaderboard />} />
+            <Route path="/stocks" element={<Stocks />} />
+            <Route path="/stock/:symbol" element={<StockDetail />} />
+          </Routes>
+        </div>
       </div>
     </>
   );
@@ -83,20 +85,15 @@ const AppContent = () => {
   const containerStyle = {
     color: currentTheme.accent.primary,
     backdropFilter: "blur(10px)",
-    //width: "100%",
   };
 
   return (
     <>
       <SpaceBackground theme={currentTheme} />
       {currentTheme.name === "Default Theme" ? (
-        <div className="w-full overflow-x-hidden">
-          <div className="w-full px-4 max-w-[1200px] mx-auto">{content}</div>
-        </div>
+        <div className="w-full overflow-x-hidden">{content}</div>
       ) : (
-        <div style={containerStyle}>
-          <div className="w-full px-4 max-w-[1200px] mx-auto">{content}</div>
-        </div>
+        <div style={containerStyle}>{content}</div>
       )}
     </>
   );

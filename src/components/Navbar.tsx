@@ -2,8 +2,6 @@ import React from "react";
 import { Link, NavLink } from "react-router-dom";
 import {
   IconButton,
-  Menu,
-  MenuItem,
   Box,
   useMediaQuery,
   useTheme as useMuiTheme,
@@ -12,14 +10,18 @@ import PaletteIcon from "@mui/icons-material/Palette";
 import MenuIcon from "@mui/icons-material/Menu";
 import UserMenu from "./UserMenu";
 import { useTheme } from "../contexts/ThemeContext";
-import { spaceThemes } from "../themes/spaceThemes";
 
 const Navbar = () => {
   const { currentTheme, setTheme, availableThemes } = useTheme();
-  const [themeMenu, setThemeMenu] = React.useState<null | HTMLElement>(null);
   const [mobileMenu, setMobileMenu] = React.useState<null | HTMLElement>(null);
   const muiTheme = useMuiTheme();
   const isMobile = useMediaQuery(muiTheme.breakpoints.down("sm"));
+
+  const toggleTheme = () => {
+    const currentIndex = availableThemes.indexOf(currentTheme.name);
+    const nextIndex = (currentIndex + 1) % availableThemes.length;
+    setTheme(availableThemes[nextIndex]);
+  };
 
   const navStyle = {
     "& a": {
@@ -121,7 +123,7 @@ const Navbar = () => {
       </IconButton>
       <div className="flex items-center space-x-2">
         <IconButton
-          onClick={(e) => setThemeMenu(e.currentTarget)}
+          onClick={toggleTheme}
           style={{
             color:
               currentTheme.name === "Default Theme"
@@ -140,14 +142,32 @@ const Navbar = () => {
     <>
       <Box
         component="nav"
-        className="mb-4 flex justify-between items-center w-full"
-        sx={navStyle}
+        className="flex justify-between items-center w-full"
+        sx={{
+          padding: "0.5rem 1rem",
+          backgroundColor:
+            currentTheme.name === "Default Theme"
+              ? "#ffffff"
+              : currentTheme.background.primary,
+          ...navStyle,
+        }}
       >
         <>
-          <div className="flex-1 min-w-0">{renderNavLinks()}</div>
-          <div className="flex items-center space-x-2 ml-4">
+          <div className="flex items-center flex-grow">
+            <Link to="/" className="mr-4">
+              <img
+                src="/assets/branding/nepse-leader-transparent.png"
+                alt="Logo"
+                className="h-12 w-auto"
+              />
+            </Link>
+            <div className="flex flex-grow w-full px-8 max-w-[1200px] mx-auto">
+              {renderNavLinks()}
+            </div>
+          </div>
+          <div className="flex items-center space-x-2">
             <IconButton
-              onClick={(e) => setThemeMenu(e.currentTarget)}
+              onClick={toggleTheme}
               style={{
                 color:
                   currentTheme.name === "Default Theme"
@@ -194,25 +214,6 @@ const Navbar = () => {
       >
         {isMobile && renderNavLinks()}
       </Menu> */}
-
-      {/* Theme Menu */}
-      <Menu
-        anchorEl={themeMenu}
-        open={Boolean(themeMenu)}
-        onClose={() => setThemeMenu(null)}
-      >
-        {availableThemes.map((themeName) => (
-          <MenuItem
-            key={themeName}
-            onClick={() => {
-              setTheme(themeName);
-              setThemeMenu(null);
-            }}
-          >
-            {spaceThemes[themeName].name}
-          </MenuItem>
-        ))}
-      </Menu>
     </>
   );
 };

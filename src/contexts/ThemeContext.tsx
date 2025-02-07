@@ -17,8 +17,11 @@ export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({
   );
 
   const setTheme = (themeName: string) => {
-    if (spaceThemes[themeName]) {
-      setCurrentTheme(spaceThemes[themeName]);
+    const theme = Object.values(spaceThemes).find(
+      (theme) => theme.name === themeName
+    );
+    if (theme) {
+      setCurrentTheme(theme);
     }
   };
 
@@ -27,7 +30,7 @@ export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({
       value={{
         currentTheme,
         setTheme,
-        availableThemes: Object.keys(spaceThemes),
+        availableThemes: Object.values(spaceThemes).map((theme) => theme.name),
       }}
     >
       {children}
