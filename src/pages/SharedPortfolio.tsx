@@ -31,8 +31,11 @@ const SharedPortfolio: React.FC = () => {
       key: "symbol",
       render: (value) => (
         <RouterLink
-          to={`/stock/${value}`}
+          // to={`/stock/${value}`}
+          to={`https://nepsealpha.com/trading/chart?symbol=${value}`}
           className="text-blue-600 hover:underline"
+          target="_blank"
+          rel="noopener noreferrer"
         >
           {value}
         </RouterLink>

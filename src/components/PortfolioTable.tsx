@@ -9,17 +9,24 @@ import TrendingDownIcon from "@mui/icons-material/TrendingDown";
 import StopLossForm from "./StopLossForm";
 import { StopLossDTO } from "../types/api";
 import { StopLossType } from "../types/api";
-import { Link } from "react-router-dom";
+import { Link as RouterLink } from "react-router-dom";
 
 const PORTFOLIO_TABLE_HEADERS_FROM_DB: Array<ColumnConfig> = [
   {
     label: "Stock",
     key: "stock",
     getValue: (portfolioStock: PortfolioStock) => portfolioStock.stock?.symbol,
-  },
-  {
-    label: "Quantity",
-    key: "quantity",
+    render: (value) => (
+      <RouterLink
+        // to={`/stock/${value}`}
+        to={`https://nepsealpha.com/trading/chart?symbol=${value}`}
+        className="text-blue-600 hover:underline"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        {value}
+      </RouterLink>
+    ),
   },
   {
     label: "Closing Price",
@@ -69,14 +76,14 @@ interface PortfolioTableProps {
 
 const StopLossAction: React.FC<{ stock: PortfolioStock }> = ({ stock }) => {
   return (
-    <Link
+    <RouterLink
       to={`/stop-loss/${stock.stock?.symbol}`}
       state={{ portfolioStockId: stock.id, stockSymbol: stock.stock?.symbol }}
     >
       <Button size="small" startIcon={<TrendingDownIcon />}>
         Stop Loss
       </Button>
-    </Link>
+    </RouterLink>
   );
 };
 
