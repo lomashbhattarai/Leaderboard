@@ -65,7 +65,7 @@ export const spaceThemes: Record<string, SpaceTheme> = {
   nebula: {
     name: 'Nebula',
     background: {
-      primary: '#0f172a',
+      primary: '#1a1f35',
       secondary: '#1e293b',
     },
     stars: {

@@ -32,6 +32,10 @@ const Navbar = () => {
       transition: "all 0.2s ease",
       padding: "4px 0",
       position: "relative",
+      backgroundColor:
+        currentTheme.name === "Default Theme"
+          ? "rgba(240, 237, 238, 0.8)" // Tailwind gray-100
+          : "rgba(0, 0, 0, 0.8)",
       "&:hover": {
         opacity: 0.8,
         color: currentTheme.accent.primary,
@@ -74,10 +78,7 @@ const Navbar = () => {
         isMobile && false ? "flex flex-col space-y-2" : "flex space-x-4"
       }`}
       style={{
-        color:
-          currentTheme.name === "Default Theme"
-            ? "rgba(0, 0, 0, 0.87)"
-            : "#ffffff",
+        color: currentTheme.name === "Default Theme" ? "blue" : "#ffffff",
       }}
     >
       {navLinks.map((link) => (
@@ -89,7 +90,7 @@ const Navbar = () => {
               color:
                 currentTheme.name === "Default Theme"
                   ? "rgba(0, 0, 0, 0.87)"
-                  : "#ffffff",
+                  : currentTheme.accent.primary,
               backgroundColor:
                 isActive && isMobile && false
                   ? currentTheme.name === "Default Theme"
@@ -126,9 +127,7 @@ const Navbar = () => {
           onClick={toggleTheme}
           style={{
             color:
-              currentTheme.name === "Default Theme"
-                ? "rgba(0, 0, 0, 0.87)"
-                : "#ffffff",
+              currentTheme.name === "Default Theme" ? "#000000" : "#ffffff",
           }}
         >
           <PaletteIcon />
@@ -145,20 +144,21 @@ const Navbar = () => {
         className="flex justify-between items-center w-full"
         sx={{
           padding: "0.5rem 1rem",
-          backgroundColor:
+          background:
             currentTheme.name === "Default Theme"
-              ? "#ffffff"
-              : currentTheme.background.primary,
+              ? "linear-gradient(to right, rgba(0, 0, 255, 0.07), rgba(0, 0, 255, 0.03), rgba(0, 0, 255, 0.01))"
+              : "rgba(0, 0, 0, 0.2)",
           ...navStyle,
         }}
       >
         <>
           <div className="flex items-center flex-grow">
-            <Link to="/" className="mr-4">
+            <Link to="/" className="mr-4" style={{ background: "transparent" }}>
               <img
                 src="/assets/branding/nepse-leader-transparent.png"
                 alt="Logo"
                 className="h-12 w-12 w-auto"
+                style={{ background: "transparent" }}
               />
             </Link>
             <div className="flex flex-grow w-full px-8 max-w-[1200px] mx-auto">
@@ -170,9 +170,7 @@ const Navbar = () => {
               onClick={toggleTheme}
               style={{
                 color:
-                  currentTheme.name === "Default Theme"
-                    ? "rgba(0, 0, 0, 0.87)"
-                    : "#ffffff",
+                  currentTheme.name === "Default Theme" ? "#000000" : "#ffffff",
               }}
             >
               <PaletteIcon />

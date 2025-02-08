@@ -20,7 +20,7 @@ const Stocks = () => {
   };
 
   return (
-    <div>
+    <div className="mt-3">
       <div className="flex justify-between items-center mb-4">
         <h1 className="text-2xl font-bold">
           Nepal Stock Exchange Listed Companies

@@ -117,7 +117,7 @@ const Portfolio: React.FC = () => {
   );
 
   return (
-    <div className="portfolio-container">
+    <div className="portfolio-container mt-3">
       <div className="portfolio-grid">
         {!portfolioId && (
           <Alert severity="info" className="mb-4">
@@ -136,7 +136,7 @@ const Portfolio: React.FC = () => {
           <Stack direction="row" spacing={2} alignItems="center">
             <Button
               variant="contained"
-              color="primary"
+              sx={{ bgcolor: currentTheme.accent.secondary }}
               onClick={() => setIsDrawerOpen(true)}
             >
               Add Stock to Portfolio

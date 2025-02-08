@@ -1,27 +1,12 @@
 import React from "react";
-import {
-  Alert,
-  Button,
-  Link,
-  Tab,
-  Typography,
-  IconButton,
-  Menu,
-  MenuItem,
-  Box,
-  Stack,
-} from "@mui/material";
+import { Alert, Button, Typography, Box } from "@mui/material";
 import { ColumnConfig } from "../components/common/TableView";
 import TableView from "../components/common/TableView";
 import { useUsers, useLeaderboard } from "../api/queries";
 import { Link as RouterLink, useNavigate } from "react-router-dom";
-import { Portfolio } from "../types/api";
-import MeroshareImport from "../components/MeroshareImport";
 import { usePortfolio } from "../hooks/usePortfolio";
 import { useAuthContext } from "../contexts/AuthContext";
 import { formatDistanceToNow } from "date-fns";
-import PaletteIcon from "@mui/icons-material/Palette";
-import { spaceThemes } from "../themes/spaceThemes";
 import EmojiEventsIcon from "@mui/icons-material/EmojiEvents";
 import LeaderboardCard from "../components/LeaderboardCard";
 
@@ -144,8 +129,8 @@ const Leaderboard: React.FC = () => {
 
   return (
     <div>
-      <div className="flex justify-between items-center mb-4">
-        <Typography variant="h4" component="h1">
+      <div className="flex justify-end items-center mb-4 mt-4 text-right text-sm">
+        <Typography variant="h5" component="h1">
           NEPSE Leaderboard
         </Typography>
       </div>
