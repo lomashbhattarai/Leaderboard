@@ -65,6 +65,11 @@ const PortfolioValue: React.FC<PortfolioValueProps> = ({
 }) => {
   const [isEditing, setIsEditing] = useState(false);
   const [editedName, setEditedName] = useState(portfolioName);
+
+  React.useEffect(() => {
+    setEditedName(portfolioName);
+  }, [portfolioName]);
+
   const updatePortfolio = useUpdatePortfolio(portfolioId);
 
   const totalValue = portfolioStocksFromDb.reduce(
@@ -155,7 +160,7 @@ const PortfolioValue: React.FC<PortfolioValueProps> = ({
               <IconButton
                 onClick={() => setIsEditing(true)}
                 size="small"
-                className="opacity-0 group-hover:opacity-100 transition-opacity ml-1"
+                className="ml-1"
                 sx={{ color: currentTheme.accent.primary }}
               >
                 <EditIcon fontSize="small" />

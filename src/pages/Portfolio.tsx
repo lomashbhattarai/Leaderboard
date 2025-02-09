@@ -155,25 +155,12 @@ const Portfolio: React.FC = () => {
           />
         </Stack>
 
-        <Stack>
-          <Box
-            sx={{
-              order: { xs: 2, md: 1 }, // On mobile (xs) show later, on desktop (md) show first
-            }}
-          >
-            <PortfolioTable
-              portfolioStocksFromDb={portfolioStocksFromDb}
-              onEdit={handleEdit}
-              onDelete={handleDelete}
-            />
-          </Box>
-
+        <Stack spacing={2}>
           <Stack
             direction={{ xs: "column", md: "row" }}
             spacing={4}
             width="100%"
             sx={{
-              order: { xs: 1, md: 2 }, // On mobile (xs) show first, on desktop (md) show later
               "& > *:first-of-type": {
                 flex: 0.4,
                 minWidth: { xs: "100%", md: "auto" },
@@ -191,8 +178,17 @@ const Portfolio: React.FC = () => {
               portfolioName={portfolioName}
               portfolioStocksFromDb={portfolioStocksFromDb}
             />
-            <PortfolioChart portfolioStocksFromDb={portfolioStocksFromDb} />
           </Stack>
+          <Box>
+            <PortfolioTable
+              portfolioStocksFromDb={portfolioStocksFromDb}
+              onEdit={handleEdit}
+              onDelete={handleDelete}
+            />
+          </Box>
+          <Box sx={{ order: 3 }}>
+            <PortfolioChart portfolioStocksFromDb={portfolioStocksFromDb} />
+          </Box>
         </Stack>
 
         {stockDrawer}

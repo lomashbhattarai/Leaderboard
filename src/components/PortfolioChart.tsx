@@ -73,7 +73,6 @@ const PortfolioChart: React.FC<Props> = ({ portfolioStocksFromDb }) => {
 
   return (
     <div className="portfolio-chart">
-      <h2>Portfolio Distribution</h2>
       <div
         className="chart-container"
         style={{

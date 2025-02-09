@@ -13,7 +13,7 @@ export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({
   children,
 }) => {
   const [currentTheme, setCurrentTheme] = useState<SpaceTheme>(
-    spaceThemes.nebula
+    spaceThemes.none
   );
 
   const setTheme = (themeName: string) => {
