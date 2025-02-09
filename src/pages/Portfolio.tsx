@@ -30,8 +30,13 @@ import { useTheme } from "../contexts/ThemeContext";
 
 const Portfolio: React.FC = () => {
   const queryClient = useQueryClient();
-  const { portfolioStocksFromDb, portfolioId, addPortfolio, portfolioName } =
-    usePortfolio();
+  const {
+    portfolioStocksFromDb,
+    portfolioId,
+    addPortfolio,
+    portfolioName,
+    privacy,
+  } = usePortfolio();
   const [isDrawerOpen, setIsDrawerOpen] = React.useState(false);
   const [selectedStock, setSelectedStock] =
     React.useState<PortfolioStock | null>(null);
@@ -181,6 +186,8 @@ const Portfolio: React.FC = () => {
             className="mt-8"
           >
             <PortfolioValue
+              privacy={privacy}
+              portfolioId={portfolioId}
               portfolioName={portfolioName}
               portfolioStocksFromDb={portfolioStocksFromDb}
             />

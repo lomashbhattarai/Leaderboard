@@ -47,6 +47,12 @@ export interface StockDTO {
   symbol: string
 }
 
+export enum PortfolioPrivacy {
+  PRIVATE = 'PRIVATE',
+  SHARE_ALL = 'SHARE_ALL',
+  SHARE_SECTORS = 'SHARE_SECTORS',
+}
+
 export interface Portfolio {
   id: number
   name: string
@@ -55,11 +61,13 @@ export interface Portfolio {
   updatedAt: string
   user?: User // Optional since it might not always be included in responses
   portfolioStocks?: PortfolioStock[] // Optional since it might not always be included
+  privacy: PortfolioPrivacy
 }
 
 export interface PublicPortfolio {
   id: number
   name: string
+  privacy: PortfolioPrivacy
   // userId: number
   // user?: User // Optional since it might not always be included in responses
   portfolioStocks?: PublicPortfolioStock[] // Optional since it might not always be included
@@ -76,6 +84,7 @@ export interface PublicPortfolioStock {
 export interface PortfolioDTO {
   name: string
   userId: number
+  privacy?: PortfolioPrivacy
 }
 
 export interface PortfolioStock {

@@ -7,6 +7,7 @@ import {
   useUserPortfolios,
 } from "../api/queries";
 import { useAuthContext } from "../contexts/AuthContext";
+import { PortfolioPrivacy } from "../types/api";
 
 export const usePortfolio = () => {
   const [portfolio, setPortfolio] = useState<ScriptInPortfolio[]>([]);
@@ -52,5 +53,6 @@ export const usePortfolio = () => {
     portfolioStocksFromDb: portfolios?.[0]?.portfolioStocks || [],
     portfolioId: portfolios?.[0]?.id || 0,
     portfolioName: portfolios?.[0]?.name || "",
+    privacy: portfolios?.[0]?.privacy || PortfolioPrivacy.PRIVATE,
   };
 };

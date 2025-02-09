@@ -14,7 +14,11 @@ import { Link as RouterLink } from "react-router-dom";
 import { formatPerformance } from "./Leaderboard";
 import Tooltip from "../components/common/Tooltip";
 import { format } from "date-fns";
-import { Stack, Box } from "@mui/material";
+import { Stack, Box, Tooltip as MuiTooltip, Typography } from "@mui/material";
+import LockIcon from "@mui/icons-material/Lock";
+import PublicIcon from "@mui/icons-material/Public";
+import CategoryIcon from "@mui/icons-material/Category";
+import { PortfolioPrivacy } from "../types/api";
 
 const SharedPortfolio: React.FC = () => {
   const { id } = useParams<{ id: string }>();
@@ -147,61 +151,69 @@ const SharedPortfolio: React.FC = () => {
 
   return (
     <div className="mx-auto">
-      <h1 className="text-2xl font-bold mb-4">
-        {/* {data.userName}'s */}
-        {publicPortfolio.name}
-      </h1>
+      <Box className="flex items-center gap-2 mb-4">
+        <Typography variant="h4" component="h1">
+          {publicPortfolio.name}
+        </Typography>
+        <MuiTooltip title={getPrivacyInfo(publicPortfolio.privacy).text}>
+          <span>{getPrivacyInfo(publicPortfolio.privacy).icon}</span>
+        </MuiTooltip>
+      </Box>
 
-      <Stack
-        direction={{ xs: "column", md: "row" }}
-        spacing={4}
-        sx={{ width: "100%" }}
-      >
-        <Box
-          sx={{
-            flex: "0 0 60%",
-            order: { xs: 2, md: 1 },
-          }}
+      {publicPortfolio.privacy === PortfolioPrivacy.PRIVATE ? (
+        <div>Private Portfolio</div>
+      ) : (
+        <Stack
+          direction={{ xs: "column", md: "row" }}
+          spacing={4}
+          sx={{ width: "100%" }}
         >
-          <TableView
-            columns={columns}
-            tableData={publicPortfolio.portfolioStocks || []}
-          />
-        </Box>
+          <Box
+            sx={{
+              flex: "0 0 60%",
+              order: { xs: 2, md: 1 },
+            }}
+          >
+            <TableView
+              columns={columns}
+              tableData={publicPortfolio.portfolioStocks || []}
+            />
+          </Box>
 
-        <Box
-          sx={{
-            flex: "0 0 40%",
-            order: { xs: 1, md: 2 },
-            fontSize: chartDimensions.fontSize,
-          }}
-        >
-          <ResponsiveContainer width="100%" height={chartDimensions.height}>
-            <PieChart>
-              <Pie
-                data={publicPortfolio.portfolioStocks}
-                dataKey="percentage"
-                nameKey="symbol"
-                cx="50%"
-                cy="50%"
-                outerRadius={chartDimensions.outerRadius}
-                fill="#8884d8"
-                label={({ symbol, percent }) =>
-                  `${symbol} ${(percent * 100).toFixed(0)}%`
-                }
-              >
-                {publicPortfolio.portfolioStocks?.map((entry, index) => (
-                  <Cell
-                    key={`cell-${index}`}
-                    fill={COLORS[index % COLORS.length]}
-                  />
-                ))}
-              </Pie>
-              <RechartTooltip />
-            </PieChart>
-          </ResponsiveContainer>
-        </Box>
-      </Stack>
+          <Box
+            sx={{
+              flex: "0 0 40%",
+              order: { xs: 1, md: 2 },
+              fontSize: chartDimensions.fontSize,
+            }}
+          >
+            <ResponsiveContainer width="100%" height={chartDimensions.height}>
+              <PieChart>
+                <Pie
+                  data={publicPortfolio.portfolioStocks}
+                  dataKey="percentage"
+                  nameKey="symbol"
+                  cx="50%"
+                  cy="50%"
+                  outerRadius={chartDimensions.outerRadius}
+                  fill="#8884d8"
+                  label={({ symbol, percent }) =>
+                    `${symbol} ${(percent * 100).toFixed(0)}%`
+                  }
+                >
+                  {publicPortfolio.portfolioStocks?.map((entry, index) => (
+                    <Cell
+                      key={`cell-${index}`}
+                      fill={COLORS[index % COLORS.length]}
+                    />
+                  ))}
+                </Pie>
+                <RechartTooltip />
+              </PieChart>
+            </ResponsiveContainer>
+          </Box>
+        </Stack>
+      )}
     </div>
   );
 };
@@ -257,4 +269,17 @@ const PriceChangeTooltip = ({
       {formattedValue}
     </Tooltip>
   );
+};
+
+const getPrivacyInfo = (privacy: string) => {
+  switch (privacy) {
+    case "PRIVATE":
+      return { icon: <LockIcon />, text: "Private Portfolio" };
+    case "SHARE_ALL":
+      return { icon: <PublicIcon />, text: "Showing All Holdings" };
+    case "SHARE_SECTORS":
+      return { icon: <CategoryIcon />, text: "Showing Sector-wise Holdings" };
+    default:
+      return { icon: <PublicIcon />, text: "Public Portfolio" };
+  }
 };
