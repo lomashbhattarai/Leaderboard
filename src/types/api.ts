@@ -158,6 +158,7 @@ export interface BulkPortfolioCreationPayload {
 export interface LeaderboardEntry {
   portfolioId: number;
   portfolioName: string;
+  privacy: PortfolioPrivacy;
   performance1D: number;
   performance1W: number;
   performance1M: number;
