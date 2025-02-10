@@ -1,5 +1,5 @@
 import React from "react";
-import { Alert, Button, Typography, Box } from "@mui/material";
+import { Alert, Button, Typography, Box, Tooltip } from "@mui/material";
 import { ColumnConfig } from "../components/common/TableView";
 import TableView from "../components/common/TableView";
 import { useUsers, useLeaderboard } from "../api/queries";
@@ -9,6 +9,9 @@ import { useAuthContext } from "../contexts/AuthContext";
 import { formatDistanceToNow } from "date-fns";
 import EmojiEventsIcon from "@mui/icons-material/EmojiEvents";
 import LeaderboardCard from "../components/LeaderboardCard";
+import LockIcon from "@mui/icons-material/Lock";
+import PublicIcon from "@mui/icons-material/Public";
+import CategoryIcon from "@mui/icons-material/Category";
 
 export const formatPerformance = (value: number | string) => {
   if (!value && value !== 0) {
@@ -59,14 +62,43 @@ const columns: ColumnConfig[] = [
   {
     label: "Portfolio",
     key: "portfolioName",
+    minWidth: 200,
     render: (value, row) => {
       return (
-        <RouterLink
-          to={`/portfolio/${row.portfolioId}`}
-          className="text-blue-600 hover:underline truncate block"
-        >
-          {value}
-        </RouterLink>
+        <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+          <RouterLink
+            to={`/portfolio/${row.portfolioId}`}
+            className="text-blue-600 hover:underline truncate block"
+          >
+            {value}
+          </RouterLink>
+        </Box>
+      );
+    },
+  },
+  {
+    label: "",
+    key: "privacy",
+    align: "center",
+    render: (value, row) => {
+      return (
+        <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+          {row.privacy === "PRIVATE" && (
+            <Tooltip title="Private portfolio">
+              <LockIcon fontSize="small" />
+            </Tooltip>
+          )}
+          {row.privacy === "SHARE_ALL" && (
+            <Tooltip title="All holdings visible">
+              <PublicIcon fontSize="small" />
+            </Tooltip>
+          )}
+          {row.privacy === "SHARE_SECTORS" && (
+            <Tooltip title="Only sectors visible">
+              <CategoryIcon fontSize="small" />
+            </Tooltip>
+          )}
+        </Box>
       );
     },
   },

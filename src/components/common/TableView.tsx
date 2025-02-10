@@ -27,6 +27,7 @@ export interface ColumnConfig {
   align?: "left" | "right" | "center";
   render?: (value: any, row: any, index: number) => React.ReactNode;
   getValue?: (row: any) => any;
+  minWidth?: number;
 }
 
 // Add view mode types
@@ -294,6 +295,7 @@ const TableView = ({
                       backgroundColor: currentTheme.background.primary,
                       zIndex:
                         index === 0 && responsive.fixedFirstColumn ? 3 : 2,
+                      minWidth: column.minWidth || responsive.minWidth || 150,
                     }}
                   >
                     {column.label}
