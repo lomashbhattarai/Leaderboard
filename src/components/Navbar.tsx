@@ -6,7 +6,6 @@ import {
   useMediaQuery,
   useTheme as useMuiTheme,
 } from "@mui/material";
-import PaletteIcon from "@mui/icons-material/Palette";
 import MenuIcon from "@mui/icons-material/Menu";
 import UserMenu from "./UserMenu";
 import { useTheme } from "../contexts/ThemeContext";
@@ -16,12 +15,6 @@ const Navbar = () => {
   const [mobileMenu, setMobileMenu] = React.useState<null | HTMLElement>(null);
   const muiTheme = useMuiTheme();
   const isMobile = useMediaQuery(muiTheme.breakpoints.down("sm"));
-
-  const toggleTheme = () => {
-    const currentIndex = availableThemes.indexOf(currentTheme.name);
-    const nextIndex = (currentIndex + 1) % availableThemes.length;
-    setTheme(availableThemes[nextIndex]);
-  };
 
   const navStyle = {
     "& a": {
@@ -69,7 +62,7 @@ const Navbar = () => {
   ];
 
   if (isMobile) {
-    navLinks = navLinks.slice(0, 2);
+    navLinks = navLinks.slice(0, 3);
   }
 
   const renderNavLinks = () => (
@@ -123,15 +116,6 @@ const Navbar = () => {
         <MenuIcon />
       </IconButton>
       <div className="flex items-center space-x-2">
-        <IconButton
-          onClick={toggleTheme}
-          style={{
-            color:
-              currentTheme.name === "Default Theme" ? "#000000" : "#ffffff",
-          }}
-        >
-          <PaletteIcon />
-        </IconButton>
         <UserMenu />
       </div>
     </>
@@ -161,20 +145,11 @@ const Navbar = () => {
                 style={{ background: "transparent" }}
               />
             </Link>
-            <div className="flex flex-grow w-full px-8 max-w-[1200px] mx-auto">
+            <div className="flex flex-grow w-full px-2 md:px-8 max-w-[1200px] mx-auto">
               {renderNavLinks()}
             </div>
           </div>
           <div className="flex items-center space-x-2">
-            <IconButton
-              onClick={toggleTheme}
-              style={{
-                color:
-                  currentTheme.name === "Default Theme" ? "#000000" : "#ffffff",
-              }}
-            >
-              <PaletteIcon />
-            </IconButton>
             <UserMenu />
           </div>
         </>
