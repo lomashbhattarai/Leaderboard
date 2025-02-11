@@ -1,6 +1,5 @@
 import { useState, useEffect, useCallback } from "react";
 import { ScriptInPortfolio } from "../types/portfolio";
-import { getPortfolio, savePortfolio } from "../utils/localStorage";
 import {
   useCreateBulkPortfolio,
   usePortfolios,
@@ -10,25 +9,14 @@ import { useAuthContext } from "../contexts/AuthContext";
 import { PortfolioPrivacy } from "../types/api";
 
 export const usePortfolio = () => {
-  const [portfolio, setPortfolio] = useState<ScriptInPortfolio[]>([]);
   const createBulkPortfolio = useCreateBulkPortfolio();
 
   const { user } = useAuthContext();
-
-  useEffect(() => {
-    const storedPortfolio = getPortfolio();
-    setPortfolio(storedPortfolio);
-  }, []);
 
   const { data: portfolios } = useUserPortfolios();
 
   const addPortfolio = useCallback(
     async (portfolio: Array<ScriptInPortfolio>) => {
-      setPortfolio((prev) => {
-        savePortfolio(portfolio);
-        return portfolio;
-      });
-
       try {
         const name = `${user?.fullName} - Portfolio`;
         const stocks = portfolio.map((stock) => ({
@@ -48,7 +36,7 @@ export const usePortfolio = () => {
   );
 
   return {
-    portfolio,
+    portfolio: portfolios?.[0],
     addPortfolio,
     portfolioStocksFromDb: portfolios?.[0]?.portfolioStocks || [],
     portfolioId: portfolios?.[0]?.id || 0,

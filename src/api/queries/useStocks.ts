@@ -1,7 +1,7 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { apiClient } from '../client';
 import { ENDPOINTS } from '../endpoints';
-import type { Stock, StockDTO } from '../../types/api';
+import type { Stock, StockDTO, StockWithPerformance } from '../../types/api';
 
 // Query keys
 export const stockKeys = {
@@ -27,6 +27,18 @@ export const useStock = (id: number) => {
     queryFn: async () => {
       const { data } = await apiClient.get<Stock>(ENDPOINTS.STOCKS.DETAIL(id));
       return data;
+    },
+  });
+};
+
+export const useStocksWithPerformance = () => {
+  return useQuery<StockWithPerformance[]>({
+    queryKey: [...stockKeys.lists(), 'withPerformance'],
+    queryFn: async () => {
+      const { data } = await apiClient.get<{ status: string; stocks: StockWithPerformance[] }>(
+        '/api/stocks/with-performance'
+      );
+      return data.stocks;
     },
   });
 };

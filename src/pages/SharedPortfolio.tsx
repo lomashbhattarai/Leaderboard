@@ -19,6 +19,7 @@ import LockIcon from "@mui/icons-material/Lock";
 import PublicIcon from "@mui/icons-material/Public";
 import CategoryIcon from "@mui/icons-material/Category";
 import { PortfolioPrivacy } from "../types/api";
+import StockSymbolLink from "../components/common/StockSymbolLink";
 
 const SharedPortfolio: React.FC = () => {
   const { id } = useParams<{ id: string }>();
@@ -33,17 +34,7 @@ const SharedPortfolio: React.FC = () => {
     {
       label: "Symbol",
       key: "symbol",
-      render: (value) => (
-        <RouterLink
-          // to={`/stock/${value}`}
-          to={`https://nepsealpha.com/trading/chart?symbol=${value}`}
-          className="text-blue-600 hover:underline"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          {value}
-        </RouterLink>
-      ),
+      render: (value) => <StockSymbolLink symbol={value} />,
     },
     {
       label: "Closing Price",

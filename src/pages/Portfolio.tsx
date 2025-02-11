@@ -27,6 +27,7 @@ import { useQueryClient } from "@tanstack/react-query";
 import { portfolioKeys } from "../api/queries/usePortfolios";
 import type { PortfolioStock, PortfolioStockDTO } from "../types/api";
 import { useTheme } from "../contexts/ThemeContext";
+import PortfolioInfo from "../components/PortfolioInfo";
 
 const Portfolio: React.FC = () => {
   const queryClient = useQueryClient();
@@ -36,6 +37,7 @@ const Portfolio: React.FC = () => {
     addPortfolio,
     portfolioName,
     privacy,
+    portfolio,
   } = usePortfolio();
   const [isDrawerOpen, setIsDrawerOpen] = React.useState(false);
   const [selectedStock, setSelectedStock] =
@@ -172,12 +174,8 @@ const Portfolio: React.FC = () => {
             }}
             className="mt-8"
           >
-            <PortfolioValue
-              privacy={privacy}
-              portfolioId={portfolioId}
-              portfolioName={portfolioName}
-              portfolioStocksFromDb={portfolioStocksFromDb}
-            />
+            <PortfolioInfo />
+            <PortfolioValue portfolio={portfolio} />
           </Stack>
           <Box>
             <PortfolioTable

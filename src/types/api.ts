@@ -59,9 +59,15 @@ export interface Portfolio {
   userId: number
   createdAt: string
   updatedAt: string
-  user?: User // Optional since it might not always be included in responses
-  portfolioStocks?: PortfolioStock[] // Optional since it might not always be included
+  user?: User
+  portfolioStocks?: PortfolioStock[]
   privacy: PortfolioPrivacy
+  currentValue: number
+  performance: {
+    daily: number
+    weekly: number
+    monthly: number
+  }
 }
 
 export interface PublicPortfolio {
@@ -213,3 +219,10 @@ export type StopLoss = {
 }
 
 export type StopLossDTO = Omit<StopLoss, 'id' | 'portfolioStockId' | 'status' | 'triggeredAt' | 'executedAt' | 'failureReason' | 'createdAt' | 'updatedAt'>
+
+export interface StockWithPerformance extends Stock {
+  latestPrice: number
+  performance1D: number
+  performance1W: number
+  performance1M: number
+}

@@ -47,9 +47,6 @@ const LeaderboardCard: React.FC<LeaderboardCardProps> = ({ row, index }) => {
       onClick={() => navigate(`/portfolio/${row.portfolioId}`)}
       sx={{
         cursor: "pointer",
-        // "&:hover": {
-        //   backgroundColor: "rgba(0, 0, 0, 0.04)",
-        // },
         borderRadius: 1,
         p: 2,
       }}
