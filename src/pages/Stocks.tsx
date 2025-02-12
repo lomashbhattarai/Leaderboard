@@ -66,59 +66,60 @@ const Stocks = () => {
           }}
         />
       </div>
-      <div className="grid gap-4">
-        <TableView
-          columns={[
-            {
-              label: "Symbol",
-              key: "symbol",
-              render: (symbol: string) => <StockSymbolLink symbol={symbol} />,
-            },
-            {
-              label: "Name",
-              key: "name",
-              minWidth: 200,
-              render: (value) => (
-                <Tooltip title={value}>
-                  <Box
-                    sx={{
-                      whiteSpace: "nowrap",
-                      overflow: "hidden",
-                      textOverflow: "ellipsis",
-                    }}
-                  >
-                    {value}
-                  </Box>
-                </Tooltip>
-              ),
-            },
-            {
-              label: "Latest Price",
-              key: "latestPrice",
-              render: (value) => (value ? formatAmount(value, true) : "-"),
-            },
-            {
-              label: "1 Day",
-              key: "performance1D",
-              render: (value) =>
-                value !== null ? formatPerformance(value) : "-",
-            },
-            {
-              label: "1 Week",
-              key: "performance1W",
-              render: (value) =>
-                value !== null ? formatPerformance(value) : "-",
-            },
-            {
-              label: "1 Month",
-              key: "performance1M",
-              render: (value) =>
-                value !== null ? formatPerformance(value) : "-",
-            },
-          ]}
-          tableData={filteredStocks}
-        />
-      </div>
+      <TableView
+        columns={[
+          {
+            label: "Symbol",
+            key: "symbol",
+            render: (symbol: string) => <StockSymbolLink symbol={symbol} />,
+          },
+          {
+            label: "Name",
+            key: "name",
+            minWidth: 200,
+            render: (value) => (
+              <Tooltip title={value}>
+                <Box
+                  sx={{
+                    whiteSpace: "nowrap",
+                    overflow: "hidden",
+                    textOverflow: "ellipsis",
+                    maxWidth: "260px",
+                    width: "100%",
+                    display: "block",
+                  }}
+                >
+                  {value}
+                </Box>
+              </Tooltip>
+            ),
+          },
+          {
+            label: "Latest Price",
+            key: "latestPrice",
+            render: (value) => (value ? formatAmount(value, true) : "-"),
+          },
+          {
+            label: "1 Day",
+            key: "performance1D",
+            render: (value) =>
+              value !== null ? formatPerformance(value) : "-",
+          },
+          {
+            label: "1 Week",
+            key: "performance1W",
+            render: (value) =>
+              value !== null ? formatPerformance(value) : "-",
+          },
+          {
+            label: "1 Month",
+            key: "performance1M",
+            render: (value) =>
+              value !== null ? formatPerformance(value) : "-",
+          },
+        ]}
+        tableData={filteredStocks}
+      />
     </div>
   );
 };
