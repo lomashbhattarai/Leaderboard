@@ -9,11 +9,15 @@ import { Box, Tooltip, TextField } from "@mui/material";
 // import { toast } from "react-hot-toast";
 import React from "react";
 import StockSymbolLink from "../components/common/StockSymbolLink";
+import { useAuthContext } from "../contexts/AuthContext";
 
 const Stocks = () => {
   const { data: stocks, isLoading, error } = useStocksWithPerformance();
   const uploadMutation = useUploadStockPrices();
   const [searchQuery, setSearchQuery] = React.useState("");
+  const { user } = useAuthContext();
+
+  console.log(user);
 
   const handleFileImport = async (file: File) => {
     try {
@@ -43,10 +47,12 @@ const Stocks = () => {
         <h1 className="text-2xl font-bold">
           Nepal Stock Exchange Listed Companies
         </h1>
-        <CSVImport
-          handleFileImport={handleFileImport}
-          label="Upload Today's Prices"
-        />
+        {user?.role === "superadmin" && (
+          <CSVImport
+            handleFileImport={handleFileImport}
+            label="Upload Today's Prices"
+          />
+        )}
       </div>
       <div className="mb-4">
         <TextField
