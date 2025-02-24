@@ -138,7 +138,7 @@ const columns: ColumnConfig[] = [
     label: "Updated At",
     key: "updatedAt",
     render: (value) => {
-      return `Updated ${formatDistanceToNow(new Date(value))} ago`;
+      return value ? `Updated ${formatDistanceToNow(new Date(value))} ago` : "";
     },
   },
 ];

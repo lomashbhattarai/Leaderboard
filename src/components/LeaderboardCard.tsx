@@ -137,7 +137,11 @@ const LeaderboardCard: React.FC<LeaderboardCardProps> = ({ row, index }) => {
             sx={{ color: currentTheme.accent.primary }}
           >
             <Typography variant="body2">
-              last updated {formatDistanceToNow(new Date(row.updatedAt))} ago
+              {row.updatedAt
+                ? `Last updated ${formatDistanceToNow(
+                    new Date(row.updatedAt)
+                  )} ago`
+                : ""}
             </Typography>
           </Stack>
         </Stack>
