@@ -57,8 +57,8 @@ const Navbar = () => {
     { to: "/", label: "Home" },
     { to: "/my-portfolio", label: "My Portfolio" },
     { to: "/stocks", label: "Stocks" },
-    { to: "/earnings-tracker", label: "Earnings Tracker" },
-    { to: "/wealth-tracker", label: "Wealth Tracker" },
+    // { to: "/earnings-tracker", label: "Earnings Tracker" },
+    // { to: "/wealth-tracker", label: "Wealth Tracker" },
   ];
 
   if (isMobile) {
