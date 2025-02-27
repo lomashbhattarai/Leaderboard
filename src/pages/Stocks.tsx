@@ -7,12 +7,27 @@ import { formatPerformance } from "../pages/Leaderboard";
 import { formatAmount } from "../utils/helper";
 import { Box, Tooltip, TextField } from "@mui/material";
 // import { toast } from "react-hot-toast";
-import React from "react";
+import React, { useState } from "react";
 import StockSymbolLink from "../components/common/StockSymbolLink";
 import { useAuthContext } from "../contexts/AuthContext";
 
 const Stocks = () => {
-  const { data: stocks, isLoading, error } = useStocksWithPerformance();
+  const [sortConfig, setSortConfig] = useState<{
+    key: string;
+    order: "asc" | "desc";
+  }>({
+    key: "performance1M",
+    order: "desc",
+  });
+
+  const {
+    data: stocks,
+    isLoading,
+    error,
+  } = useStocksWithPerformance({
+    sortBy: sortConfig.key,
+    sortOrder: sortConfig.order,
+  });
   const uploadMutation = useUploadStockPrices();
   const [searchQuery, setSearchQuery] = React.useState("");
   const { user } = useAuthContext();
@@ -27,6 +42,10 @@ const Stocks = () => {
       console.error("Error uploading CSV:", error);
       // toast.error("Failed to upload stock prices");
     }
+  };
+
+  const handleSort = (key: string, order: "asc" | "desc") => {
+    setSortConfig({ key, order });
   };
 
   const filteredStocks = React.useMemo(() => {
@@ -77,11 +96,13 @@ const Stocks = () => {
           {
             label: "Symbol",
             key: "symbol",
+            sortable: true,
             render: (symbol: string) => <StockSymbolLink symbol={symbol} />,
           },
           {
             label: "Name",
             key: "name",
+            sortable: true,
             minWidth: 200,
             render: (value) => (
               <Tooltip title={value}>
@@ -103,28 +124,34 @@ const Stocks = () => {
           {
             label: "Latest Price",
             key: "latestPrice",
+            sortable: true,
             render: (value) => (value ? formatAmount(value, true) : "-"),
           },
           {
             label: "1 Day",
             key: "performance1D",
+            sortable: true,
             render: (value) =>
               value !== null ? formatPerformance(value) : "-",
           },
           {
             label: "1 Week",
             key: "performance1W",
+            sortable: true,
             render: (value) =>
               value !== null ? formatPerformance(value) : "-",
           },
           {
             label: "1 Month",
             key: "performance1M",
+            sortable: true,
             render: (value) =>
               value !== null ? formatPerformance(value) : "-",
           },
         ]}
         tableData={filteredStocks}
+        onSort={handleSort}
+        currentSort={sortConfig}
       />
     </div>
   );

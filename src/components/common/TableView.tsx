@@ -36,6 +36,7 @@ export interface ColumnConfig {
   ) => React.ReactNode;
   getValue?: (row: any) => any;
   minWidth?: number;
+  sortable?: boolean;
 }
 
 // Add view mode types
@@ -61,6 +62,8 @@ interface TableViewProps {
   customCardComponent?: (row: any, index: number) => React.ReactNode;
   renderExpandedRow?: (row: any) => React.ReactNode;
   expansionTriggerColumnKey?: string;
+  onSort?: (key: string, order: "asc" | "desc") => void;
+  currentSort?: { key: string; order: "asc" | "desc" };
 }
 
 const TableView = ({
@@ -80,6 +83,8 @@ const TableView = ({
   customCardComponent,
   renderExpandedRow,
   expansionTriggerColumnKey,
+  onSort,
+  currentSort,
 }: TableViewProps) => {
   const { currentTheme } = useTheme();
   const styles = getCommonStyles(currentTheme);
@@ -334,9 +339,53 @@ const TableView = ({
                       zIndex:
                         index === 0 && responsive.fixedFirstColumn ? 3 : 2,
                       minWidth: column.minWidth || responsive.minWidth || 150,
+                      cursor: column.sortable ? "pointer" : "default",
+                      "&:hover": column.sortable
+                        ? {
+                            "& .sort-icon": {
+                              opacity: 1,
+                            },
+                          }
+                        : {},
+                    }}
+                    onClick={() => {
+                      if (column.sortable && onSort) {
+                        const newOrder =
+                          currentSort?.key === column.key &&
+                          currentSort.order === "asc"
+                            ? "desc"
+                            : "asc";
+                        onSort(column.key, newOrder);
+                      }
                     }}
                   >
-                    {column.label}
+                    <Box
+                      sx={{
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent:
+                          column.align === "right" ? "flex-end" : "flex-start",
+                      }}
+                    >
+                      {column.label}
+                      {column.sortable && (
+                        <Box
+                          component="span"
+                          className="sort-icon"
+                          sx={{
+                            opacity: currentSort?.key === column.key ? 1 : 0.3,
+                            marginLeft: "4px",
+                            transition: "opacity 0.2s",
+                          }}
+                        >
+                          {currentSort?.key === column.key
+                            ? currentSort.order === "asc"
+                              ? "↑"
+                              : "↓"
+                            : "↕"}
+                        </Box>
+                      )}
+                    </Box>
                   </TableCell>
                 ))}
                 {(showActions || onDeleteTransaction) && (

@@ -31,12 +31,18 @@ export const useStock = (id: number) => {
   });
 };
 
-export const useStocksWithPerformance = () => {
+export const useStocksWithPerformance = (
+  options?: { sortBy?: string; sortOrder?: 'asc' | 'desc' }
+) => {
   return useQuery<StockWithPerformance[]>({
-    queryKey: [...stockKeys.lists(), 'withPerformance'],
+    queryKey: [...stockKeys.lists(), 'withPerformance', options],
     queryFn: async () => {
+      const params = new URLSearchParams();
+      if (options?.sortBy) params.append('sortBy', options.sortBy);
+      if (options?.sortOrder) params.append('sortOrder', options.sortOrder);
+      
       const { data } = await apiClient.get<{ status: string; stocks: StockWithPerformance[] }>(
-        '/api/stocks/with-performance'
+        `/api/stocks/with-performance?${params.toString()}`
       );
       return data.stocks;
     },
