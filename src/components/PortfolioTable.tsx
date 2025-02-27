@@ -10,6 +10,8 @@ import StopLossForm from "./StopLossForm";
 import { StopLossDTO } from "../types/api";
 import { StopLossType } from "../types/api";
 import { Link as RouterLink } from "react-router-dom";
+import StopLossChip from "./StopLossChip";
+import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 
 const PORTFOLIO_TABLE_HEADERS_FROM_DB: Array<ColumnConfig> = [
   {
@@ -60,7 +62,13 @@ const PORTFOLIO_TABLE_HEADERS_FROM_DB: Array<ColumnConfig> = [
   {
     label: "Stop Loss",
     key: "stopLoss",
-    render: (_, stock: PortfolioStock) => <StopLossAction stock={stock} />,
+    render: (_, stock: PortfolioStock, _index, onExpand, isExpanded) => (
+      <StopLossAction
+        stock={stock}
+        onExpand={onExpand}
+        isExpanded={isExpanded}
+      />
+    ),
   },
   // {
   //   label: "Buy Date",
@@ -74,16 +82,125 @@ interface PortfolioTableProps {
   onDelete: (stockId: number) => void;
 }
 
-const StopLossAction: React.FC<{ stock: PortfolioStock }> = ({ stock }) => {
+const StopLossAction: React.FC<{
+  stock: PortfolioStock;
+  onExpand?: () => void;
+  isExpanded?: boolean;
+}> = ({ stock, onExpand, isExpanded }) => {
+  const activeStopLosses = stock.stopLosses || [];
+
+  if (activeStopLosses.length === 0) {
+    return (
+      <RouterLink
+        to={`/stop-loss/${stock.stock?.symbol}`}
+        state={{ portfolioStockId: stock.id, stockSymbol: stock.stock?.symbol }}
+      >
+        <Button
+          size="small"
+          startIcon={<TrendingDownIcon sx={{ fontSize: "1rem" }} />}
+          sx={{
+            textTransform: "none",
+            fontSize: "0.75rem",
+          }}
+        >
+          Set stop loss
+        </Button>
+      </RouterLink>
+    );
+  }
+
   return (
-    <RouterLink
-      to={`/stop-loss/${stock.stock?.symbol}`}
-      state={{ portfolioStockId: stock.id, stockSymbol: stock.stock?.symbol }}
+    <Stack
+      direction="row"
+      alignItems="center"
+      spacing={1}
+      onClick={onExpand}
+      sx={{
+        minWidth: 0,
+        maxWidth: "100%",
+        cursor: "pointer",
+        "&:hover": {
+          opacity: 0.8,
+        },
+      }}
     >
-      <Button size="small" startIcon={<TrendingDownIcon />}>
-        Stop Loss
-      </Button>
-    </RouterLink>
+      <StopLossChip
+        key={activeStopLosses[0].id}
+        type={activeStopLosses[0].type}
+        value={activeStopLosses[0].value}
+        status={activeStopLosses[0].status}
+      />
+      {activeStopLosses.length > 1 && (
+        <Typography
+          variant="caption"
+          color="text.secondary"
+          sx={{
+            whiteSpace: "nowrap",
+            overflow: "hidden",
+            textOverflow: "ellipsis",
+          }}
+        >
+          +{activeStopLosses.length - 1}
+        </Typography>
+      )}
+      <KeyboardArrowDownIcon
+        sx={{
+          transform: isExpanded ? "rotate(180deg)" : "rotate(0deg)",
+          transition: "transform 0.2s",
+          fontSize: "small",
+        }}
+      />
+    </Stack>
+  );
+};
+
+const ExpandedStopLossView: React.FC<{ stock: PortfolioStock }> = ({
+  stock,
+}) => {
+  return (
+    <Box sx={{ p: 2 }}>
+      <Typography variant="subtitle2" gutterBottom>
+        Stop Losses for {stock.stock?.symbol}
+      </Typography>
+      <Stack spacing={2}>
+        {stock.stopLosses?.map((sl) => (
+          <Box
+            key={sl.id}
+            sx={{
+              display: "flex",
+              justifyContent: "space-between",
+              alignItems: "center",
+            }}
+          >
+            <StopLossChip type={sl.type} value={sl.value} status={sl.status} />
+            {/* <Typography variant="body2">Quantity: {sl.quantity}</Typography> */}
+            {sl.triggeredAt && (
+              <Typography variant="body2" color="text.secondary">
+                Triggered: {new Date(sl.triggeredAt).toLocaleDateString()}
+              </Typography>
+            )}
+          </Box>
+        ))}
+        <RouterLink
+          to={`/stop-loss/${stock.stock?.symbol}`}
+          state={{
+            portfolioStockId: stock.id,
+            stockSymbol: stock.stock?.symbol,
+          }}
+        >
+          <Button
+            size="small"
+            startIcon={<TrendingDownIcon sx={{ fontSize: "1rem" }} />}
+            sx={{
+              textTransform: "none",
+              fontSize: "0.75rem",
+            }}
+          >
+            Set stop loss
+          </Button>
+        </RouterLink>
+      </Stack>
+    </Box>
   );
 };
 
@@ -107,6 +224,8 @@ const PortfolioTable: React.FC<PortfolioTableProps> = ({
       onEdit={onEdit}
       onDelete={onDelete}
       showActions={true}
+      renderExpandedRow={(row) => <ExpandedStopLossView stock={row} />}
+      expansionTriggerColumnKey="stopLoss"
     />
   );
 };

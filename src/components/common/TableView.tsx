@@ -15,17 +15,27 @@ import {
   Stack,
   useMediaQuery,
   useTheme as useMuiTheme,
+  Collapse,
 } from "@mui/material";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
+import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
+import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
 import { useTheme } from "../../contexts/ThemeContext";
 import { getCommonStyles } from "../../themes/commonComponents";
+import { useState } from "react";
 
 export interface ColumnConfig {
   label: string;
   key: string;
   align?: "left" | "right" | "center";
-  render?: (value: any, row: any, index: number) => React.ReactNode;
+  render?: (
+    value: any,
+    row: any,
+    index: number,
+    onExpand?: () => void,
+    isExpanded?: boolean
+  ) => React.ReactNode;
   getValue?: (row: any) => any;
   minWidth?: number;
 }
@@ -51,6 +61,8 @@ interface TableViewProps {
   showActions?: boolean;
   responsive?: ResponsiveOptions;
   customCardComponent?: (row: any, index: number) => React.ReactNode;
+  renderExpandedRow?: (row: any) => React.ReactNode;
+  expansionTriggerColumnKey?: string;
 }
 
 const TableView = ({
@@ -68,10 +80,13 @@ const TableView = ({
     breakpoint: 600, // default breakpoint
   },
   customCardComponent,
+  renderExpandedRow,
+  expansionTriggerColumnKey,
 }: TableViewProps) => {
   const { currentTheme } = useTheme();
   const styles = getCommonStyles(currentTheme);
   const muiTheme = useMuiTheme();
+  const [expandedRows, setExpandedRows] = useState<Set<number>>(new Set());
 
   // Check if screen is mobile size
   const isMobile = useMediaQuery(`(max-width:${responsive.breakpoint}px)`);
@@ -79,6 +94,16 @@ const TableView = ({
   // Determine view mode
   const viewMode: ViewMode =
     responsive.forceViewMode || (isMobile ? "card" : "table");
+
+  const toggleRow = (rowId: number) => {
+    const newExpandedRows = new Set(expandedRows);
+    if (expandedRows.has(rowId)) {
+      newExpandedRows.delete(rowId);
+    } else {
+      newExpandedRows.add(rowId);
+    }
+    setExpandedRows(newExpandedRows);
+  };
 
   const renderCardView = () => (
     <Stack spacing={2}>
@@ -308,65 +333,83 @@ const TableView = ({
             </TableHead>
             <TableBody>
               {tableData.map((row, rowIndex) => (
-                <TableRow key={row.id || rowIndex}>
-                  {columns.map((column, colIndex) => (
-                    <TableCell
-                      key={colIndex}
-                      align={column.align}
-                      className={
-                        colIndex === 0 && responsive.fixedFirstColumn
-                          ? "fixed-column"
-                          : ""
-                      }
-                      sx={{
-                        color: currentTheme.accent.secondary,
-                      }}
-                    >
-                      {column.render
-                        ? column.render(
-                            column.getValue
-                              ? column.getValue(row)
-                              : row[column.key],
-                            row,
-                            rowIndex
-                          )
-                        : column.getValue
-                        ? column.getValue(row)
-                        : row[column.key]}
-                    </TableCell>
-                  ))}
-                  {(showActions || onDeleteTransaction) && (
-                    <TableCell>
-                      {showActions && (
-                        <>
+                <>
+                  <TableRow key={row.id || rowIndex}>
+                    {columns.map((column, colIndex) => (
+                      <TableCell
+                        key={colIndex}
+                        align={column.align}
+                        className={
+                          colIndex === 0 && responsive.fixedFirstColumn
+                            ? "fixed-column"
+                            : ""
+                        }
+                        sx={{
+                          color: currentTheme.accent.secondary,
+                        }}
+                      >
+                        {column.render
+                          ? column.render(
+                              column.getValue
+                                ? column.getValue(row)
+                                : row[column.key],
+                              row,
+                              rowIndex,
+                              column.key === expansionTriggerColumnKey
+                                ? () => toggleRow(row.id)
+                                : undefined,
+                              expandedRows.has(row.id)
+                            )
+                          : column.getValue
+                          ? column.getValue(row)
+                          : row[column.key]}
+                      </TableCell>
+                    ))}
+                    {(showActions || onDeleteTransaction) && (
+                      <TableCell>
+                        {showActions && (
+                          <>
+                            <IconButton
+                              onClick={() => onEdit?.(row)}
+                              size="small"
+                              aria-label="edit"
+                            >
+                              <EditIcon />
+                            </IconButton>
+                            <IconButton
+                              onClick={() => onDelete?.(row.id)}
+                              size="small"
+                              aria-label="delete"
+                            >
+                              <DeleteIcon />
+                            </IconButton>
+                          </>
+                        )}
+                        {onDeleteTransaction && !showActions && (
                           <IconButton
-                            onClick={() => onEdit?.(row)}
-                            size="small"
-                            aria-label="edit"
-                          >
-                            <EditIcon />
-                          </IconButton>
-                          <IconButton
-                            onClick={() => onDelete?.(row.id)}
+                            onClick={() => onDeleteTransaction(rowIndex)}
                             size="small"
                             aria-label="delete"
                           >
                             <DeleteIcon />
                           </IconButton>
-                        </>
-                      )}
-                      {onDeleteTransaction && !showActions && (
-                        <IconButton
-                          onClick={() => onDeleteTransaction(rowIndex)}
-                          size="small"
-                          aria-label="delete"
-                        >
-                          <DeleteIcon />
-                        </IconButton>
-                      )}
-                    </TableCell>
+                        )}
+                      </TableCell>
+                    )}
+                  </TableRow>
+                  {renderExpandedRow && expandedRows.has(row.id) && (
+                    <TableRow>
+                      <TableCell
+                        style={{ paddingBottom: 0, paddingTop: 0 }}
+                        colSpan={columns.length + (showActions ? 1 : 0)}
+                      >
+                        <Collapse in timeout="auto" unmountOnExit>
+                          <Box sx={{ margin: 1 }}>{renderExpandedRow(row)}</Box>
+                        </Collapse>
+                      </TableCell>
+                    </TableRow>
                   )}
-                </TableRow>
+                </>
               ))}
             </TableBody>
             {showFooter && (

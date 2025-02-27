@@ -104,6 +104,7 @@ export interface PortfolioStock {
   updatedAt: string
   portfolio?: Portfolio // Optional since it might not always be included
   stock?: Stock // Optional since it might not always be included
+  stopLosses?: StopLoss[]
   latestClosingPrice?: number
   latestDate?: string
   dayAgoPrice?: number
