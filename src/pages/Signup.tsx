@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { TextField, Button, Paper, Typography, Box } from "@mui/material";
 import { useAuth } from "../api/queries/useAuth";
+import { showToast } from "../utils/toast";
 
 export default function Signup() {
   const [email, setEmail] = useState("");
@@ -11,7 +12,17 @@ export default function Signup() {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    signupMutation.mutate({ email, password, fullName });
+    signupMutation.mutate(
+      { email, password, fullName },
+      {
+        onSuccess: () => {
+          showToast.success("Account created successfully!");
+        },
+        onError: (error) => {
+          showToast.error("Failed to create account. Please try again.");
+        },
+      }
+    );
   };
 
   return (

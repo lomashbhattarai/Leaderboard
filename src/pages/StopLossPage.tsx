@@ -19,6 +19,7 @@ import {
 import StopLossForm from "../components/StopLossForm";
 import AddIcon from "@mui/icons-material/Add";
 import CloseIcon from "@mui/icons-material/Close";
+import { showToast } from "../utils/toast";
 
 const STOP_LOSS_TABLE_HEADERS: Array<ColumnConfig> = [
   {
@@ -73,13 +74,15 @@ const StopLossPage: React.FC = () => {
     try {
       if (selectedStopLoss) {
         await updateStopLoss.mutateAsync(data);
+        showToast.success("Stop loss updated successfully");
       } else {
         await createStopLoss.mutateAsync(data);
+        showToast.success("Stop loss added successfully");
       }
       handleDrawerClose();
     } catch (error) {
       console.error("Failed to save stop loss:", error);
-      alert("Failed to save stop loss. Please try again.");
+      showToast.error("Failed to save stop loss. Please try again.");
     }
   };
 
@@ -92,9 +95,10 @@ const StopLossPage: React.FC = () => {
     if (window.confirm("Are you sure you want to delete this stop loss?")) {
       try {
         await deleteStopLoss.mutateAsync(id);
+        showToast.success("Stop loss deleted successfully");
       } catch (error) {
         console.error("Failed to delete stop loss:", error);
-        alert("Failed to delete stop loss. Please try again.");
+        showToast.error("Failed to delete stop loss. Please try again.");
       }
     }
   };

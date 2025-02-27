@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import Avatar from "@mui/material/Avatar";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
@@ -9,11 +9,21 @@ import { Button } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import { useTheme } from "../contexts/ThemeContext";
 import PaletteIcon from "@mui/icons-material/Palette";
+import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
+import VisibilityIcon from "@mui/icons-material/Visibility";
+import {
+  useUserSettings,
+  useToggleAnonymous,
+} from "../api/queries/useUserSettings";
+import { showToast } from "../utils/toast";
 
 const UserMenu: React.FC = () => {
   const { user, logout } = useAuthContext();
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const { currentTheme, setTheme, availableThemes } = useTheme();
+
+  const { data: settings } = useUserSettings();
+  const toggleAnonymousMutation = useToggleAnonymous();
 
   const navigate = useNavigate();
 
@@ -29,6 +39,21 @@ const UserMenu: React.FC = () => {
 
   const handleClose = () => {
     setAnchorEl(null);
+  };
+
+  const handleToggleAnonymous = async () => {
+    try {
+      await toggleAnonymousMutation.mutateAsync();
+      showToast.success(
+        settings?.isAnonymous
+          ? "Identity revealed! Time to be as bold as Tony Stark at a press conference 🎤"
+          : "Gone incognito! Even Batman would approve of your discretion 🦇"
+      );
+      handleClose();
+    } catch (error) {
+      console.error("Failed to toggle anonymous mode:", error);
+      showToast.error("Failed to toggle anonymous mode.");
+    }
   };
 
   return (
@@ -50,7 +75,9 @@ const UserMenu: React.FC = () => {
             open={Boolean(anchorEl)}
             onClose={handleClose}
           >
-            <MenuItem disabled>{user.name}</MenuItem>
+            <MenuItem disabled>
+              {settings?.isAnonymous ? "Anonymous User" : user.fullName}
+            </MenuItem>
             <MenuItem disabled>{user.email}</MenuItem>
             <MenuItem
               onClick={() => {
@@ -70,6 +97,14 @@ const UserMenu: React.FC = () => {
                   strokeWidth: 1,
                 }}
               />
+            </MenuItem>
+            <MenuItem onClick={handleToggleAnonymous}>
+              {settings?.isAnonymous ? "Show Identity" : "Go Anonymous"}
+              {settings?.isAnonymous ? (
+                <VisibilityIcon sx={{ ml: 1 }} />
+              ) : (
+                <VisibilityOffIcon sx={{ ml: 1 }} />
+              )}
             </MenuItem>
             <MenuItem
               onClick={() => {

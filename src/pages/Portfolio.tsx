@@ -28,6 +28,7 @@ import { portfolioKeys } from "../api/queries/usePortfolios";
 import type { PortfolioStock, PortfolioStockDTO } from "../types/api";
 import { useTheme } from "../contexts/ThemeContext";
 import PortfolioInfo from "../components/PortfolioInfo";
+import { showToast } from "../utils/toast";
 
 const Portfolio: React.FC = () => {
   const queryClient = useQueryClient();
@@ -61,17 +62,18 @@ const Portfolio: React.FC = () => {
     try {
       if (selectedStock) {
         await updateStock.mutateAsync(data);
+        showToast.success("Stock updated successfully");
       } else {
         await createStock.mutateAsync(data);
+        showToast.success("Stock added to portfolio");
       }
-      // Invalidate user portfolios query after successful mutation
       queryClient.invalidateQueries({
         queryKey: portfolioKeys.userPortfolios(),
       });
       handleDrawerClose();
     } catch (error) {
       console.error("Failed to save stock:", error);
-      alert("Failed to save stock. Please try again.");
+      showToast.error("Failed to save stock. Please try again.");
     }
   };
 
@@ -85,14 +87,23 @@ const Portfolio: React.FC = () => {
     if (window.confirm("Are you sure you want to delete this stock?")) {
       try {
         await deleteStock.mutateAsync(stockId);
-        // Invalidate user portfolios query after successful deletion
+        showToast.success("Stock deleted successfully");
         queryClient.invalidateQueries({
           queryKey: portfolioKeys.userPortfolios(),
         });
       } catch (error) {
         console.error("Failed to delete stock:", error);
-        alert("Failed to delete stock. Please try again.");
+        showToast.error("Failed to delete stock. Please try again.");
       }
+    }
+  };
+
+  const handlePortfolioAdd = async (data: any) => {
+    try {
+      await addPortfolio(data);
+      showToast.success("Portfolio imported successfully");
+    } catch (error) {
+      showToast.error("Failed to import portfolio");
     }
   };
 
@@ -151,7 +162,7 @@ const Portfolio: React.FC = () => {
             <Typography color={currentTheme.accent.primary}>Or</Typography>
           </Stack>
           <MeroshareImport
-            addPortfolio={addPortfolio}
+            addPortfolio={handlePortfolioAdd}
             buttonVariant="outlined"
             buttonColor="primary"
           />

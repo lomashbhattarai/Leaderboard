@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { TextField, Button, Paper, Typography, Box } from "@mui/material";
 import { useAuth } from "../api/queries/useAuth";
+import { showToast } from "../utils/toast";
 
 export default function Login() {
   const [email, setEmail] = useState("");
@@ -10,7 +11,17 @@ export default function Login() {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    loginMutation.mutate({ email, password });
+    loginMutation.mutate(
+      { email, password },
+      {
+        onSuccess: () => {
+          showToast.success("Successfully logged in!");
+        },
+        onError: (error) => {
+          showToast.error("Login failed. Please check your credentials.");
+        },
+      }
+    );
   };
 
   return (

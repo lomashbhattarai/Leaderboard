@@ -23,6 +23,7 @@ import { useTheme } from "./contexts/ThemeContext";
 import SpaceBackground from "./components/SpaceBackground";
 import Navbar from "./components/Navbar";
 import StopLossPage from "./pages/StopLossPage";
+import { Toaster } from "react-hot-toast";
 
 const theme = createTheme();
 
@@ -43,6 +44,7 @@ const AppContent = () => {
     <>
       <SpaceBackground theme={currentTheme} />
       <div className="w-full">
+        <Toaster position="top-right" />
         <Navbar />
         <div className="w-full px-4 max-w-[1200px] mx-auto">
           <Routes>

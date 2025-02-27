@@ -227,3 +227,23 @@ export interface StockWithPerformance extends Stock {
   performance1W: number
   performance1M: number
 }
+
+export interface UserSetting {
+  id: number
+  userId: number
+  isAnonymous: boolean
+  createdAt: string
+  updatedAt: string
+}
+
+export interface UserSettingResponse {
+  status: string
+  data: UserSetting
+}
+
+export interface ToggleAnonymousResponse {
+  status: string
+  data: {
+    isAnonymous: boolean
+  }
+}

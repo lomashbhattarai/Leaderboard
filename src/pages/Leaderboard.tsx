@@ -135,10 +135,10 @@ const columns: ColumnConfig[] = [
     render: (value) => formatPerformance(value),
   },
   {
-    label: "Updated At",
+    label: "Updated",
     key: "updatedAt",
     render: (value) => {
-      return value ? `Updated ${formatDistanceToNow(new Date(value))} ago` : "";
+      return value ? `${formatDistanceToNow(new Date(value))} ago` : "";
     },
   },
 ];

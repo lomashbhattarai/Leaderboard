@@ -6,7 +6,7 @@ import CSVImport from "../components/CSVImport";
 import { formatPerformance } from "../pages/Leaderboard";
 import { formatAmount } from "../utils/helper";
 import { Box, Tooltip, TextField } from "@mui/material";
-// import { toast } from "react-hot-toast";
+import { showToast } from "../utils/toast";
 import React, { useState } from "react";
 import StockSymbolLink from "../components/common/StockSymbolLink";
 import { useAuthContext } from "../contexts/AuthContext";
@@ -37,10 +37,10 @@ const Stocks = () => {
   const handleFileImport = async (file: File) => {
     try {
       await uploadMutation.mutateAsync(file);
-      // toast.success("Stock prices uploaded successfully!");
+      showToast.success("Stock prices upload in progress!");
     } catch (error) {
       console.error("Error uploading CSV:", error);
-      // toast.error("Failed to upload stock prices");
+      showToast.error("Failed to upload stock prices");
     }
   };
 

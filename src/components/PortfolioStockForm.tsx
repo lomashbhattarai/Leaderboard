@@ -3,6 +3,7 @@ import { TextField, Button, Stack } from "@mui/material";
 import { DatePicker } from "@mui/x-date-pickers";
 import type { PortfolioStock, PortfolioStockDTO } from "../types/api";
 import { useStockContext } from "../contexts/StockContext";
+import { showToast } from "../utils/toast";
 
 interface PortfolioStockFormProps {
   initialData?: Partial<PortfolioStock>;
@@ -55,7 +56,7 @@ const PortfolioStockForm: React.FC<PortfolioStockFormProps> = ({
     if (formData.stockSymbol && formData.quantity) {
       const stockId = stockMap[formData.stockSymbol];
       if (!stockId) {
-        alert("Invalid stock symbol");
+        showToast.error("Invalid stock symbol");
         return;
       }
 
