@@ -3,15 +3,12 @@ import TableView, { ColumnConfig } from "./common/TableView";
 import { PortfolioStock } from "../types/api";
 import { formatPerformance } from "../pages/Leaderboard";
 import { formatAmount } from "../utils/helper";
-import { useStopLosses, useCreateStopLoss } from "../api/queries/useStopLosses";
-import { Button, Drawer, Box, Typography, Stack } from "@mui/material";
+import { Button, Box, Typography, Stack } from "@mui/material";
 import TrendingDownIcon from "@mui/icons-material/TrendingDown";
-import StopLossForm from "./StopLossForm";
-import { StopLossDTO } from "../types/api";
-import { StopLossType } from "../types/api";
 import { Link as RouterLink } from "react-router-dom";
 import StopLossChip from "./StopLossChip";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
+import { useMediaQuery } from "@mui/material";
 
 const PORTFOLIO_TABLE_HEADERS_FROM_DB: Array<ColumnConfig> = [
   {
@@ -34,6 +31,11 @@ const PORTFOLIO_TABLE_HEADERS_FROM_DB: Array<ColumnConfig> = [
     label: "Closing Price",
     key: "latestClosingPrice",
     render: (value) => formatAmount(value, true),
+  },
+  {
+    label: "Quantity",
+    key: "quantity",
+    render: (value) => value,
   },
   {
     label: "Value at LTP",
@@ -62,18 +64,11 @@ const PORTFOLIO_TABLE_HEADERS_FROM_DB: Array<ColumnConfig> = [
   {
     label: "Stop Loss",
     key: "stopLoss",
-    render: (_, stock: PortfolioStock, _index, onExpand, isExpanded) => (
-      <StopLossAction
-        stock={stock}
-        onExpand={onExpand}
-        isExpanded={isExpanded}
-      />
+    minWidth: 150,
+    render: (_, stock: PortfolioStock, _index) => (
+      <StopLossAction stock={stock} />
     ),
   },
-  // {
-  //   label: "Buy Date",
-  //   key: "buyDate",
-  // },
 ];
 
 interface PortfolioTableProps {
@@ -84,73 +79,90 @@ interface PortfolioTableProps {
 
 const StopLossAction: React.FC<{
   stock: PortfolioStock;
-  onExpand?: () => void;
-  isExpanded?: boolean;
-}> = ({ stock, onExpand, isExpanded }) => {
+}> = ({ stock }) => {
+  const isMobile = useMediaQuery("(max-width:600px)");
   const activeStopLosses = stock.stopLosses || [];
 
   if (activeStopLosses.length === 0) {
     return (
-      <RouterLink
-        to={`/stop-loss/${stock.stock?.symbol}`}
-        state={{ portfolioStockId: stock.id, stockSymbol: stock.stock?.symbol }}
+      <Box
+        sx={{
+          display: "flex",
+          justifyContent: { xs: "flex-end", sm: "flex-start" },
+        }}
       >
-        <Button
-          size="small"
-          startIcon={<TrendingDownIcon sx={{ fontSize: "1rem" }} />}
-          sx={{
-            textTransform: "none",
-            fontSize: "0.75rem",
+        <RouterLink
+          to={`/stop-loss/${stock.stock?.symbol}`}
+          state={{
+            portfolioStockId: stock.id,
+            stockSymbol: stock.stock?.symbol,
           }}
         >
-          Set stop loss
-        </Button>
-      </RouterLink>
+          <Button
+            size="small"
+            startIcon={<TrendingDownIcon sx={{ fontSize: "1rem" }} />}
+            sx={{
+              textTransform: "none",
+              fontSize: "0.75rem",
+              minWidth: 0,
+              px: 1,
+            }}
+          >
+            Set stop loss
+          </Button>
+        </RouterLink>
+      </Box>
     );
   }
 
   return (
-    <Stack
-      direction="row"
-      alignItems="center"
-      spacing={1}
-      onClick={onExpand}
-      sx={{
-        minWidth: 0,
-        maxWidth: "100%",
-        cursor: "pointer",
-        "&:hover": {
-          opacity: 0.8,
-        },
-      }}
+    <RouterLink
+      to={`/stop-loss/${stock.stock?.symbol}`}
+      state={{ portfolioStockId: stock.id, stockSymbol: stock.stock?.symbol }}
+      style={{ textDecoration: "none" }}
     >
-      <StopLossChip
-        key={activeStopLosses[0].id}
-        type={activeStopLosses[0].type}
-        value={activeStopLosses[0].value}
-        status={activeStopLosses[0].status}
-      />
-      {activeStopLosses.length > 1 && (
-        <Typography
-          variant="caption"
-          color="text.secondary"
-          sx={{
-            whiteSpace: "nowrap",
-            overflow: "hidden",
-            textOverflow: "ellipsis",
-          }}
-        >
-          +{activeStopLosses.length - 1}
-        </Typography>
-      )}
-      <KeyboardArrowDownIcon
+      <Stack
+        direction="column"
+        alignItems={{ xs: "flex-end", sm: "flex-start" }}
+        spacing={1}
         sx={{
-          transform: isExpanded ? "rotate(180deg)" : "rotate(0deg)",
-          transition: "transform 0.2s",
-          fontSize: "small",
+          minWidth: 0,
+          maxWidth: "100%",
+          cursor: "pointer",
+          "&:hover": {
+            opacity: 0.8,
+          },
         }}
-      />
-    </Stack>
+      >
+        <Stack
+          direction="row"
+          alignItems="center"
+          justifyContent={{ xs: "flex-end", sm: "flex-start" }}
+          spacing={1}
+        >
+          <TrendingDownIcon sx={{ fontSize: "1rem", color: "#1976d2" }} />
+          <StopLossChip
+            key={activeStopLosses[0].id}
+            type={activeStopLosses[0].type}
+            value={activeStopLosses[0].value}
+            status={activeStopLosses[0].status}
+          />
+          {activeStopLosses.length > 1 && (
+            <Typography
+              variant="caption"
+              color="text.secondary"
+              sx={{
+                whiteSpace: "nowrap",
+                overflow: "hidden",
+                textOverflow: "ellipsis",
+              }}
+            >
+              +{activeStopLosses.length - 1}
+            </Typography>
+          )}
+        </Stack>
+      </Stack>
+    </RouterLink>
   );
 };
 
@@ -224,8 +236,8 @@ const PortfolioTable: React.FC<PortfolioTableProps> = ({
       onEdit={onEdit}
       onDelete={onDelete}
       showActions={true}
-      renderExpandedRow={(row) => <ExpandedStopLossView stock={row} />}
-      expansionTriggerColumnKey="stopLoss"
+      // renderExpandedRow={(row) => <ExpandedStopLossView stock={row} />}
+      // expansionTriggerColumnKey="stopLoss"
     />
   );
 };

@@ -19,8 +19,6 @@ import {
 } from "@mui/material";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
-import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
-import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
 import { useTheme } from "../../contexts/ThemeContext";
 import { getCommonStyles } from "../../themes/commonComponents";
 import { useState } from "react";
@@ -177,7 +175,13 @@ const TableView = ({
                           onClick={() => onEdit?.(row)}
                           size="small"
                           aria-label="edit"
-                          sx={{ color: currentTheme.accent.secondary }}
+                          sx={{
+                            color: currentTheme.accent.secondary,
+                            padding: "4px", // Increased padding
+                            "& svg": {
+                              fontSize: "1.2rem", // Increased icon size
+                            },
+                          }}
                         >
                           <EditIcon />
                         </IconButton>
@@ -185,7 +189,13 @@ const TableView = ({
                           onClick={() => onDelete?.(row.id)}
                           size="small"
                           aria-label="delete"
-                          sx={{ color: currentTheme.accent.secondary }}
+                          sx={{
+                            color: currentTheme.accent.secondary,
+                            padding: "4px", // Increased padding
+                            "& svg": {
+                              fontSize: "1.2rem", // Increased icon size
+                            },
+                          }}
                         >
                           <DeleteIcon />
                         </IconButton>
@@ -295,8 +305,11 @@ const TableView = ({
             },
             "& .MuiIconButton-root": {
               ...styles.interactive.button,
-              padding: "4px",
+              padding: "5px",
               marginLeft: "4px",
+              "& svg": {
+                fontSize: "1.2rem",
+              },
             },
             "& .MuiTableRow-root:focus-within": {
               outline: `2px solid ${currentTheme.accent.secondary}`,
@@ -373,6 +386,12 @@ const TableView = ({
                               onClick={() => onEdit?.(row)}
                               size="small"
                               aria-label="edit"
+                              sx={{
+                                padding: "5px", // Increased padding
+                                "& svg": {
+                                  fontSize: "1.2rem", // Increased icon size
+                                },
+                              }}
                             >
                               <EditIcon />
                             </IconButton>
@@ -380,6 +399,12 @@ const TableView = ({
                               onClick={() => onDelete?.(row.id)}
                               size="small"
                               aria-label="delete"
+                              sx={{
+                                padding: "5px", // Increased padding
+                                "& svg": {
+                                  fontSize: "1.2rem", // Increased icon size
+                                },
+                              }}
                             >
                               <DeleteIcon />
                             </IconButton>
