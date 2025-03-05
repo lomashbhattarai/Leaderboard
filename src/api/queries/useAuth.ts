@@ -11,7 +11,7 @@ export function useAuth() {
     mutationFn: login,
     onSuccess: (data) => {
       setAuth(data.token, data.user);
-      navigate("/");
+      navigate("/my-portfolio");
     },
   });
 
@@ -19,7 +19,7 @@ export function useAuth() {
     mutationFn: signup,
     onSuccess: (data) => {
       setAuth(data.token, data.user);
-      navigate("/");
+      navigate("/my-portfolio");
     },
   });
 
