@@ -65,10 +65,9 @@ const PortfolioValue: React.FC<PortfolioValueProps> = ({ portfolio }) => {
   };
 
   return (
-    <Paper
+    <Box
       sx={{
-        p: 3,
-        ...styles.paper,
+        p: 1,
         display: "flex",
         flexDirection: "column",
         gap: 1,
@@ -95,7 +94,7 @@ const PortfolioValue: React.FC<PortfolioValueProps> = ({ portfolio }) => {
             direction="row"
             justifyContent="space-between"
             alignItems="center"
-            sx={{ color: currentTheme.accent.primary }}
+            sx={{ color: currentTheme.accent.primary, marginTop: 2 }}
           >
             <Box>
               <Typography
@@ -255,7 +254,7 @@ const PortfolioValue: React.FC<PortfolioValueProps> = ({ portfolio }) => {
           </Stack>
         </Stack>
       </Stack>
-    </Paper>
+    </Box>
   );
 };
 

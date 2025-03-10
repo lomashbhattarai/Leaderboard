@@ -88,10 +88,9 @@ const PortfolioInfo: React.FC = () => {
   };
 
   return (
-    <Paper
+    <Box
       sx={{
-        p: 3,
-        ...styles.paper,
+        p: 2,
         display: "flex",
         flexDirection: "column",
         gap: 2,
@@ -191,7 +190,7 @@ const PortfolioInfo: React.FC = () => {
           ))}
         </Select>
       </Box>
-    </Paper>
+    </Box>
   );
 };
 
