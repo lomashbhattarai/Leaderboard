@@ -63,10 +63,16 @@ export interface Portfolio {
   portfolioStocks?: PortfolioStock[]
   privacy: PortfolioPrivacy
   currentValue: number
+  initialInvestment?: number
   performance: {
     daily: number
     weekly: number
     monthly: number
+  }
+  historicalValues: {
+    oneDayAgo: HistoricalValue
+    oneWeekAgo: HistoricalValue
+    oneMonthAgo: HistoricalValue
   }
 }
 
@@ -246,4 +252,10 @@ export interface ToggleAnonymousResponse {
   data: {
     isAnonymous: boolean
   }
+}
+
+export interface HistoricalValue {
+  value: number
+  change: number
+  percentage: number
 }

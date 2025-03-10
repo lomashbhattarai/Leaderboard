@@ -14,6 +14,10 @@ export interface SpaceTheme {
     primary: string;
     secondary: string;
   };
+  text: {
+    primary: string;
+    secondary: string;
+  };
 }
 
 export const spaceThemes: Record<string, SpaceTheme> = {
@@ -30,6 +34,10 @@ export const spaceThemes: Record<string, SpaceTheme> = {
     accent: {
       primary: 'rgba(0, 0, 0, 0.87)',  // Default black text
       secondary: '#1976d2',  // MUI primary blue for accents
+    },
+    text: {
+      primary: 'rgba(0, 0, 0, 0.87)',
+      secondary: 'rgba(0, 0, 0, 0.6)',
     },
   },
 //   deepSpace: {
@@ -75,6 +83,10 @@ export const spaceThemes: Record<string, SpaceTheme> = {
     accent: {
       primary: '#38bdf8',
       secondary: '#818cf8',
+    },
+    text: {
+      primary: '#ffffff',
+      secondary: 'rgba(255, 255, 255, 0.7)',
     },
   },
 }; 
