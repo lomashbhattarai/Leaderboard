@@ -29,6 +29,7 @@ import type { PortfolioStock, PortfolioStockDTO } from "../types/api";
 import { useTheme } from "../contexts/ThemeContext";
 import PortfolioInfo from "../components/PortfolioInfo";
 import { showToast } from "../utils/toast";
+import InvestmentPerformance from "../components/InvestmentPerformance";
 
 const Portfolio: React.FC = () => {
   const queryClient = useQueryClient();
@@ -188,6 +189,7 @@ const Portfolio: React.FC = () => {
             <PortfolioInfo />
             <PortfolioValue portfolio={portfolio} />
           </Stack>
+
           <Box>
             <PortfolioTable
               portfolioStocksFromDb={portfolioStocksFromDb}

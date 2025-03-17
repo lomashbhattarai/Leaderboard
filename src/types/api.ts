@@ -62,8 +62,12 @@ export interface Portfolio {
   user?: User
   portfolioStocks?: PortfolioStock[]
   privacy: PortfolioPrivacy
+  initialInvestment: number
   currentValue: number
-  initialInvestment?: number
+  profitLoss: {
+    value: number
+    percentage: number
+  }
   performance: {
     daily: number
     weekly: number

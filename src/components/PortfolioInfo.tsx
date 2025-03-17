@@ -8,6 +8,7 @@ import {
   MenuItem,
   SelectChangeEvent,
   Tooltip,
+  Typography,
 } from "@mui/material";
 import EditIcon from "@mui/icons-material/Edit";
 import CheckIcon from "@mui/icons-material/Check";
@@ -97,7 +98,7 @@ const PortfolioInfo: React.FC = () => {
       }}
       className="h-auto min-h-[130px]"
     >
-      <Box className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-2">
+      <Box className="flex flex-col items-stretch justify-between gap-2">
         <Box className="flex-grow">
           {isEditing ? (
             <Box className="flex items-center w-full">
@@ -132,7 +133,13 @@ const PortfolioInfo: React.FC = () => {
             </Box>
           ) : (
             <Box className="flex items-center group w-full">
-              <span className="flex-grow">{portfolioName}</span>
+              <Typography
+                variant="h6"
+                className="flex-grow"
+                sx={{ fontWeight: "bold", color: currentTheme.accent.primary }}
+              >
+                {portfolioName}
+              </Typography>
               <IconButton
                 onClick={() => setIsEditing(true)}
                 size="small"
@@ -151,6 +158,7 @@ const PortfolioInfo: React.FC = () => {
           size="small"
           fullWidth
           sx={{
+            mt: 2,
             minWidth: { xs: "100%", sm: "200px" },
             "& .MuiSelect-select": {
               display: "flex",

@@ -47,11 +47,11 @@ const PortfolioValue: React.FC<PortfolioValueProps> = ({ portfolio }) => {
     portfolio?.historicalValues?.oneMonthAgo?.percentage || 0
   );
 
-  // Total investment performance (using dummy initial investment for now)
-  const initialInvestment = portfolio?.initialInvestment || 1000000;
+  // Total investment performance (using actual data from API now)
+  const initialInvestment = portfolio?.initialInvestment || 0;
   const currentValue = portfolio?.currentValue || 0;
-  const totalChange = currentValue - initialInvestment;
-  const totalChangePercentage = (currentValue / initialInvestment - 1) * 100;
+  const totalChange = portfolio?.profitLoss?.value || 0;
+  const totalChangePercentage = portfolio?.profitLoss?.percentage || 0;
   const totalReturnData = getChangeData(totalChange, totalChangePercentage);
 
   // All the calculated data is available in these objects
@@ -80,6 +80,7 @@ const PortfolioValue: React.FC<PortfolioValueProps> = ({ portfolio }) => {
           justifyContent="space-between"
           sx={{ flex: 1 }}
         >
+          {/* Current Value */}
           <Typography
             variant="h4"
             sx={{
@@ -90,12 +91,86 @@ const PortfolioValue: React.FC<PortfolioValueProps> = ({ portfolio }) => {
           >
             {formatAmount(currentValue)}
           </Typography>
+
+          <Stack
+            direction="row"
+            justifyContent="space-between"
+            spacing={2}
+            sx={{ mt: 2 }}
+          >
+            {/* Initial Investment */}
+
+            <Box sx={{ mt: 1, mb: 1 }}>
+              <Typography variant="body2" color="text.secondary">
+                Initial Investment
+              </Typography>
+              <Typography
+                variant="h6"
+                sx={{
+                  color: currentTheme.text.primary,
+                  fontWeight: 500,
+                }}
+              >
+                {formatAmount(initialInvestment)}
+              </Typography>
+            </Box>
+            {/* Total Return */}
+            <Box>
+              <Typography
+                variant="body2"
+                sx={{
+                  color: currentTheme.text.secondary,
+                  display: "flex",
+                  alignItems: "center",
+                  gap: 0.5,
+                }}
+              >
+                Total Return
+                {totalReturnData.isPositive ? (
+                  <TrendingUpIcon
+                    sx={{
+                      color: "success.main",
+                      fontSize: "1rem",
+                    }}
+                  />
+                ) : (
+                  <TrendingDownIcon
+                    sx={{
+                      color: "error.main",
+                      fontSize: "1rem",
+                    }}
+                  />
+                )}
+                <Typography
+                  variant="body2"
+                  color={
+                    totalReturnData.isPositive ? "success.main" : "error.main"
+                  }
+                >
+                  {totalReturnData.formattedPercentage.toFixed(2)}%
+                </Typography>
+              </Typography>
+
+              <Typography
+                variant="h6"
+                color={
+                  totalReturnData.isPositive ? "success.main" : "error.main"
+                }
+                sx={{ justifySelf: "right" }}
+              >
+                {totalReturnData.isPositive ? "+" : "-"}
+                {formatAmount(totalReturnData.formattedChange, true)}
+              </Typography>
+            </Box>
+          </Stack>
+
           <Stack
             direction="row"
             justifyContent="space-between"
             alignItems="center"
-            sx={{ color: currentTheme.accent.primary, marginTop: 2 }}
+            sx={{ color: currentTheme.accent.primary, marginTop: 4 }}
           >
+            {/* 1D Change */}
             <Box>
               <Typography
                 variant="body2"
@@ -124,7 +199,6 @@ const PortfolioValue: React.FC<PortfolioValueProps> = ({ portfolio }) => {
                     }}
                   />
                 )}
-                {/* add percentage */}
                 <Typography
                   variant="body2"
                   color={oneDayData.change >= 0 ? "success.main" : "error.main"}
@@ -134,11 +208,12 @@ const PortfolioValue: React.FC<PortfolioValueProps> = ({ portfolio }) => {
               </Typography>
 
               <Typography variant="body2" color="text.secondary">
-                {/* add + or - symbol */}
                 {oneDayData.change >= 0 ? "+" : "-"}
                 {formatAmount(oneDayData.formattedChange, true)}
               </Typography>
             </Box>
+
+            {/* 1W Change */}
             <Box>
               <Typography
                 variant="body2"
@@ -167,7 +242,6 @@ const PortfolioValue: React.FC<PortfolioValueProps> = ({ portfolio }) => {
                     }}
                   />
                 )}
-                {/* add percentage */}
                 <Typography
                   variant="body2"
                   color={
@@ -179,11 +253,12 @@ const PortfolioValue: React.FC<PortfolioValueProps> = ({ portfolio }) => {
               </Typography>
 
               <Typography variant="body2" color="text.secondary">
-                {/* add + or - symbol */}
                 {oneWeekData.change >= 0 ? "+" : "-"}
                 {formatAmount(oneWeekData.formattedChange, true)}
               </Typography>
             </Box>
+
+            {/* 1M Change */}
             <Box>
               <Typography
                 variant="body2"
@@ -216,7 +291,6 @@ const PortfolioValue: React.FC<PortfolioValueProps> = ({ portfolio }) => {
                     }}
                   />
                 )}
-                {/* add percentage */}
                 <Typography
                   variant="body2"
                   color={
@@ -228,28 +302,9 @@ const PortfolioValue: React.FC<PortfolioValueProps> = ({ portfolio }) => {
               </Typography>
 
               <Typography variant="body2" color="text.secondary">
-                {/* add + or - symbol */}
                 {oneMonthData.change >= 0 ? "+" : "-"}
                 {formatAmount(oneMonthData.formattedChange, true)}
               </Typography>
-            </Box>
-            {/* add this back later after change the db model and adding in the api response */}
-            <Box>
-              {/* <Typography variant="body2" color="text.secondary">
-                Initial Investment
-              </Typography>
-              <Typography variant="body1">
-                {formatAmount(initialInvestment)}
-              </Typography>
-              <Typography
-                variant="body2"
-                color={
-                  totalReturnData.change >= 0 ? "success.main" : "error.main"
-                }
-              >
-                {totalReturnData.change >= 0 ? "+" : ""}
-                {formatAmount(totalReturnData.formattedChange)}
-              </Typography> */}
             </Box>
           </Stack>
         </Stack>
