@@ -134,7 +134,7 @@ const PortfolioInfo: React.FC = () => {
           ) : (
             <Box className="flex items-center group w-full">
               <Typography
-                variant="h6"
+                variant="subtitle1"
                 className="flex-grow"
                 sx={{ fontWeight: "bold", color: currentTheme.accent.primary }}
               >

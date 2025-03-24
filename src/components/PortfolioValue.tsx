@@ -67,14 +67,15 @@ const PortfolioValue: React.FC<PortfolioValueProps> = ({ portfolio }) => {
   return (
     <Box
       sx={{
-        p: 1,
+        p: 0.5,
         display: "flex",
         flexDirection: "column",
-        gap: 1,
+        gap: 0.5,
+        mb: 3,
       }}
       className="h-auto"
     >
-      <Stack direction="row" justifyContent="space-between" spacing={2}>
+      <Stack direction="row" justifyContent="space-between" spacing={1}>
         <Stack
           direction="column"
           justifyContent="space-between"
@@ -82,7 +83,7 @@ const PortfolioValue: React.FC<PortfolioValueProps> = ({ portfolio }) => {
         >
           {/* Current Value */}
           <Typography
-            variant="h4"
+            variant="h5"
             sx={{
               color: currentTheme.accent.primary,
               fontWeight: 600,
@@ -95,17 +96,16 @@ const PortfolioValue: React.FC<PortfolioValueProps> = ({ portfolio }) => {
           <Stack
             direction="row"
             justifyContent="space-between"
-            spacing={2}
-            sx={{ mt: 2 }}
+            spacing={1}
+            sx={{ mt: 1 }}
           >
             {/* Initial Investment */}
-
-            <Box sx={{ mt: 1, mb: 1 }}>
-              <Typography variant="body2" color="text.secondary">
+            <Box sx={{ mt: 0.5, mb: 0.5 }}>
+              <Typography variant="caption" color="text.secondary">
                 Initial Investment
               </Typography>
               <Typography
-                variant="h6"
+                variant="subtitle1"
                 sx={{
                   color: currentTheme.text.primary,
                   fontWeight: 500,
@@ -117,12 +117,12 @@ const PortfolioValue: React.FC<PortfolioValueProps> = ({ portfolio }) => {
             {/* Total Return */}
             <Box>
               <Typography
-                variant="body2"
+                variant="caption"
                 sx={{
                   color: currentTheme.text.secondary,
                   display: "flex",
                   alignItems: "center",
-                  gap: 0.5,
+                  gap: 0.25,
                 }}
               >
                 Total Return
@@ -130,19 +130,19 @@ const PortfolioValue: React.FC<PortfolioValueProps> = ({ portfolio }) => {
                   <TrendingUpIcon
                     sx={{
                       color: "success.main",
-                      fontSize: "1rem",
+                      fontSize: "0.875rem",
                     }}
                   />
                 ) : (
                   <TrendingDownIcon
                     sx={{
                       color: "error.main",
-                      fontSize: "1rem",
+                      fontSize: "0.875rem",
                     }}
                   />
                 )}
                 <Typography
-                  variant="body2"
+                  variant="caption"
                   color={
                     totalReturnData.isPositive ? "success.main" : "error.main"
                   }
@@ -152,7 +152,7 @@ const PortfolioValue: React.FC<PortfolioValueProps> = ({ portfolio }) => {
               </Typography>
 
               <Typography
-                variant="h6"
+                variant="subtitle1"
                 color={
                   totalReturnData.isPositive ? "success.main" : "error.main"
                 }
@@ -168,17 +168,17 @@ const PortfolioValue: React.FC<PortfolioValueProps> = ({ portfolio }) => {
             direction="row"
             justifyContent="space-between"
             alignItems="center"
-            sx={{ color: currentTheme.accent.primary, marginTop: 4 }}
+            sx={{ color: currentTheme.accent.primary, marginTop: 2 }}
           >
             {/* 1D Change */}
             <Box>
               <Typography
-                variant="body2"
+                variant="caption"
                 sx={{
                   color: currentTheme.text.secondary,
                   display: "flex",
                   alignItems: "center",
-                  gap: 0.5,
+                  gap: 0.25,
                 }}
               >
                 1D
@@ -187,7 +187,7 @@ const PortfolioValue: React.FC<PortfolioValueProps> = ({ portfolio }) => {
                     sx={{
                       color:
                         oneDayData.change >= 0 ? "success.main" : "error.main",
-                      fontSize: "1rem",
+                      fontSize: "0.875rem",
                     }}
                   />
                 ) : (
@@ -195,19 +195,19 @@ const PortfolioValue: React.FC<PortfolioValueProps> = ({ portfolio }) => {
                     sx={{
                       color:
                         oneDayData.change >= 0 ? "success.main" : "error.main",
-                      fontSize: "1rem",
+                      fontSize: "0.875rem",
                     }}
                   />
                 )}
                 <Typography
-                  variant="body2"
+                  variant="caption"
                   color={oneDayData.change >= 0 ? "success.main" : "error.main"}
                 >
                   {oneDayData.formattedPercentage}%
                 </Typography>
               </Typography>
 
-              <Typography variant="body2" color="text.secondary">
+              <Typography variant="caption" color="text.secondary">
                 {oneDayData.change >= 0 ? "+" : "-"}
                 {formatAmount(oneDayData.formattedChange, true)}
               </Typography>
@@ -216,12 +216,12 @@ const PortfolioValue: React.FC<PortfolioValueProps> = ({ portfolio }) => {
             {/* 1W Change */}
             <Box>
               <Typography
-                variant="body2"
+                variant="caption"
                 sx={{
                   color: currentTheme.text.secondary,
                   display: "flex",
                   alignItems: "center",
-                  gap: 0.5,
+                  gap: 0.25,
                 }}
               >
                 1W
@@ -230,7 +230,7 @@ const PortfolioValue: React.FC<PortfolioValueProps> = ({ portfolio }) => {
                     sx={{
                       color:
                         oneWeekData.change >= 0 ? "success.main" : "error.main",
-                      fontSize: "1rem",
+                      fontSize: "0.875rem",
                     }}
                   />
                 ) : (
@@ -238,12 +238,12 @@ const PortfolioValue: React.FC<PortfolioValueProps> = ({ portfolio }) => {
                     sx={{
                       color:
                         oneWeekData.change >= 0 ? "success.main" : "error.main",
-                      fontSize: "1rem",
+                      fontSize: "0.875rem",
                     }}
                   />
                 )}
                 <Typography
-                  variant="body2"
+                  variant="caption"
                   color={
                     oneWeekData.change >= 0 ? "success.main" : "error.main"
                   }
@@ -252,7 +252,7 @@ const PortfolioValue: React.FC<PortfolioValueProps> = ({ portfolio }) => {
                 </Typography>
               </Typography>
 
-              <Typography variant="body2" color="text.secondary">
+              <Typography variant="caption" color="text.secondary">
                 {oneWeekData.change >= 0 ? "+" : "-"}
                 {formatAmount(oneWeekData.formattedChange, true)}
               </Typography>
@@ -261,12 +261,12 @@ const PortfolioValue: React.FC<PortfolioValueProps> = ({ portfolio }) => {
             {/* 1M Change */}
             <Box>
               <Typography
-                variant="body2"
+                variant="caption"
                 sx={{
                   color: currentTheme.text.secondary,
                   display: "flex",
                   alignItems: "center",
-                  gap: 0.5,
+                  gap: 0.25,
                 }}
               >
                 1M
@@ -277,7 +277,7 @@ const PortfolioValue: React.FC<PortfolioValueProps> = ({ portfolio }) => {
                         oneMonthData.change >= 0
                           ? "success.main"
                           : "error.main",
-                      fontSize: "1rem",
+                      fontSize: "0.875rem",
                     }}
                   />
                 ) : (
@@ -287,12 +287,12 @@ const PortfolioValue: React.FC<PortfolioValueProps> = ({ portfolio }) => {
                         oneMonthData.change >= 0
                           ? "success.main"
                           : "error.main",
-                      fontSize: "1rem",
+                      fontSize: "0.875rem",
                     }}
                   />
                 )}
                 <Typography
-                  variant="body2"
+                  variant="caption"
                   color={
                     oneMonthData.change >= 0 ? "success.main" : "error.main"
                   }
@@ -301,7 +301,7 @@ const PortfolioValue: React.FC<PortfolioValueProps> = ({ portfolio }) => {
                 </Typography>
               </Typography>
 
-              <Typography variant="body2" color="text.secondary">
+              <Typography variant="caption" color="text.secondary">
                 {oneMonthData.change >= 0 ? "+" : "-"}
                 {formatAmount(oneMonthData.formattedChange, true)}
               </Typography>

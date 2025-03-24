@@ -64,6 +64,7 @@ interface TableViewProps {
   expansionTriggerColumnKey?: string;
   onSort?: (key: string, order: "asc" | "desc") => void;
   currentSort?: { key: string; order: "asc" | "desc" };
+  isCompact?: boolean;
 }
 
 const TableView = ({
@@ -85,6 +86,7 @@ const TableView = ({
   expansionTriggerColumnKey,
   onSort,
   currentSort,
+  isCompact = false,
 }: TableViewProps) => {
   const { currentTheme } = useTheme();
   const styles = getCommonStyles(currentTheme);
@@ -109,7 +111,7 @@ const TableView = ({
   };
 
   const renderCardView = () => (
-    <Stack spacing={2}>
+    <Stack spacing={isCompact ? 1 : 2}>
       {tableData.map((row, rowIndex) => (
         <Card
           key={row.id || rowIndex}
@@ -121,11 +123,11 @@ const TableView = ({
             },
           }}
         >
-          <CardContent>
+          <CardContent sx={{ p: isCompact ? 1 : 2 }}>
             {customCardComponent ? (
               customCardComponent(row, rowIndex)
             ) : (
-              <Stack spacing={1}>
+              <Stack spacing={isCompact ? 0.5 : 1}>
                 {columns.map((column, colIndex) => (
                   <Stack
                     key={colIndex}
@@ -135,7 +137,7 @@ const TableView = ({
                     alignItems="center"
                   >
                     <Typography
-                      variant="body2"
+                      variant={isCompact ? "caption" : "body2"}
                       sx={{
                         fontWeight: "bold",
                         minWidth: "40%",
@@ -145,7 +147,7 @@ const TableView = ({
                       {column.label}:
                     </Typography>
                     <Typography
-                      variant="body2"
+                      variant={isCompact ? "caption" : "body2"}
                       align={column.align || "right"}
                       sx={{
                         flex: 1,
@@ -182,9 +184,9 @@ const TableView = ({
                           aria-label="edit"
                           sx={{
                             color: currentTheme.accent.secondary,
-                            padding: "4px", // Increased padding
+                            padding: isCompact ? "2px" : "4px",
                             "& svg": {
-                              fontSize: "1.2rem", // Increased icon size
+                              fontSize: isCompact ? "1rem" : "1.2rem",
                             },
                           }}
                         >
@@ -196,9 +198,9 @@ const TableView = ({
                           aria-label="delete"
                           sx={{
                             color: currentTheme.accent.secondary,
-                            padding: "4px", // Increased padding
+                            padding: isCompact ? "2px" : "4px",
                             "& svg": {
-                              fontSize: "1.2rem", // Increased icon size
+                              fontSize: isCompact ? "1rem" : "1.2rem",
                             },
                           }}
                         >
@@ -252,7 +254,14 @@ const TableView = ({
 
   return (
     <Box sx={{ width: "100%", position: "relative" }}>
-      {title && <h2>{title}</h2>}
+      {title && (
+        <Typography
+          variant={isCompact ? "h6" : "h5"}
+          sx={{ mb: isCompact ? 1 : 2 }}
+        >
+          {title}
+        </Typography>
+      )}
       {viewMode === "card" ? (
         renderCardView()
       ) : (
@@ -273,11 +282,12 @@ const TableView = ({
             },
             "& .MuiTableCell-root": {
               ...styles.table.cell,
-              padding: { xs: "8px 12px", sm: "16px" },
+              padding: isCompact ? "4px 8px" : { xs: "8px 12px", sm: "16px" },
               whiteSpace: "nowrap",
               overflow: "visible",
               textOverflow: "ellipsis",
               maxWidth: responsive.minWidth,
+              fontSize: isCompact ? "0.75rem" : "inherit",
             },
             "& .fixed-column": {
               position: "sticky",
@@ -322,7 +332,7 @@ const TableView = ({
             },
           }}
         >
-          <Table size="small">
+          <Table size={isCompact ? "small" : "medium"}>
             <TableHead>
               <TableRow>
                 {columns.map((column, index) => (
@@ -340,6 +350,7 @@ const TableView = ({
                         index === 0 && responsive.fixedFirstColumn ? 3 : 2,
                       minWidth: column.minWidth || responsive.minWidth || 150,
                       cursor: column.sortable ? "pointer" : "default",
+                      fontSize: isCompact ? "0.75rem" : "inherit",
                       "&:hover": column.sortable
                         ? {
                             "& .sort-icon": {
@@ -436,9 +447,9 @@ const TableView = ({
                               size="small"
                               aria-label="edit"
                               sx={{
-                                padding: "5px", // Increased padding
+                                padding: isCompact ? "2px" : "4px",
                                 "& svg": {
-                                  fontSize: "1.2rem", // Increased icon size
+                                  fontSize: isCompact ? "1rem" : "1.2rem",
                                 },
                               }}
                             >
@@ -449,9 +460,9 @@ const TableView = ({
                               size="small"
                               aria-label="delete"
                               sx={{
-                                padding: "5px", // Increased padding
+                                padding: isCompact ? "2px" : "4px",
                                 "& svg": {
-                                  fontSize: "1.2rem", // Increased icon size
+                                  fontSize: isCompact ? "1rem" : "1.2rem",
                                 },
                               }}
                             >

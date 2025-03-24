@@ -184,13 +184,12 @@ const Portfolio: React.FC = () => {
                 minWidth: { xs: "100%", md: "auto" },
               },
             }}
-            className="mt-8"
           >
             <PortfolioInfo />
             <PortfolioValue portfolio={portfolio} />
           </Stack>
 
-          <Box>
+          <Box sx={{ mb: 2, mt: 2.5 }}>
             <PortfolioTable
               portfolioStocksFromDb={portfolioStocksFromDb}
               onEdit={handleEdit}

@@ -100,12 +100,13 @@ const StopLossAction: React.FC<{
         >
           <Button
             size="small"
-            startIcon={<TrendingDownIcon sx={{ fontSize: "1rem" }} />}
+            startIcon={<TrendingDownIcon sx={{ fontSize: "0.875rem" }} />}
             sx={{
               textTransform: "none",
-              fontSize: "0.75rem",
+              fontSize: "0.7rem",
               minWidth: 0,
-              px: 1,
+              px: 0.5,
+              py: 0.25,
             }}
           >
             Set stop loss
@@ -124,7 +125,7 @@ const StopLossAction: React.FC<{
       <Stack
         direction="column"
         alignItems={{ xs: "flex-end", sm: "flex-start" }}
-        spacing={1}
+        spacing={0.5}
         sx={{
           minWidth: 0,
           maxWidth: "100%",
@@ -138,9 +139,9 @@ const StopLossAction: React.FC<{
           direction="row"
           alignItems="center"
           justifyContent={{ xs: "flex-end", sm: "flex-start" }}
-          spacing={1}
+          spacing={0.5}
         >
-          <TrendingDownIcon sx={{ fontSize: "1rem", color: "#1976d2" }} />
+          <TrendingDownIcon sx={{ fontSize: "0.875rem", color: "#1976d2" }} />
           <StopLossChip
             key={activeStopLosses[0].id}
             type={activeStopLosses[0].type}
@@ -155,6 +156,7 @@ const StopLossAction: React.FC<{
                 whiteSpace: "nowrap",
                 overflow: "hidden",
                 textOverflow: "ellipsis",
+                fontSize: "0.7rem",
               }}
             >
               +{activeStopLosses.length - 1}
@@ -236,6 +238,7 @@ const PortfolioTable: React.FC<PortfolioTableProps> = ({
       onEdit={onEdit}
       onDelete={onDelete}
       showActions={true}
+      isCompact
       // renderExpandedRow={(row) => <ExpandedStopLossView stock={row} />}
       // expansionTriggerColumnKey="stopLoss"
     />

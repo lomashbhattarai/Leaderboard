@@ -103,9 +103,9 @@ const SharedPortfolio: React.FC = () => {
 
   // Add chart dimensions state
   const [chartDimensions, setChartDimensions] = React.useState({
-    height: 400,
-    outerRadius: 150,
-    fontSize: "14px",
+    height: 350,
+    outerRadius: 100,
+    fontSize: "10px",
   });
 
   React.useEffect(() => {
@@ -115,13 +115,13 @@ const SharedPortfolio: React.FC = () => {
         setChartDimensions({
           height: 300,
           outerRadius: 100,
-          fontSize: "11px",
+          fontSize: "10px",
         });
       } else {
         setChartDimensions({
           height: 400,
           outerRadius: 130,
-          fontSize: "14px",
+          fontSize: "12px",
         });
       }
     };
@@ -142,8 +142,8 @@ const SharedPortfolio: React.FC = () => {
 
   return (
     <div className="mx-auto">
-      <Box className="flex items-center gap-2 mb-4">
-        <Typography variant="h4" component="h1">
+      <Box className="flex items-center gap-2 mb-4 mt-4">
+        <Typography variant="subtitle1" component="h1">
           {publicPortfolio.name}
         </Typography>
         <MuiTooltip title={getPrivacyInfo(publicPortfolio.privacy).text}>
@@ -168,6 +168,7 @@ const SharedPortfolio: React.FC = () => {
             <TableView
               columns={columns}
               tableData={publicPortfolio.portfolioStocks || []}
+              isCompact
             />
           </Box>
 

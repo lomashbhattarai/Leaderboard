@@ -162,7 +162,7 @@ const Leaderboard: React.FC = () => {
   return (
     <div>
       <div className="flex justify-end items-center mb-4 mt-4 text-right text-sm">
-        <Typography variant="h5" component="h1">
+        <Typography variant="subtitle1" component="h1">
           NEPSE Leaderboard
         </Typography>
       </div>
@@ -204,6 +204,7 @@ const Leaderboard: React.FC = () => {
               customCardComponent={(row, index) => (
                 <LeaderboardCard row={row} index={index} />
               )}
+              isCompact
               // responsive={{
               //   fixedFirstColumn: true,
               //   minWidth: 120,

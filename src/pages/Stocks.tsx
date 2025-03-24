@@ -92,6 +92,7 @@ const Stocks = () => {
         />
       </div>
       <TableView
+        isCompact
         columns={[
           {
             label: "Symbol",

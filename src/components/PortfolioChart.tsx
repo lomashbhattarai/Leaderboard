@@ -50,8 +50,8 @@ const PortfolioChart: React.FC<Props> = ({ portfolioStocksFromDb }) => {
         });
       } else {
         setChartDimensions({
-          height: 500,
-          outerRadius: 200,
+          height: 400,
+          outerRadius: 150,
           fontSize: "14px",
         });
       }
