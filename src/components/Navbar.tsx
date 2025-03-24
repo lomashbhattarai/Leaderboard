@@ -128,10 +128,7 @@ const Navbar = () => {
         className="flex justify-between items-center w-full"
         sx={{
           padding: "0.5rem 1rem",
-          background:
-            currentTheme.name === "Default Theme"
-              ? "linear-gradient(to right, rgba(0, 0, 255, 0.07), rgba(0, 0, 255, 0.03), rgba(0, 0, 255, 0.01))"
-              : "rgba(0, 0, 0, 0.2)",
+          borderBottom: "1px solid #e0e0e0",
           ...navStyle,
         }}
       >
