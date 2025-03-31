@@ -84,13 +84,7 @@ const LeaderboardCard: React.FC<LeaderboardCardProps> = ({ row, index }) => {
           }
           <Typography variant="h6" component="div">
             <Stack direction="row" spacing={1} alignItems="center">
-              <Typography
-                sx={{
-                  color: currentTheme.accent.primary,
-                }}
-              >
-                {row.portfolioName}
-              </Typography>
+              <Typography>{row.portfolioName}</Typography>
               {renderPrivacyIcon()}
             </Stack>
           </Typography>
@@ -98,19 +92,10 @@ const LeaderboardCard: React.FC<LeaderboardCardProps> = ({ row, index }) => {
 
         <Stack spacing={2}>
           <Stack direction="row" justifyContent="space-between">
-            <Typography
-              variant="body2"
-              sx={{ color: currentTheme.accent.primary }}
-            >
-              by {row.userName}
-            </Typography>
+            <Typography variant="body2">by {row.userName}</Typography>
           </Stack>
 
-          <Stack
-            direction="row"
-            justifyContent="space-between"
-            sx={{ color: currentTheme.accent.primary }}
-          >
+          <Stack direction="row" justifyContent="space-between">
             <Box>
               <Typography variant="body2">
                 {formatPerformance(row.performance1D)}
@@ -131,11 +116,7 @@ const LeaderboardCard: React.FC<LeaderboardCardProps> = ({ row, index }) => {
             </Box>
           </Stack>
 
-          <Stack
-            direction="row"
-            justifyContent="space-between"
-            sx={{ color: currentTheme.accent.primary }}
-          >
+          <Stack direction="row" justifyContent="space-between">
             <Typography variant="body2">
               {row.updatedAt
                 ? `Last updated ${formatDistanceToNow(

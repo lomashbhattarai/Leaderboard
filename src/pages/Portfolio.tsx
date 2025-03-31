@@ -7,6 +7,18 @@ import PortfolioValue from "../components/PortfolioValue";
 import ReportsAnalysis from "../components/ReportsAnalysis";
 import BankReportScanner from "../components/BankReportScanner";
 import { usePortfolio } from "../hooks/usePortfolio";
+
+import {
+  Add as AddIcon,
+  ArrowDropDown as ArrowDropDownIcon,
+  ArrowDropUp as ArrowDropUpIcon,
+  Edit as EditIcon,
+  FileUpload as FileUploadIcon,
+  Info as InfoIcon,
+  Public as PublicIcon,
+  ShowChart as ShowChartIcon,
+} from "@mui/icons-material";
+
 import {
   Alert,
   Stack,
@@ -15,6 +27,9 @@ import {
   IconButton,
   Typography,
   Box,
+  Menu,
+  MenuItem,
+  Container,
 } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 import PortfolioStockForm from "../components/PortfolioStockForm";
@@ -108,85 +123,58 @@ const Portfolio: React.FC = () => {
     }
   };
 
-  const stockDrawer = (
-    <Drawer anchor="right" open={isDrawerOpen} onClose={handleDrawerClose}>
-      <div style={{ width: "400px", padding: "20px" }}>
-        <div
-          style={{
-            display: "flex",
-            justifyContent: "space-between",
-            alignItems: "center",
-            marginBottom: "20px",
-          }}
-        >
-          <Typography variant="h6">
-            {selectedStock ? "Edit Stock" : "Add Stock"}
-          </Typography>
-          <IconButton onClick={handleDrawerClose} edge="end" aria-label="close">
-            <CloseIcon />
-          </IconButton>
-        </div>
-        <PortfolioStockForm
-          initialData={selectedStock || undefined}
-          onSubmit={handleStockSubmit}
-          portfolioId={portfolioId}
-        />
-      </div>
-    </Drawer>
-  );
-
   return (
-    <div className="portfolio-container mt-3">
-      <div className="portfolio-grid">
+    <Box sx={{ minHeight: "100vh", bgcolor: "background.default" }}>
+      <Container maxWidth="xl" sx={{ py: 4 }}>
         {!portfolioId && (
-          <Alert severity="info" className="mb-4">
+          <Alert severity="info" sx={{ mb: 4 }}>
             Login to your Meroshare account and go to "My Portfolio" page. Click
             on the "CSV" button to import the CSV of your portfolio to your
             computer. Upload the CSV file by clicking the button below.
           </Alert>
         )}
 
-        <Stack
-          direction={{ xs: "column", md: "row" }}
-          spacing={2}
-          className="mb-4"
-          alignItems="center"
-        >
-          <Stack direction="row" spacing={2} alignItems="center">
-            <Button
-              variant="contained"
-              sx={{ bgcolor: currentTheme.accent.secondary }}
-              onClick={() => setIsDrawerOpen(true)}
-            >
-              Add Stock to Portfolio
-            </Button>
-            <Typography color={currentTheme.accent.primary}>Or</Typography>
-          </Stack>
-          <MeroshareImport
-            addPortfolio={handlePortfolioAdd}
-            buttonVariant="outlined"
-            buttonColor="primary"
-          />
-        </Stack>
+        <PortfolioInfo />
 
-        <Stack spacing={2}>
+        <Stack spacing={3}>
           <Stack
             direction={{ xs: "column", md: "row" }}
             spacing={4}
             width="100%"
             sx={{
               "& > *:first-of-type": {
-                flex: 0.4,
+                flex: 1,
                 minWidth: { xs: "100%", md: "auto" },
               },
               "& > *:last-of-type": {
-                flex: 0.6,
+                flex: 1,
                 minWidth: { xs: "100%", md: "auto" },
               },
             }}
           >
-            <PortfolioInfo />
             <PortfolioValue portfolio={portfolio} />
+          </Stack>
+
+          <Stack
+            direction={{ xs: "column", md: "row" }}
+            spacing={2}
+            sx={{ mb: 4 }}
+            alignItems="center"
+          >
+            <Stack direction="row" spacing={2} alignItems="center">
+              <Button
+                variant="contained"
+                startIcon={<AddIcon />}
+                onClick={() => setIsDrawerOpen(true)}
+              >
+                Add Stock to Portfolio
+              </Button>
+            </Stack>
+            <MeroshareImport
+              addPortfolio={handlePortfolioAdd}
+              buttonVariant="outlined"
+              buttonColor="primary"
+            />
           </Stack>
 
           <Box sx={{ mb: 2, mt: 2.5 }}>
@@ -201,13 +189,50 @@ const Portfolio: React.FC = () => {
           </Box>
         </Stack>
 
-        {stockDrawer}
-
-        {/* <StopLoss />
-        <ReportsAnalysis />
-        <BankReportScanner /> */}
-      </div>
-    </div>
+        <Drawer
+          anchor="right"
+          open={isDrawerOpen}
+          onClose={handleDrawerClose}
+          PaperProps={{
+            sx: {
+              width: 400,
+              p: 2.5,
+              borderRadius: currentTheme.shape.borderRadius,
+            },
+          }}
+        >
+          <Box
+            sx={{
+              display: "flex",
+              justifyContent: "space-between",
+              alignItems: "center",
+              mb: 2.5,
+            }}
+          >
+            <Typography
+              variant="h6"
+              sx={{
+                fontWeight: currentTheme.typography.fontWeights.heading,
+              }}
+            >
+              {selectedStock ? "Edit Stock" : "Add Stock"}
+            </Typography>
+            <IconButton
+              onClick={handleDrawerClose}
+              edge="end"
+              aria-label="close"
+            >
+              <CloseIcon />
+            </IconButton>
+          </Box>
+          <PortfolioStockForm
+            initialData={selectedStock || undefined}
+            onSubmit={handleStockSubmit}
+            portfolioId={portfolioId}
+          />
+        </Drawer>
+      </Container>
+    </Box>
   );
 };
 

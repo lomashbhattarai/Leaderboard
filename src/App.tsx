@@ -24,7 +24,7 @@ import SpaceBackground from "./components/SpaceBackground";
 import Navbar from "./components/Navbar";
 import StopLossPage from "./pages/StopLossPage";
 import { Toaster } from "react-hot-toast";
-
+import NewPortfolio from "./pages/NewPortfolio";
 const theme = createTheme();
 
 // Create a client
@@ -73,6 +73,14 @@ const AppContent = () => {
               element={
                 <ProtectedRoute>
                   <Portfolio />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/my-new-portfolio"
+              element={
+                <ProtectedRoute>
+                  <NewPortfolio />
                 </ProtectedRoute>
               }
             />

@@ -45,7 +45,7 @@ const MeroshareImport: React.FC<{
 
   return (
     <CSVImport
-      label="Upload your Meroshare Portfolio CSV"
+      label="Upload Meroshare Portfolio CSV"
       variant={buttonVariant}
       color={buttonColor}
       handleImport={handleImport}

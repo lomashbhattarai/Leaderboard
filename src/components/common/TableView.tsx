@@ -141,7 +141,6 @@ const TableView = ({
                       sx={{
                         fontWeight: "bold",
                         minWidth: "40%",
-                        color: currentTheme.accent.primary,
                       }}
                     >
                       {column.label}:
@@ -152,7 +151,6 @@ const TableView = ({
                       sx={{
                         flex: 1,
                         wordBreak: "break-word",
-                        color: currentTheme.accent.primary,
                       }}
                     >
                       {column.render

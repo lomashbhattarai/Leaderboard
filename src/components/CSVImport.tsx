@@ -1,7 +1,7 @@
 import React, { ChangeEvent, useState } from "react";
 import { Button } from "@mui/material";
 import CSVModal from "./CSVModal";
-
+import { FileUpload as FileUploadIcon } from "@mui/icons-material";
 interface CSVImportProps {
   handleImport?: (csvData: string[][]) => void;
   handleFileImport?: (file: File) => void;
@@ -82,7 +82,12 @@ const CSVImport: React.FC<CSVImportProps> = ({
         onChange={handleFileUpload}
       />
       <label htmlFor="raised-button-file">
-        <Button variant={variant} color={color} component="span">
+        <Button
+          variant={variant}
+          color={color}
+          component="span"
+          startIcon={<FileUploadIcon />}
+        >
           {label}
         </Button>
       </label>

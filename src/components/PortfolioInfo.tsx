@@ -91,67 +91,61 @@ const PortfolioInfo: React.FC = () => {
   return (
     <Box
       sx={{
-        p: 2,
         display: "flex",
-        flexDirection: "column",
+        justifyContent: "space-between",
+        alignItems: "center",
+        mb: 3,
+        flexWrap: "wrap",
         gap: 2,
       }}
-      className="h-auto min-h-[130px]"
     >
-      <Box className="flex flex-col items-stretch justify-between gap-2">
-        <Box className="flex-grow">
-          {isEditing ? (
-            <Box className="flex items-center w-full">
-              <TextField
-                value={editedName}
-                onChange={(e) => setEditedName(e.target.value)}
-                onKeyDown={handleKeyPress}
-                onBlur={handleSave}
-                size="small"
-                autoFocus
-                fullWidth
-                sx={{
-                  "& .MuiOutlinedInput-root": {
-                    "&.Mui-focused fieldset": {
-                      borderColor: currentTheme.accent.primary,
-                    },
-                    "& input": {
-                      color: currentTheme.accent.primary,
-                    },
+      <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+        {isEditing ? (
+          <Box className="flex items-center w-full">
+            <TextField
+              value={editedName}
+              onChange={(e) => setEditedName(e.target.value)}
+              onKeyDown={handleKeyPress}
+              onBlur={handleSave}
+              autoFocus
+              fullWidth
+              size="medium"
+              sx={{
+                "& .MuiOutlinedInput-root": {
+                  "&.Mui-focused fieldset": {
+                    borderColor: currentTheme.accent.primary,
                   },
-                }}
-              />
-              <IconButton
-                onClick={handleSave}
-                size="small"
-                className="ml-1"
-                disabled={updatePortfolio.isPending}
-                sx={{ color: currentTheme.accent.primary }}
-              >
-                <CheckIcon fontSize="small" />
-              </IconButton>
-            </Box>
-          ) : (
-            <Box className="flex items-center group w-full">
-              <Typography
-                variant="subtitle1"
-                className="flex-grow"
-                sx={{ fontWeight: "bold", color: currentTheme.accent.primary }}
-              >
-                {portfolioName}
-              </Typography>
-              <IconButton
-                onClick={() => setIsEditing(true)}
-                size="small"
-                className="ml-1"
-                sx={{ color: currentTheme.accent.primary }}
-              >
-                <EditIcon fontSize="small" />
-              </IconButton>
-            </Box>
-          )}
-        </Box>
-
+                  "& input": {
+                    color: currentTheme.accent.primary,
+                  },
+                },
+              }}
+            />
+            <IconButton
+              onClick={handleSave}
+              size="small"
+              className="ml-1"
+              disabled={updatePortfolio.isPending}
+              sx={{ color: currentTheme.accent.primary }}
+            >
+              <CheckIcon fontSize="small" />
+            </IconButton>
+          </Box>
+        ) : (
+          <Box className="flex items-center w-full">
+            <Typography variant="h5">{portfolioName}</Typography>
+            <IconButton
+              onClick={() => setIsEditing(true)}
+              size="small"
+              className="ml-1"
+              sx={{ color: currentTheme.accent.primary }}
+            >
+              <EditIcon fontSize="small" />
+            </IconButton>
+          </Box>
+        )}
+      </Box>
+      <Box>
         <Select
           value={privacy}
           onChange={handlePrivacyChange}
@@ -185,7 +179,6 @@ const PortfolioInfo: React.FC = () => {
                 display: "flex",
                 alignItems: "center",
                 gap: 1,
-                color: currentTheme.accent.primary,
               }}
             >
               <Tooltip title={option.tooltip}>

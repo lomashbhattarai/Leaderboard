@@ -18,58 +18,84 @@ export interface SpaceTheme {
     primary: string;
     secondary: string;
   };
+  typography: {
+    fontFamily: string;
+    fontWeights: {
+      heading: number;
+      subheading: number;
+      button: number;
+    };
+  };
+  shape: {
+    borderRadius: number;
+  };
+  components: {
+    button: {
+      borderRadius: number;
+      padding: string;
+      shadow: string;
+      backgroundColor: string;
+    };
+    card: {
+      shadow: string;
+      borderRadius: number;
+    };
+    table: {
+      headerBg: string;
+      padding: string;
+      headerFontWeight: number;
+    };
+  };
 }
 
 export const spaceThemes: Record<string, SpaceTheme> = {
   none: {
     name: 'Default Theme',
     background: {
-      primary: '#ffffff',
-      secondary: '#f5f5f5',
+      primary: '#f8fafc',  // slate-50 (matches theme.palette.background.default)
+      secondary: '#ffffff', // matches theme.palette.background.paper
     },
     stars: {
       color: 'transparent',
       density: 0,
     },
     accent: {
-      primary: 'rgba(0, 0, 0, 0.87)',  // Default black text
-      secondary: '#1976d2',  // MUI primary blue for accents
+      primary: '#10b981',  // emerald-500 (matches theme.palette.primary.main)
+      secondary: '#34d399', // emerald-400 (matches theme.palette.primary.light)
     },
     text: {
-      primary: 'rgba(0, 0, 0, 0.87)',
-      secondary: 'rgba(0, 0, 0, 0.6)',
+      primary: '#0f172a',  // slate-900 (matches theme.palette.text.primary)
+      secondary: '#64748b', // slate-500 (matches theme.palette.text.secondary)
+    },
+    typography: {
+      fontFamily: '"Inter", "Roboto", "Helvetica", "Arial", sans-serif',
+      fontWeights: {
+        heading: 700,      // h1, h2
+        subheading: 600,   // h3-h6
+        button: 500,
+      },
+    },
+    shape: {
+      borderRadius: 8,
+    },
+    components: {
+      button: {
+        borderRadius: 8,
+        padding: '8px 16px',
+        shadow: 'none',
+        backgroundColor: '#10b981',
+      },
+      card: {
+        shadow: '0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1)',
+        borderRadius: 12,
+      },
+      table: {
+        headerBg: '#f8fafc',  // slate-50
+        padding: '16px',
+        headerFontWeight: 600,
+      },
     },
   },
-//   deepSpace: {
-//     name: 'Deep Space',
-//     background: {
-//       primary: '#0a0b1e',
-//       secondary: '#16213e',
-//     },
-//     stars: {
-//       color: '#ffffff',
-//       density: 100,
-//     },
-//     accent: {
-//       primary: '#7597de',
-//       secondary: '#4e54c8',
-//     },
-//   },
-//   cosmicPurple: {
-//     name: 'Cosmic Purple',
-//     background: {
-//       primary: '#1a092c',
-//       secondary: '#2d1b3d',
-//     },
-//     stars: {
-//       color: '#e0d9ff',
-//       density: 150,
-//     },
-//     accent: {
-//       primary: '#b164ff',
-//       secondary: '#7c3aed',
-//     },
-//   },
   nebula: {
     name: 'Nebula',
     background: {
@@ -87,6 +113,35 @@ export const spaceThemes: Record<string, SpaceTheme> = {
     text: {
       primary: '#ffffff',
       secondary: 'rgba(255, 255, 255, 0.7)',
+    },
+    typography: {
+      fontFamily: '"Inter", "Roboto", "Helvetica", "Arial", sans-serif',
+      fontWeights: {
+        heading: 700,
+        subheading: 600,
+        button: 500,
+      },
+    },
+    shape: {
+      borderRadius: 8,
+    },
+    components: {
+      button: {
+        borderRadius: 8,
+        padding: "8px 16px",
+        shadow: "none",
+        backgroundColor: "#38bdf8",
+      },
+      card: {
+        shadow:
+          "0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1)",
+        borderRadius: 12,
+      },
+      table: {
+        headerBg: '#1e293b',  // darker background for dark theme
+        padding: '16px',
+        headerFontWeight: 600,
+      },
     },
   },
 }; 

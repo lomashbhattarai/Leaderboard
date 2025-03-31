@@ -3,7 +3,15 @@ import { Portfolio } from "../types/api";
 import { useTheme } from "../contexts/ThemeContext";
 import { getCommonStyles } from "../themes/commonComponents";
 import AmountSummary from "./common/AmountSummary";
-import { Stack, Typography, Box, Paper } from "@mui/material";
+import {
+  Stack,
+  Typography,
+  Box,
+  Paper,
+  Card,
+  CardContent,
+  Grid,
+} from "@mui/material";
 import { formatPerformance } from "../pages/Leaderboard";
 import { formatAmount } from "../utils/helper";
 import TrendingUpIcon from "@mui/icons-material/TrendingUp";
@@ -54,261 +62,200 @@ const PortfolioValue: React.FC<PortfolioValueProps> = ({ portfolio }) => {
   const totalChangePercentage = portfolio?.profitLoss?.percentage || 0;
   const totalReturnData = getChangeData(totalChange, totalChangePercentage);
 
-  // All the calculated data is available in these objects
-  const portfolioData = {
-    currentValue,
-    initialInvestment,
-    oneDayData,
-    oneWeekData,
-    oneMonthData,
-    totalReturnData,
-  };
-
   return (
-    <Box
-      sx={{
-        p: 0.5,
-        display: "flex",
-        flexDirection: "column",
-        gap: 0.5,
-        mb: 3,
-      }}
-      className="h-auto"
-    >
-      <Stack direction="row" justifyContent="space-between" spacing={1}>
-        <Stack
-          direction="column"
-          justifyContent="space-between"
-          sx={{ flex: 1 }}
-        >
-          {/* Current Value */}
-          <Typography
-            variant="h5"
-            sx={{
-              color: currentTheme.accent.primary,
-              fontWeight: 600,
-              letterSpacing: "-0.5px",
-            }}
-          >
-            {formatAmount(currentValue)}
-          </Typography>
+    <Box sx={{ display: "flex", flexDirection: "column", gap: 3 }}>
+      <Grid container spacing={3}>
+        <Grid item xs={12} md={6} lg={3}>
+          <Card>
+            <CardContent>
+              <Typography variant="body2" color="text.secondary" gutterBottom>
+                Current Value
+              </Typography>
+              <Typography
+                variant="h5"
+                component="div"
+                sx={{
+                  fontWeight: currentTheme.typography.fontWeights.heading,
+                  mb: 0.5,
+                }}
+              >
+                {formatAmount(currentValue)}
+              </Typography>
+              <Box sx={{ display: "flex", alignItems: "center" }}>
+                {totalReturnData.isPositive ? (
+                  <TrendingUpIcon sx={{ color: "success.main" }} />
+                ) : (
+                  <TrendingDownIcon sx={{ color: "error.main" }} />
+                )}
+                <Typography
+                  variant="body2"
+                  sx={{
+                    color: totalReturnData.isPositive
+                      ? "success.main"
+                      : "error.main",
+                  }}
+                >
+                  {totalReturnData.formattedPercentage.toFixed(2)}%
+                </Typography>
+              </Box>
+            </CardContent>
+          </Card>
+        </Grid>
 
-          <Stack
-            direction="row"
-            justifyContent="space-between"
-            spacing={1}
-            sx={{ mt: 1 }}
-          >
-            {/* Initial Investment */}
-            <Box sx={{ mt: 0.5, mb: 0.5 }}>
-              <Typography variant="caption" color="text.secondary">
+        <Grid item xs={12} md={6} lg={3}>
+          <Card>
+            <CardContent>
+              <Typography variant="body2" color="text.secondary" gutterBottom>
                 Initial Investment
               </Typography>
               <Typography
-                variant="subtitle1"
+                variant="h5"
+                component="div"
                 sx={{
+                  fontWeight: currentTheme.typography.fontWeights.heading,
+                  mb: 0.5,
                   color: currentTheme.text.primary,
-                  fontWeight: 500,
                 }}
               >
                 {formatAmount(initialInvestment)}
               </Typography>
-            </Box>
-            {/* Total Return */}
-            <Box>
               <Typography
-                variant="caption"
+                variant="body2"
                 sx={{
-                  color: currentTheme.text.secondary,
-                  display: "flex",
-                  alignItems: "center",
-                  gap: 0.25,
+                  color: totalReturnData.isPositive
+                    ? "success.main"
+                    : "error.main",
                 }}
-              >
-                Total Return
-                {totalReturnData.isPositive ? (
-                  <TrendingUpIcon
-                    sx={{
-                      color: "success.main",
-                      fontSize: "0.875rem",
-                    }}
-                  />
-                ) : (
-                  <TrendingDownIcon
-                    sx={{
-                      color: "error.main",
-                      fontSize: "0.875rem",
-                    }}
-                  />
-                )}
-                <Typography
-                  variant="caption"
-                  color={
-                    totalReturnData.isPositive ? "success.main" : "error.main"
-                  }
-                >
-                  {totalReturnData.formattedPercentage.toFixed(2)}%
-                </Typography>
-              </Typography>
-
-              <Typography
-                variant="subtitle1"
-                color={
-                  totalReturnData.isPositive ? "success.main" : "error.main"
-                }
-                sx={{ justifySelf: "right" }}
               >
                 {totalReturnData.isPositive ? "+" : "-"}
                 {formatAmount(totalReturnData.formattedChange, true)}
               </Typography>
-            </Box>
-          </Stack>
+            </CardContent>
+          </Card>
+        </Grid>
 
-          <Stack
-            direction="row"
-            justifyContent="space-between"
-            alignItems="center"
-            sx={{ color: currentTheme.accent.primary, marginTop: 2 }}
-          >
-            {/* 1D Change */}
-            <Box>
-              <Typography
-                variant="caption"
-                sx={{
-                  color: currentTheme.text.secondary,
-                  display: "flex",
-                  alignItems: "center",
-                  gap: 0.25,
-                }}
-              >
-                1D
-                {oneDayData.isPositive ? (
-                  <TrendingUpIcon
-                    sx={{
-                      color:
-                        oneDayData.change >= 0 ? "success.main" : "error.main",
-                      fontSize: "0.875rem",
-                    }}
-                  />
-                ) : (
-                  <TrendingDownIcon
-                    sx={{
-                      color:
-                        oneDayData.change >= 0 ? "success.main" : "error.main",
-                      fontSize: "0.875rem",
-                    }}
-                  />
-                )}
-                <Typography
-                  variant="caption"
-                  color={oneDayData.change >= 0 ? "success.main" : "error.main"}
-                >
-                  {oneDayData.formattedPercentage}%
-                </Typography>
+        <Grid item xs={12} lg={6}>
+          <Card>
+            <CardContent>
+              <Typography variant="body2" color="text.secondary" gutterBottom>
+                Performance
               </Typography>
+              <Grid container spacing={3}>
+                <Grid item xs={4}>
+                  <Box>
+                    <Box
+                      sx={{ display: "flex", alignItems: "center", gap: 0.5 }}
+                    >
+                      <Typography variant="caption" color="text.secondary">
+                        1D
+                      </Typography>
+                      <Typography
+                        variant="body2"
+                        sx={{
+                          color:
+                            oneDayData.change >= 0
+                              ? "success.main"
+                              : "error.main",
+                          fontWeight:
+                            currentTheme.typography.fontWeights.button,
+                        }}
+                      >
+                        {oneDayData.formattedPercentage}%
+                      </Typography>
+                    </Box>
+                    <Typography
+                      variant="body2"
+                      sx={{
+                        color:
+                          oneDayData.change >= 0
+                            ? "success.main"
+                            : "error.main",
+                      }}
+                    >
+                      {oneDayData.change >= 0 ? "+" : "-"}
+                      {formatAmount(oneDayData.formattedChange, true)}
+                    </Typography>
+                  </Box>
+                </Grid>
 
-              <Typography variant="caption" color="text.secondary">
-                {oneDayData.change >= 0 ? "+" : "-"}
-                {formatAmount(oneDayData.formattedChange, true)}
-              </Typography>
-            </Box>
+                <Grid item xs={4}>
+                  <Box>
+                    <Box
+                      sx={{ display: "flex", alignItems: "center", gap: 0.5 }}
+                    >
+                      <Typography variant="caption" color="text.secondary">
+                        1W
+                      </Typography>
+                      <Typography
+                        variant="body2"
+                        sx={{
+                          color:
+                            oneWeekData.change >= 0
+                              ? "success.main"
+                              : "error.main",
+                          fontWeight:
+                            currentTheme.typography.fontWeights.button,
+                        }}
+                      >
+                        {oneWeekData.formattedPercentage}%
+                      </Typography>
+                    </Box>
+                    <Typography
+                      variant="body2"
+                      sx={{
+                        color:
+                          oneWeekData.change >= 0
+                            ? "success.main"
+                            : "error.main",
+                      }}
+                    >
+                      {oneWeekData.change >= 0 ? "+" : "-"}
+                      {formatAmount(oneWeekData.formattedChange, true)}
+                    </Typography>
+                  </Box>
+                </Grid>
 
-            {/* 1W Change */}
-            <Box>
-              <Typography
-                variant="caption"
-                sx={{
-                  color: currentTheme.text.secondary,
-                  display: "flex",
-                  alignItems: "center",
-                  gap: 0.25,
-                }}
-              >
-                1W
-                {oneWeekData.isPositive ? (
-                  <TrendingUpIcon
-                    sx={{
-                      color:
-                        oneWeekData.change >= 0 ? "success.main" : "error.main",
-                      fontSize: "0.875rem",
-                    }}
-                  />
-                ) : (
-                  <TrendingDownIcon
-                    sx={{
-                      color:
-                        oneWeekData.change >= 0 ? "success.main" : "error.main",
-                      fontSize: "0.875rem",
-                    }}
-                  />
-                )}
-                <Typography
-                  variant="caption"
-                  color={
-                    oneWeekData.change >= 0 ? "success.main" : "error.main"
-                  }
-                >
-                  {oneWeekData.formattedPercentage}%
-                </Typography>
-              </Typography>
-
-              <Typography variant="caption" color="text.secondary">
-                {oneWeekData.change >= 0 ? "+" : "-"}
-                {formatAmount(oneWeekData.formattedChange, true)}
-              </Typography>
-            </Box>
-
-            {/* 1M Change */}
-            <Box>
-              <Typography
-                variant="caption"
-                sx={{
-                  color: currentTheme.text.secondary,
-                  display: "flex",
-                  alignItems: "center",
-                  gap: 0.25,
-                }}
-              >
-                1M
-                {oneMonthData.isPositive ? (
-                  <TrendingUpIcon
-                    sx={{
-                      color:
-                        oneMonthData.change >= 0
-                          ? "success.main"
-                          : "error.main",
-                      fontSize: "0.875rem",
-                    }}
-                  />
-                ) : (
-                  <TrendingDownIcon
-                    sx={{
-                      color:
-                        oneMonthData.change >= 0
-                          ? "success.main"
-                          : "error.main",
-                      fontSize: "0.875rem",
-                    }}
-                  />
-                )}
-                <Typography
-                  variant="caption"
-                  color={
-                    oneMonthData.change >= 0 ? "success.main" : "error.main"
-                  }
-                >
-                  {oneMonthData.formattedPercentage}%
-                </Typography>
-              </Typography>
-
-              <Typography variant="caption" color="text.secondary">
-                {oneMonthData.change >= 0 ? "+" : "-"}
-                {formatAmount(oneMonthData.formattedChange, true)}
-              </Typography>
-            </Box>
-          </Stack>
-        </Stack>
-      </Stack>
+                <Grid item xs={4}>
+                  <Box>
+                    <Box
+                      sx={{ display: "flex", alignItems: "center", gap: 0.5 }}
+                    >
+                      <Typography variant="caption" color="text.secondary">
+                        1M
+                      </Typography>
+                      <Typography
+                        variant="body2"
+                        sx={{
+                          color:
+                            oneMonthData.change >= 0
+                              ? "success.main"
+                              : "error.main",
+                          fontWeight:
+                            currentTheme.typography.fontWeights.button,
+                        }}
+                      >
+                        {oneMonthData.formattedPercentage}%
+                      </Typography>
+                    </Box>
+                    <Typography
+                      variant="body2"
+                      sx={{
+                        color:
+                          oneMonthData.change >= 0
+                            ? "success.main"
+                            : "error.main",
+                      }}
+                    >
+                      {oneMonthData.change >= 0 ? "+" : "-"}
+                      {formatAmount(oneMonthData.formattedChange, true)}
+                    </Typography>
+                  </Box>
+                </Grid>
+              </Grid>
+            </CardContent>
+          </Card>
+        </Grid>
+      </Grid>
     </Box>
   );
 };
