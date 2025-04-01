@@ -9,23 +9,34 @@ import { Link as RouterLink } from "react-router-dom";
 import StopLossChip from "./StopLossChip";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import { useMediaQuery } from "@mui/material";
+import { useTheme } from "../contexts/ThemeContext";
+
+const StockLink: React.FC<{ symbol: string }> = ({ symbol }) => {
+  const { currentTheme } = useTheme();
+
+  return (
+    <RouterLink
+      to={`https://nepsealpha.com/trading/chart?symbol=${symbol}`}
+      className="hover:underline"
+      target="_blank"
+      rel="noopener noreferrer"
+      style={{
+        color: currentTheme.accent.primary,
+        textDecoration: "none",
+        fontWeight: currentTheme.typography.fontWeights.heading,
+      }}
+    >
+      {symbol}
+    </RouterLink>
+  );
+};
 
 const PORTFOLIO_TABLE_HEADERS_FROM_DB: Array<ColumnConfig> = [
   {
     label: "Stock",
     key: "stock",
     getValue: (portfolioStock: PortfolioStock) => portfolioStock.stock?.symbol,
-    render: (value) => (
-      <RouterLink
-        // to={`/stock/${value}`}
-        to={`https://nepsealpha.com/trading/chart?symbol=${value}`}
-        className="text-blue-600 hover:underline"
-        target="_blank"
-        rel="noopener noreferrer"
-      >
-        {value}
-      </RouterLink>
-    ),
+    render: (value) => <StockLink symbol={value} />,
   },
   {
     label: "Closing Price",
@@ -97,6 +108,7 @@ const StopLossAction: React.FC<{
             portfolioStockId: stock.id,
             stockSymbol: stock.stock?.symbol,
           }}
+          style={{ textDecoration: "none", color: "inherit" }}
         >
           <Button
             size="small"

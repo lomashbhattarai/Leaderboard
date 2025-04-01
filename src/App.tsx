@@ -48,7 +48,10 @@ const AppContent = () => {
         <Navbar />
         <div className="w-full px-4 max-w-[1200px] mx-auto">
           <Routes>
-            <Route path="/" element={<Leaderboard />} />
+            <Route
+              path="/"
+              element={<Leaderboard rowLimit={10} isCompact={true} />}
+            />
             <Route path="/login" element={<Login />} />
             <Route path="/signup" element={<Signup />} />
             <Route path="/portfolio/:id" element={<SharedPortfolio />} />

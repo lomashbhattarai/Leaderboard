@@ -1,5 +1,20 @@
-import React from "react";
-import { Alert, Button, Typography, Box, Tooltip } from "@mui/material";
+import React, { useState } from "react";
+import {
+  Alert,
+  Button,
+  Typography,
+  Box,
+  Badge,
+  Tooltip,
+  TextField,
+  InputAdornment,
+  Grid,
+  Card,
+  CardHeader,
+  CardContent,
+  Stack,
+  Chip,
+} from "@mui/material";
 import { ColumnConfig } from "../components/common/TableView";
 import TableView from "../components/common/TableView";
 import { useUsers, useLeaderboard } from "../api/queries";
@@ -13,6 +28,15 @@ import LockIcon from "@mui/icons-material/Lock";
 import PublicIcon from "@mui/icons-material/Public";
 import CategoryIcon from "@mui/icons-material/Category";
 import { useTheme } from "../contexts/ThemeContext";
+import { Menu, MenuItem } from "@mui/material";
+import {
+  Search as SearchIcon,
+  FilterList as FilterListIcon,
+  ArrowUpward as ArrowUpIcon,
+  BarChart as BarChartIcon,
+} from "@mui/icons-material";
+import RankedPositionCard from "../components/RankedPositionCard";
+import type { LeaderboardEntry } from "../types/api";
 
 export const formatPerformance = (value: number | string) => {
   if (!value && value !== 0) {
@@ -57,7 +81,7 @@ const columns: ColumnConfig[] = [
           </Box>
         );
       }
-      return index + 1;
+      return <Typography fontWeight={600}>{index + 1}</Typography>;
     },
   },
   {
@@ -69,35 +93,20 @@ const columns: ColumnConfig[] = [
         <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
           <RouterLink
             to={`/portfolio/${row.portfolioId}`}
-            className="text-blue-600 hover:underline truncate block"
+            className="hover:underline truncate block"
           >
-            {value}
+            <Typography variant="subtitle2" fontWeight={600}>
+              {value}
+            </Typography>
           </RouterLink>
-        </Box>
-      );
-    },
-  },
-  {
-    label: "",
-    key: "privacy",
-    align: "center",
-    render: (value, row) => {
-      return (
-        <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
           {row.privacy === "PRIVATE" && (
-            <Tooltip title="Private portfolio">
-              <LockIcon fontSize="small" />
-            </Tooltip>
+            <LockIcon sx={{ fontSize: "0.875rem", color: "text.secondary" }} />
           )}
-          {row.privacy === "SHARE_ALL" && (
-            <Tooltip title="All holdings visible">
-              <PublicIcon fontSize="small" />
-            </Tooltip>
-          )}
+
           {row.privacy === "SHARE_SECTORS" && (
-            <Tooltip title="Only sectors visible">
-              <CategoryIcon fontSize="small" />
-            </Tooltip>
+            <CategoryIcon
+              sx={{ fontSize: "0.875rem", color: "text.secondary" }}
+            />
           )}
         </Box>
       );
@@ -106,51 +115,94 @@ const columns: ColumnConfig[] = [
   {
     label: "Owner",
     key: "userName",
+    render: (value) => (
+      <Typography variant="subtitle2" sx={{ color: "text.secondary" }}>
+        {value}
+      </Typography>
+    ),
   },
   {
     label: "1 Day",
     key: "performance1D",
     align: "right",
     getValue: (row) => row.performance1D,
-    render: (value) => formatPerformance(value),
+    render: (value) => (
+      <Typography variant="body2">{formatPerformance(value)}</Typography>
+    ),
   },
   {
     label: "1 Week",
     key: "performance1W",
     align: "right",
     getValue: (row) => row.performance1W,
-    render: (value) => formatPerformance(value),
+    render: (value) => (
+      <Typography variant="body2" sx={{ fontWeight: 500 }}>
+        {formatPerformance(value)}
+      </Typography>
+    ),
   },
   {
     label: "1 Month",
     key: "performance1M",
     align: "right",
     getValue: (row) => row.performance1M,
-    render: (value) => formatPerformance(value),
+    render: (value) => (
+      <Typography variant="body2" sx={{ fontWeight: 500 }}>
+        {formatPerformance(value)}
+      </Typography>
+    ),
   },
   {
     label: "1 Year",
     key: "performance1Y",
     align: "right",
     getValue: (row) => row.performance1Y,
-    render: (value) => formatPerformance(value),
+    render: (value) => (
+      <Typography variant="body2" sx={{ fontWeight: 500 }}>
+        {formatPerformance(value)}
+      </Typography>
+    ),
   },
   {
     label: "Updated",
     key: "updatedAt",
     render: (value) => {
-      return value ? `${formatDistanceToNow(new Date(value))} ago` : "";
+      return value ? (
+        <Typography
+          variant="subtitle2"
+          sx={{
+            fontWeight: 500,
+            color: "text.secondary",
+          }}
+        >
+          {formatDistanceToNow(new Date(value))} ago
+        </Typography>
+      ) : (
+        ""
+      );
     },
   },
 ];
 
-const Leaderboard: React.FC = () => {
+const Leaderboard: React.FC<{ rowLimit?: number; isCompact?: boolean }> = ({
+  rowLimit,
+  isCompact = true,
+}) => {
   const { currentTheme } = useTheme();
-  const {
-    data: users,
-    isLoading: isUsersLoading,
-    isError: isUsersError,
-  } = useUsers();
+  const [searchQuery, setSearchQuery] = useState("");
+
+  const [filterAnchorEl, setFilterAnchorEl] = useState<null | HTMLElement>(
+    null
+  );
+
+  const handleFilterClose = () => {
+    setFilterAnchorEl(null);
+  };
+
+  const handleFilterClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+    setFilterAnchorEl(event.currentTarget);
+  };
+
   const {
     data: leaderboardData,
     isLoading: isLeaderboardLoading,
@@ -161,17 +213,122 @@ const Leaderboard: React.FC = () => {
   const { user } = useAuthContext();
   const navigate = useNavigate();
 
+  // Filter data based on rowLimit if provided
+  const displayData = rowLimit
+    ? leaderboardData?.slice(0, rowLimit)
+    : leaderboardData;
+
+  // Filter data based on search query
+  const filteredData = searchQuery
+    ? displayData?.filter(
+        (entry) =>
+          entry.portfolioName
+            .toLowerCase()
+            .includes(searchQuery.toLowerCase()) ||
+          entry.userName.toLowerCase().includes(searchQuery.toLowerCase())
+      )
+    : displayData;
+
+  // Find user's portfolio and rank in leaderboard data
+  const userPortfolio =
+    user && leaderboardData
+      ? leaderboardData.find((portfolio) => portfolio.userId === user.id)
+      : undefined;
+  const userRank =
+    userPortfolio && leaderboardData
+      ? leaderboardData.findIndex((portfolio) => portfolio.userId === user.id) +
+        1
+      : undefined;
+
+  // Find today's top gainer based on 1D performance
+  const topGainer = leaderboardData?.reduce((top, current) => {
+    if (!top) return current;
+    return current.performance1D > top.performance1D ? current : top;
+  }, undefined as LeaderboardEntry | undefined);
+
+  // Find top gainer's rank
+  const topGainerRank =
+    topGainer && leaderboardData
+      ? leaderboardData.findIndex(
+          (p) => p.portfolioId === topGainer.portfolioId
+        ) + 1
+      : undefined;
+
   return (
-    <div>
-      <div className="flex justify-end items-center mb-4 mt-4 text-right text-sm">
-        <Typography
-          variant="subtitle1"
-          component="h1"
-          sx={{ color: currentTheme.text.primary }}
+    <div className="mb-10">
+      <Box
+        sx={{
+          display: "flex",
+          flexDirection: { xs: "column", md: "row" },
+          justifyContent: "space-between",
+          alignItems: { xs: "flex-start", md: "center" },
+          mb: 4,
+          gap: 2,
+        }}
+      >
+        <Box>
+          <Typography
+            variant="h4"
+            component="h1"
+            sx={{ fontWeight: "bold", mb: 0.5 }}
+          >
+            NEPSE Leaderboard
+          </Typography>
+          <Typography variant="body2" color="text.secondary">
+            Track and compare top-performing portfolios
+          </Typography>
+        </Box>
+
+        <Box
+          sx={{
+            display: "flex",
+            gap: 1,
+            width: { xs: "100%", md: "auto" },
+            flexWrap: "wrap",
+          }}
         >
-          NEPSE Leaderboard
-        </Typography>
-      </div>
+          <TextField
+            placeholder="Search portfolios..."
+            size="small"
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            sx={{
+              width: { xs: "100%", md: "250px" },
+              "& .MuiOutlinedInput-root": {
+                borderRadius: 2,
+              },
+            }}
+            InputProps={{
+              startAdornment: (
+                <InputAdornment position="start">
+                  <SearchIcon
+                    fontSize="small"
+                    sx={{ color: "text.secondary" }}
+                  />
+                </InputAdornment>
+              ),
+            }}
+          />
+          <Button
+            variant="outlined"
+            size="small"
+            startIcon={<FilterListIcon />}
+            onClick={handleFilterClick}
+          >
+            Filter
+          </Button>
+          <Menu
+            anchorEl={filterAnchorEl}
+            open={Boolean(filterAnchorEl)}
+            onClose={handleFilterClose}
+          >
+            <MenuItem onClick={handleFilterClose}>All Portfolios</MenuItem>
+            <MenuItem onClick={handleFilterClose}>Public Only</MenuItem>
+            <MenuItem onClick={handleFilterClose}>Top Gainers</MenuItem>
+            <MenuItem onClick={handleFilterClose}>Recently Updated</MenuItem>
+          </Menu>
+        </Box>
+      </Box>
 
       {!portfolioId && (
         <Alert severity="info" className="mb-4">
@@ -212,18 +369,53 @@ const Leaderboard: React.FC = () => {
       )}
 
       <div className="mt-10">
+        {rowLimit && (
+          <Stack direction={{ xs: "column", sm: "row" }} spacing={2}>
+            <RankedPositionCard
+              label="Your Position"
+              portfolio={userPortfolio}
+              rank={userRank}
+            />
+
+            <RankedPositionCard
+              label="Today's Top Gainer"
+              portfolio={topGainer}
+              rank={topGainerRank}
+            />
+          </Stack>
+        )}
+      </div>
+
+      <div className="mt-10">
         {isLeaderboardError ? (
           <Alert severity="error">Failed to load leaderboard data</Alert>
         ) : (
           <div>
             <TableView
               columns={columns}
-              tableData={leaderboardData || []}
+              tableData={filteredData || []}
               customCardComponent={(row, index) => (
                 <LeaderboardCard row={row} index={index} />
               )}
-              isCompact
+              isCompact={isCompact}
             />
+            {rowLimit && (
+              <Box sx={{ display: "flex", justifyContent: "center", mt: 3 }}>
+                <Button
+                  variant="contained"
+                  color="primary"
+                  onClick={() => navigate("/leaderboard")}
+                  sx={{
+                    backgroundColor: currentTheme.accent.primary,
+                    "&:hover": {
+                      backgroundColor: currentTheme.accent.secondary,
+                    },
+                  }}
+                >
+                  View Full Leaderboard
+                </Button>
+              </Box>
+            )}
           </div>
         )}
       </div>

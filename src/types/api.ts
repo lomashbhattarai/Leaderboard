@@ -186,6 +186,7 @@ export interface LeaderboardEntry {
   rank1Y: number;
   userName: string;
   updatedAt: string;
+  userId: number;
 }
 
 export type BrokerCredential = {
