@@ -12,6 +12,7 @@ import LeaderboardCard from "../components/LeaderboardCard";
 import LockIcon from "@mui/icons-material/Lock";
 import PublicIcon from "@mui/icons-material/Public";
 import CategoryIcon from "@mui/icons-material/Category";
+import { useTheme } from "../contexts/ThemeContext";
 
 export const formatPerformance = (value: number | string) => {
   if (!value && value !== 0) {
@@ -144,6 +145,7 @@ const columns: ColumnConfig[] = [
 ];
 
 const Leaderboard: React.FC = () => {
+  const { currentTheme } = useTheme();
   const {
     data: users,
     isLoading: isUsersLoading,
@@ -162,7 +164,11 @@ const Leaderboard: React.FC = () => {
   return (
     <div>
       <div className="flex justify-end items-center mb-4 mt-4 text-right text-sm">
-        <Typography variant="subtitle1" component="h1">
+        <Typography
+          variant="subtitle1"
+          component="h1"
+          sx={{ color: currentTheme.text.primary }}
+        >
           NEPSE Leaderboard
         </Typography>
       </div>
@@ -179,6 +185,12 @@ const Leaderboard: React.FC = () => {
             variant="contained"
             color="primary"
             onClick={() => navigate("/portfolio")}
+            sx={{
+              backgroundColor: currentTheme.accent.primary,
+              "&:hover": {
+                backgroundColor: currentTheme.accent.secondary,
+              },
+            }}
           >
             Add Your Portfolio
           </Button>
@@ -188,6 +200,12 @@ const Leaderboard: React.FC = () => {
           variant="contained"
           color="primary"
           onClick={() => navigate("/signup")}
+          sx={{
+            backgroundColor: currentTheme.accent.primary,
+            "&:hover": {
+              backgroundColor: currentTheme.accent.secondary,
+            },
+          }}
         >
           Sign up to participate
         </Button>
@@ -205,11 +223,6 @@ const Leaderboard: React.FC = () => {
                 <LeaderboardCard row={row} index={index} />
               )}
               isCompact
-              // responsive={{
-              //   fixedFirstColumn: true,
-              //   minWidth: 120,
-              //   breakpoint: 600,
-              // }}
             />
           </div>
         )}

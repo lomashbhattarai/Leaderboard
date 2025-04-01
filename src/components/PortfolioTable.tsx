@@ -100,7 +100,6 @@ const StopLossAction: React.FC<{
         >
           <Button
             size="small"
-            startIcon={<TrendingDownIcon sx={{ fontSize: "0.875rem" }} />}
             sx={{
               textTransform: "none",
               fontSize: "0.7rem",
@@ -141,7 +140,6 @@ const StopLossAction: React.FC<{
           justifyContent={{ xs: "flex-end", sm: "flex-start" }}
           spacing={0.5}
         >
-          <TrendingDownIcon sx={{ fontSize: "0.875rem", color: "#1976d2" }} />
           <StopLossChip
             key={activeStopLosses[0].id}
             type={activeStopLosses[0].type}

@@ -116,7 +116,7 @@ const TableView = ({
         <Card
           key={row.id || rowIndex}
           sx={{
-            backgroundColor: currentTheme.background.primary,
+            backgroundColor: currentTheme.background.secondary,
             borderRadius: 1,
             "&:hover": {
               boxShadow: `0 0 0 1px ${currentTheme.accent.primary}`,
@@ -141,6 +141,7 @@ const TableView = ({
                       sx={{
                         fontWeight: "bold",
                         minWidth: "40%",
+                        color: currentTheme.text.secondary,
                       }}
                     >
                       {column.label}:
@@ -151,6 +152,7 @@ const TableView = ({
                       sx={{
                         flex: 1,
                         wordBreak: "break-word",
+                        color: currentTheme.text.primary,
                       }}
                     >
                       {column.render
@@ -181,10 +183,13 @@ const TableView = ({
                           size="small"
                           aria-label="edit"
                           sx={{
-                            color: currentTheme.accent.secondary,
+                            color: currentTheme.accent.primary,
                             padding: isCompact ? "2px" : "4px",
                             "& svg": {
                               fontSize: isCompact ? "1rem" : "1.2rem",
+                            },
+                            "&:hover": {
+                              color: currentTheme.accent.secondary,
                             },
                           }}
                         >
@@ -195,10 +200,13 @@ const TableView = ({
                           size="small"
                           aria-label="delete"
                           sx={{
-                            color: currentTheme.accent.secondary,
+                            color: currentTheme.accent.primary,
                             padding: isCompact ? "2px" : "4px",
                             "& svg": {
                               fontSize: isCompact ? "1rem" : "1.2rem",
+                            },
+                            "&:hover": {
+                              color: currentTheme.accent.secondary,
                             },
                           }}
                         >
@@ -211,6 +219,12 @@ const TableView = ({
                         onClick={() => onDeleteTransaction(rowIndex)}
                         size="small"
                         aria-label="delete"
+                        sx={{
+                          color: currentTheme.accent.primary,
+                          "&:hover": {
+                            color: currentTheme.accent.secondary,
+                          },
+                        }}
                       >
                         <DeleteIcon />
                       </IconButton>
@@ -223,7 +237,7 @@ const TableView = ({
         </Card>
       ))}
       {showFooter && (
-        <Card sx={{ backgroundColor: currentTheme.background.primary }}>
+        <Card sx={{ backgroundColor: currentTheme.background.secondary }}>
           <CardContent>
             <Stack
               direction="row"
@@ -233,13 +247,13 @@ const TableView = ({
               <Typography
                 variant="body1"
                 fontWeight="bold"
-                sx={{ color: currentTheme.accent.primary }}
+                sx={{ color: currentTheme.text.primary }}
               >
                 Total:
               </Typography>
               <Typography
                 variant="body1"
-                sx={{ color: currentTheme.accent.primary }}
+                sx={{ color: currentTheme.text.primary }}
               >
                 total X
               </Typography>
@@ -255,7 +269,10 @@ const TableView = ({
       {title && (
         <Typography
           variant={isCompact ? "h6" : "h5"}
-          sx={{ mb: isCompact ? 1 : 2 }}
+          sx={{
+            mb: isCompact ? 1 : 2,
+            color: currentTheme.text.primary,
+          }}
         >
           {title}
         </Typography>
@@ -271,6 +288,7 @@ const TableView = ({
             overflowX: "auto",
             position: "relative",
             overflow: "visible",
+            backgroundColor: currentTheme.background.secondary,
             "& .MuiTable-root": {
               borderCollapse: "separate",
               borderSpacing: "0",
@@ -286,11 +304,12 @@ const TableView = ({
               textOverflow: "ellipsis",
               maxWidth: responsive.minWidth,
               fontSize: isCompact ? "0.75rem" : "inherit",
+              color: currentTheme.text.primary,
             },
             "& .fixed-column": {
               position: "sticky",
               left: 0,
-              backgroundColor: currentTheme.background.primary,
+              backgroundColor: currentTheme.background.secondary,
               "&::after": {
                 content: '""',
                 position: "absolute",
@@ -298,7 +317,7 @@ const TableView = ({
                 top: 0,
                 bottom: 0,
                 width: 4,
-                background: `linear-gradient(90deg, rgba(0,0,0,0.1), transparent)`,
+                background: `linear-gradient(90deg, ${currentTheme.background.primary}, transparent)`,
               },
               zIndex: 1,
             },
@@ -309,24 +328,36 @@ const TableView = ({
             },
             "& .MuiTableHead-root .MuiTableRow-root": {
               ...styles.table.header,
+              backgroundColor: currentTheme.background.primary,
             },
             "& .MuiTableBody-root .MuiTableRow-root": {
               ...styles.table.row,
+              "&:hover": {
+                backgroundColor: currentTheme.background.primary,
+              },
             },
             "& .MuiTableFooter-root .MuiTableRow-root": {
               ...styles.table.footer,
+              backgroundColor: currentTheme.background.primary,
             },
             "& .MuiIconButton-root": {
               ...styles.interactive.button,
               padding: "5px",
               marginLeft: "4px",
+              color: currentTheme.accent.primary,
               "& svg": {
                 fontSize: "1.2rem",
               },
+              "&:hover": {
+                color: currentTheme.accent.secondary,
+              },
             },
             "& .MuiTableRow-root:focus-within": {
-              outline: `2px solid ${currentTheme.accent.secondary}`,
+              outline: `2px solid ${currentTheme.accent.primary}`,
               outlineOffset: "-2px",
+            },
+            "& .sort-icon": {
+              color: currentTheme.text.secondary,
             },
           }}
         >
@@ -344,6 +375,7 @@ const TableView = ({
                     }
                     sx={{
                       backgroundColor: currentTheme.background.primary,
+                      color: currentTheme.text.primary,
                       zIndex:
                         index === 0 && responsive.fixedFirstColumn ? 3 : 2,
                       minWidth: column.minWidth || responsive.minWidth || 150,
@@ -353,6 +385,7 @@ const TableView = ({
                         ? {
                             "& .sort-icon": {
                               opacity: 1,
+                              color: currentTheme.accent.primary,
                             },
                           }
                         : {},
@@ -398,7 +431,9 @@ const TableView = ({
                   </TableCell>
                 ))}
                 {(showActions || onDeleteTransaction) && (
-                  <TableCell>Actions</TableCell>
+                  <TableCell sx={{ color: currentTheme.text.primary }}>
+                    Actions
+                  </TableCell>
                 )}
               </TableRow>
             </TableHead>
@@ -416,7 +451,7 @@ const TableView = ({
                             : ""
                         }
                         sx={{
-                          color: currentTheme.accent.secondary,
+                          color: currentTheme.text.primary,
                         }}
                       >
                         {column.render
@@ -445,9 +480,13 @@ const TableView = ({
                               size="small"
                               aria-label="edit"
                               sx={{
+                                color: currentTheme.accent.primary,
                                 padding: isCompact ? "2px" : "4px",
                                 "& svg": {
                                   fontSize: isCompact ? "1rem" : "1.2rem",
+                                },
+                                "&:hover": {
+                                  color: currentTheme.accent.secondary,
                                 },
                               }}
                             >
@@ -458,9 +497,13 @@ const TableView = ({
                               size="small"
                               aria-label="delete"
                               sx={{
+                                color: currentTheme.accent.primary,
                                 padding: isCompact ? "2px" : "4px",
                                 "& svg": {
                                   fontSize: isCompact ? "1rem" : "1.2rem",
+                                },
+                                "&:hover": {
+                                  color: currentTheme.accent.secondary,
                                 },
                               }}
                             >
@@ -473,6 +516,12 @@ const TableView = ({
                             onClick={() => onDeleteTransaction(rowIndex)}
                             size="small"
                             aria-label="delete"
+                            sx={{
+                              color: currentTheme.accent.primary,
+                              "&:hover": {
+                                color: currentTheme.accent.secondary,
+                              },
+                            }}
                           >
                             <DeleteIcon />
                           </IconButton>
@@ -485,6 +534,9 @@ const TableView = ({
                       <TableCell
                         style={{ paddingBottom: 0, paddingTop: 0 }}
                         colSpan={columns.length + (showActions ? 1 : 0)}
+                        sx={{
+                          backgroundColor: currentTheme.background.primary,
+                        }}
                       >
                         <Collapse in timeout="auto" unmountOnExit>
                           <Box sx={{ margin: 1 }}>{renderExpandedRow(row)}</Box>
@@ -498,10 +550,16 @@ const TableView = ({
             {showFooter && (
               <TableFooter>
                 <TableRow>
-                  <TableCell colSpan={columns.length} align="right">
+                  <TableCell
+                    colSpan={columns.length}
+                    align="right"
+                    sx={{ color: currentTheme.text.primary }}
+                  >
                     Total:
                   </TableCell>
-                  <TableCell>total X</TableCell>
+                  <TableCell sx={{ color: currentTheme.text.primary }}>
+                    total X
+                  </TableCell>
                   {(showActions || onDeleteTransaction) && <TableCell />}
                 </TableRow>
               </TableFooter>

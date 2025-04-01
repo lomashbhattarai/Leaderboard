@@ -20,8 +20,10 @@ import PublicIcon from "@mui/icons-material/Public";
 import CategoryIcon from "@mui/icons-material/Category";
 import { PortfolioPrivacy } from "../types/api";
 import StockSymbolLink from "../components/common/StockSymbolLink";
+import { useTheme } from "../contexts/ThemeContext";
 
 const SharedPortfolio: React.FC = () => {
+  const { currentTheme } = useTheme();
   const { id } = useParams<{ id: string }>();
 
   const {
@@ -143,16 +145,24 @@ const SharedPortfolio: React.FC = () => {
   return (
     <div className="mx-auto">
       <Box className="flex items-center gap-2 mb-4 mt-4">
-        <Typography variant="subtitle1" component="h1">
+        <Typography
+          variant="subtitle1"
+          component="h1"
+          sx={{ color: currentTheme.text.primary }}
+        >
           {publicPortfolio.name}
         </Typography>
         <MuiTooltip title={getPrivacyInfo(publicPortfolio.privacy).text}>
-          <span>{getPrivacyInfo(publicPortfolio.privacy).icon}</span>
+          <span style={{ color: currentTheme.text.secondary }}>
+            {getPrivacyInfo(publicPortfolio.privacy).icon}
+          </span>
         </MuiTooltip>
       </Box>
 
       {publicPortfolio.privacy === PortfolioPrivacy.PRIVATE ? (
-        <div>Private Portfolio</div>
+        <div style={{ color: currentTheme.text.primary }}>
+          Private Portfolio
+        </div>
       ) : (
         <Stack
           direction={{ xs: "column", md: "row" }}
@@ -188,7 +198,7 @@ const SharedPortfolio: React.FC = () => {
                   cx="50%"
                   cy="50%"
                   outerRadius={chartDimensions.outerRadius}
-                  fill="#8884d8"
+                  fill={currentTheme.accent.primary}
                   label={({ symbol, percent }) =>
                     `${symbol} ${(percent * 100).toFixed(0)}%`
                   }
@@ -238,18 +248,19 @@ const PriceChangeTooltip = ({
   latestDate: string;
   value: number;
 }) => {
+  const { currentTheme } = useTheme();
   const formattedValue = formatPerformance(value);
 
   return (
     <Tooltip
       content={
         <>
-          <div>
+          <div style={{ color: currentTheme.text.primary }}>
             {previousDate
               ? `${format(new Date(previousDate), "do MMMM")}: ${previousPrice}`
               : "No historical data"}
           </div>
-          <div>
+          <div style={{ color: currentTheme.text.primary }}>
             {latestDate
               ? `${format(new Date(latestDate), "do MMMM")}: ${latestPrice}`
               : "No historical data"}

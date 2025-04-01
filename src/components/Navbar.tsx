@@ -5,8 +5,13 @@ import {
   Box,
   useMediaQuery,
   useTheme as useMuiTheme,
+  Tooltip,
 } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
+import HomeIcon from "@mui/icons-material/Home";
+import AccountBalanceWalletIcon from "@mui/icons-material/AccountBalanceWallet";
+import TrendingUpIcon from "@mui/icons-material/TrendingUp";
+import EmojiEventsIcon from "@mui/icons-material/EmojiEvents";
 import UserMenu from "./UserMenu";
 import { useTheme } from "../contexts/ThemeContext";
 
@@ -18,17 +23,11 @@ const Navbar = () => {
 
   const navStyle = {
     "& a": {
-      color:
-        currentTheme.name === "Default Theme"
-          ? "rgba(0, 0, 0, 0.87)"
-          : "#ffffff",
+      color: currentTheme.text.primary,
       transition: "all 0.2s ease",
       padding: "4px 0",
       position: "relative",
-      backgroundColor:
-        currentTheme.name === "Default Theme"
-          ? "rgba(240, 237, 238, 0.8)" // Tailwind gray-100
-          : "rgba(0, 0, 0, 0.8)",
+      backgroundColor: currentTheme.background.secondary,
       "&:hover": {
         opacity: 0.8,
         color: currentTheme.accent.primary,
@@ -54,49 +53,57 @@ const Navbar = () => {
   };
 
   let navLinks = [
-    { to: "/", label: "Home" },
-    { to: "/my-portfolio", label: "My Portfolio" },
-    { to: "/stocks", label: "Stocks" },
+    { to: "/", label: "Home", icon: <HomeIcon /> },
+    {
+      to: "/my-portfolio",
+      label: "Portfolio",
+      icon: <AccountBalanceWalletIcon />,
+    },
+    { to: "/stocks", label: "Stocks", icon: <TrendingUpIcon /> },
+    {
+      to: "/leaderboard",
+      label: "Leaderboard",
+      icon: <EmojiEventsIcon />,
+    },
     // { to: "/earnings-tracker", label: "Earnings Tracker" },
     // { to: "/wealth-tracker", label: "Wealth Tracker" },
   ];
 
   if (isMobile) {
-    navLinks = navLinks.slice(0, 3);
+    navLinks = navLinks.slice(0, 4); // Show all items on mobile with icons
   }
 
   const renderNavLinks = () => (
     <ul
-      className={`${
-        isMobile && false ? "flex flex-col space-y-2" : "flex space-x-4"
-      }`}
+      className="flex space-x-4"
       style={{
-        color: currentTheme.name === "Default Theme" ? "blue" : "#ffffff",
+        color: currentTheme.text.primary,
       }}
     >
       {navLinks.map((link) => (
         <li key={link.to}>
-          <NavLink
-            to={link.to}
-            onClick={() => isMobile && false && setMobileMenu(null)}
-            style={({ isActive }) => ({
-              color:
-                currentTheme.name === "Default Theme"
-                  ? "rgba(0, 0, 0, 0.87)"
-                  : currentTheme.accent.primary,
-              backgroundColor:
-                isActive && isMobile && false
-                  ? currentTheme.name === "Default Theme"
-                    ? "rgba(0, 0, 0, 0.04)"
-                    : "rgba(255, 255, 255, 0.08)"
-                  : "transparent",
-              display: "block",
-              padding: isMobile && false ? "8px 12px" : "4px 0",
-              borderRadius: isMobile && false ? "4px" : "0",
-            })}
-          >
-            {link.label}
-          </NavLink>
+          <Tooltip title={isMobile ? link.label : ""} placement="right">
+            <NavLink
+              to={link.to}
+              style={({ isActive }) => ({
+                color: currentTheme.text.primary,
+                backgroundColor:
+                  isActive && isMobile
+                    ? currentTheme.background.primary
+                    : "transparent",
+                display: "flex",
+                alignItems: "center",
+                padding: isMobile ? "8px 12px" : "4px 0",
+                borderRadius: isMobile ? "4px" : "0",
+              })}
+            >
+              {isMobile ? (
+                <span style={{ marginRight: "8px" }}>{link.icon}</span>
+              ) : (
+                link.label
+              )}
+            </NavLink>
+          </Tooltip>
         </li>
       ))}
     </ul>
@@ -107,10 +114,7 @@ const Navbar = () => {
       <IconButton
         onClick={(e) => setMobileMenu(e.currentTarget)}
         style={{
-          color:
-            currentTheme.name === "Default Theme"
-              ? "rgba(0, 0, 0, 0.87)"
-              : "#ffffff",
+          color: currentTheme.text.primary,
         }}
       >
         <MenuIcon />
@@ -128,7 +132,7 @@ const Navbar = () => {
         className="flex justify-between items-center w-full"
         sx={{
           padding: "0.5rem 1rem",
-          borderBottom: "1px solid #e0e0e0",
+          borderBottom: `1px solid ${currentTheme.background.primary}`,
           ...navStyle,
         }}
       >

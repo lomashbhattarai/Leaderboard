@@ -2,6 +2,7 @@ import React, { ChangeEvent, useState } from "react";
 import { Button } from "@mui/material";
 import CSVModal from "./CSVModal";
 import { FileUpload as FileUploadIcon } from "@mui/icons-material";
+
 interface CSVImportProps {
   handleImport?: (csvData: string[][]) => void;
   handleFileImport?: (file: File) => void;
@@ -13,6 +14,7 @@ interface CSVImportProps {
     name: string;
     render: (rowData: string[], tableData: string[][]) => string;
   };
+  sx?: any;
 }
 
 const CSVImport: React.FC<CSVImportProps> = ({
@@ -23,6 +25,7 @@ const CSVImport: React.FC<CSVImportProps> = ({
   customColumn,
   variant = "contained",
   color = "primary",
+  sx,
 }) => {
   const [csvFile, setCsvFile] = useState<File | null>(null);
   const [csvData, setCsvData] = useState<string[][]>([]);
@@ -87,6 +90,7 @@ const CSVImport: React.FC<CSVImportProps> = ({
           color={color}
           component="span"
           startIcon={<FileUploadIcon />}
+          sx={sx}
         >
           {label}
         </Button>

@@ -152,7 +152,6 @@ function Home() {
         <li>Set target price for a stock (auto buy/sell)</li>
         <li>tags for stocks</li>
         <li> communtiy</li>
-        <li> Set portfolio to private/public</li>
         <li> pay to view portfolio</li>
       </ul>
     </div>

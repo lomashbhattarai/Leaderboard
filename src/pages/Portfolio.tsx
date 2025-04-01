@@ -1,23 +1,11 @@
 import React from "react";
 import MeroshareImport from "../components/MeroshareImport";
-import StopLoss from "../components/StopLoss";
 import PortfolioChart from "../components/PortfolioChart";
 import PortfolioTable from "../components/PortfolioTable";
 import PortfolioValue from "../components/PortfolioValue";
-import ReportsAnalysis from "../components/ReportsAnalysis";
-import BankReportScanner from "../components/BankReportScanner";
 import { usePortfolio } from "../hooks/usePortfolio";
 
-import {
-  Add as AddIcon,
-  ArrowDropDown as ArrowDropDownIcon,
-  ArrowDropUp as ArrowDropUpIcon,
-  Edit as EditIcon,
-  FileUpload as FileUploadIcon,
-  Info as InfoIcon,
-  Public as PublicIcon,
-  ShowChart as ShowChartIcon,
-} from "@mui/icons-material";
+import { Add as AddIcon } from "@mui/icons-material";
 
 import {
   Alert,
@@ -27,8 +15,6 @@ import {
   IconButton,
   Typography,
   Box,
-  Menu,
-  MenuItem,
   Container,
 } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
@@ -44,18 +30,11 @@ import type { PortfolioStock, PortfolioStockDTO } from "../types/api";
 import { useTheme } from "../contexts/ThemeContext";
 import PortfolioInfo from "../components/PortfolioInfo";
 import { showToast } from "../utils/toast";
-import InvestmentPerformance from "../components/InvestmentPerformance";
 
 const Portfolio: React.FC = () => {
   const queryClient = useQueryClient();
-  const {
-    portfolioStocksFromDb,
-    portfolioId,
-    addPortfolio,
-    portfolioName,
-    privacy,
-    portfolio,
-  } = usePortfolio();
+  const { portfolioStocksFromDb, portfolioId, addPortfolio, portfolio } =
+    usePortfolio();
   const [isDrawerOpen, setIsDrawerOpen] = React.useState(false);
   const [selectedStock, setSelectedStock] =
     React.useState<PortfolioStock | null>(null);
@@ -164,8 +143,15 @@ const Portfolio: React.FC = () => {
             <Stack direction="row" spacing={2} alignItems="center">
               <Button
                 variant="contained"
+                color="primary"
                 startIcon={<AddIcon />}
                 onClick={() => setIsDrawerOpen(true)}
+                sx={{
+                  backgroundColor: currentTheme.accent.primary,
+                  "&:hover": {
+                    backgroundColor: currentTheme.accent.secondary,
+                  },
+                }}
               >
                 Add Stock to Portfolio
               </Button>
@@ -198,6 +184,7 @@ const Portfolio: React.FC = () => {
               width: 400,
               p: 2.5,
               borderRadius: currentTheme.shape.borderRadius,
+              bgcolor: currentTheme.background.secondary,
             },
           }}
         >
@@ -213,6 +200,7 @@ const Portfolio: React.FC = () => {
               variant="h6"
               sx={{
                 fontWeight: currentTheme.typography.fontWeights.heading,
+                color: currentTheme.text.primary,
               }}
             >
               {selectedStock ? "Edit Stock" : "Add Stock"}
@@ -221,6 +209,7 @@ const Portfolio: React.FC = () => {
               onClick={handleDrawerClose}
               edge="end"
               aria-label="close"
+              sx={{ color: currentTheme.text.primary }}
             >
               <CloseIcon />
             </IconButton>

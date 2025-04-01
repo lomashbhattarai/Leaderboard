@@ -30,21 +30,30 @@ export interface SpaceTheme {
     borderRadius: number;
   };
   components: {
-    button: {
-      borderRadius: number;
-      padding: string;
-      shadow: string;
-      backgroundColor: string;
-    };
+    MuiButton: {
+      styleOverrides: {
+        root: {
+          borderRadius: number,
+          padding: string,
+        },
+        contained: {
+          boxShadow: string,
+          backgroundColor: string,
+          "&:hover": {
+            boxShadow: string,
+          },
+        },
+      },
+    },
     card: {
       shadow: string;
       borderRadius: number;
-    };
+    },
     table: {
       headerBg: string;
       padding: string;
       headerFontWeight: number;
-    };
+    },
   };
 }
 
@@ -79,11 +88,21 @@ export const spaceThemes: Record<string, SpaceTheme> = {
       borderRadius: 8,
     },
     components: {
-      button: {
-        borderRadius: 8,
-        padding: '8px 16px',
-        shadow: 'none',
-        backgroundColor: '#10b981',
+      MuiButton: {
+        styleOverrides: {
+          root: {
+            borderRadius: 8,
+            padding: "8px 16px",
+          },
+          contained: {
+            boxShadow: "none",
+            backgroundColor: "#38bdf8",
+            "&:hover": {
+              boxShadow: "none",
+            },
+
+          },
+        },
       },
       card: {
         shadow: '0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1)',
@@ -97,18 +116,18 @@ export const spaceThemes: Record<string, SpaceTheme> = {
     },
   },
   nebula: {
-    name: 'Nebula',
+    name: 'Dark Theme',
     background: {
-      primary: '#1a1f35',
-      secondary: '#1e293b',
+      primary: '#121212',  // Material UI dark theme background
+      secondary: '#1e1e1e', // Slightly lighter dark background
     },
     stars: {
-      color: '#ffffff',
-      density: 120,
+      color: 'transparent',
+      density: 0,
     },
     accent: {
-      primary: '#38bdf8',
-      secondary: '#818cf8',
+      primary: '#90caf9',  // Light blue for primary actions
+      secondary: '#64b5f6', // Slightly darker blue for secondary actions
     },
     text: {
       primary: '#ffffff',
@@ -126,19 +145,27 @@ export const spaceThemes: Record<string, SpaceTheme> = {
       borderRadius: 8,
     },
     components: {
-      button: {
-        borderRadius: 8,
-        padding: "8px 16px",
-        shadow: "none",
-        backgroundColor: "#38bdf8",
+      MuiButton: {
+        styleOverrides: {
+          root: {
+            borderRadius: 8,
+            padding: "8px 16px",
+          },
+          contained: {
+            boxShadow: "none",
+            backgroundColor: "#90caf9",
+            "&:hover": {
+              boxShadow: "none",
+            },
+          },
+        },
       },
       card: {
-        shadow:
-          "0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1)",
+        shadow: '0 1px 3px 0 rgb(0 0 0 / 0.3), 0 1px 2px -1px rgb(0 0 0 / 0.3)',
         borderRadius: 12,
       },
       table: {
-        headerBg: '#1e293b',  // darker background for dark theme
+        headerBg: '#1e1e1e',
         padding: '16px',
         headerFontWeight: 600,
       },
