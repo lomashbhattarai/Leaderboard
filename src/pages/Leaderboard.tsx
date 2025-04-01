@@ -264,11 +264,12 @@ const Leaderboard: React.FC<{ rowLimit?: number; isCompact?: boolean }> = ({
           alignItems: { xs: "flex-start", md: "center" },
           mb: 4,
           gap: 2,
+          mt: 2,
         }}
       >
         <Box>
           <Typography
-            variant="h4"
+            variant="h5"
             component="h1"
             sx={{ fontWeight: "bold", mb: 0.5 }}
           >
@@ -309,7 +310,7 @@ const Leaderboard: React.FC<{ rowLimit?: number; isCompact?: boolean }> = ({
               ),
             }}
           />
-          <Button
+          {/* <Button
             variant="outlined"
             size="small"
             startIcon={<FilterListIcon />}
@@ -326,7 +327,7 @@ const Leaderboard: React.FC<{ rowLimit?: number; isCompact?: boolean }> = ({
             <MenuItem onClick={handleFilterClose}>Public Only</MenuItem>
             <MenuItem onClick={handleFilterClose}>Top Gainers</MenuItem>
             <MenuItem onClick={handleFilterClose}>Recently Updated</MenuItem>
-          </Menu>
+          </Menu> */}
         </Box>
       </Box>
 

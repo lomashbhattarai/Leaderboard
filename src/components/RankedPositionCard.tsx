@@ -15,11 +15,11 @@ import {
   Divider,
   LinearProgress,
   Typography,
-  useTheme,
 } from "@mui/material";
 import { useAuthContext } from "../contexts/AuthContext";
 import { LeaderboardEntry } from "../types/api";
 import { useNavigate } from "react-router-dom";
+import { useTheme } from "../contexts/ThemeContext";
 
 interface RankedPositionCardProps {
   portfolio?: LeaderboardEntry;
@@ -32,13 +32,13 @@ export default function RankedPositionCard({
   rank,
   label = "Your Position",
 }: RankedPositionCardProps) {
-  const theme = useTheme();
+  const { currentTheme } = useTheme();
   const navigate = useNavigate();
 
   const getPerformanceColor = (value: number) => {
-    if (value > 0) return theme.palette.success.main;
-    if (value < 0) return theme.palette.error.main;
-    return theme.palette.text.secondary;
+    if (value > 0) return currentTheme.accent.primary;
+    if (value < 0) return currentTheme.accent.secondary;
+    return currentTheme.text.secondary;
   };
 
   const getPerformanceIcon = (value: number) => {
@@ -51,8 +51,8 @@ export default function RankedPositionCard({
 
   const { user } = useAuthContext();
 
-  return user && portfolio ? (
-    <Card sx={{ height: "100%" }}>
+  return portfolio ? (
+    <Card sx={{ height: "100%", flex: 0.3 }}>
       <CardHeader
         title={label}
         titleTypographyProps={{
@@ -91,7 +91,7 @@ export default function RankedPositionCard({
               size="small"
               sx={{
                 fontWeight: "bold",
-                bgcolor: theme.palette.primary.main,
+                bgcolor: currentTheme.accent.primary,
                 "& .MuiChip-label": { px: 1 },
                 marginLeft: 4,
               }}
@@ -182,7 +182,7 @@ export default function RankedPositionCard({
       </CardContent>
     </Card>
   ) : (
-    <Card sx={{ flex: 1 }}>
+    <Card sx={{ flex: 0.6 }}>
       <CardHeader
         title={label}
         titleTypographyProps={{
@@ -208,7 +208,18 @@ export default function RankedPositionCard({
               Create a portfolio to compete
             </Typography>
           </Box>
-          <Button variant="contained" size="small" color="primary">
+          <Button
+            variant="contained"
+            size="small"
+            color="primary"
+            onClick={() => navigate("/signup")}
+            sx={{
+              backgroundColor: currentTheme.accent.primary,
+              "&:hover": {
+                backgroundColor: currentTheme.accent.secondary,
+              },
+            }}
+          >
             Start Now
           </Button>
         </Box>
