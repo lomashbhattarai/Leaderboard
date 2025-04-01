@@ -65,7 +65,7 @@ const PortfolioValue: React.FC<PortfolioValueProps> = ({ portfolio }) => {
   return (
     <Box sx={{ display: "flex", flexDirection: "column", gap: 3 }}>
       <Grid container spacing={3}>
-        <Grid item xs={12} md={6} lg={3}>
+        <Grid item xs={12} md={6} lg={6}>
           <Card>
             <CardContent>
               <Typography variant="body2" color="text.secondary" gutterBottom>
@@ -82,6 +82,27 @@ const PortfolioValue: React.FC<PortfolioValueProps> = ({ portfolio }) => {
                 {formatAmount(currentValue)}
               </Typography>
               <Box sx={{ display: "flex", alignItems: "center" }}>
+                <Typography
+                  variant="body2"
+                  color="text.secondary"
+                  gutterBottom
+                  sx={{ mr: 1 }}
+                >
+                  Initial Investment{" "}
+                </Typography>
+                <Typography
+                  variant="body2"
+                  component="div"
+                  sx={{
+                    mb: 0.5,
+                    color: currentTheme.text.primary,
+                  }}
+                >
+                  {formatAmount(initialInvestment)}
+                </Typography>
+              </Box>
+
+              <Box sx={{ display: "flex", alignItems: "center" }}>
                 {totalReturnData.isPositive ? (
                   <TrendingUpIcon sx={{ color: "success.main" }} />
                 ) : (
@@ -97,39 +118,20 @@ const PortfolioValue: React.FC<PortfolioValueProps> = ({ portfolio }) => {
                 >
                   {totalReturnData.formattedPercentage.toFixed(2)}%
                 </Typography>
-              </Box>
-            </CardContent>
-          </Card>
-        </Grid>
 
-        <Grid item xs={12} md={6} lg={3}>
-          <Card>
-            <CardContent>
-              <Typography variant="body2" color="text.secondary" gutterBottom>
-                Initial Investment
-              </Typography>
-              <Typography
-                variant="h5"
-                component="div"
-                sx={{
-                  fontWeight: currentTheme.typography.fontWeights.heading,
-                  mb: 0.5,
-                  color: currentTheme.text.primary,
-                }}
-              >
-                {formatAmount(initialInvestment)}
-              </Typography>
-              <Typography
-                variant="body2"
-                sx={{
-                  color: totalReturnData.isPositive
-                    ? "success.main"
-                    : "error.main",
-                }}
-              >
-                {totalReturnData.isPositive ? "+" : "-"}
-                {formatAmount(totalReturnData.formattedChange, true)}
-              </Typography>
+                <Typography
+                  variant="body2"
+                  sx={{
+                    color: totalReturnData.isPositive
+                      ? "success.main"
+                      : "error.main",
+                    ml: 1,
+                  }}
+                >
+                  {totalReturnData.isPositive ? "+" : "-"}
+                  {formatAmount(totalReturnData.formattedChange, true)}
+                </Typography>
+              </Box>
             </CardContent>
           </Card>
         </Grid>
