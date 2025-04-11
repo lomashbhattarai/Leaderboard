@@ -71,6 +71,15 @@
 
     <!-- Favicon -->
     <link rel="icon" href="/assets/branding/nepse-leader-transparent.png" />
+
+    <link
+      rel="stylesheet"
+      href="https://noetherlabchatbotinterface.s3.ap-south-1.amazonaws.com/chatbotV2.mobcom.css"
+    />
+    <link
+      href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css"
+      rel="stylesheet"
+    />
   </head>
   <body>
     <noscript>You need to enable JavaScript to run this app.</noscript>
@@ -85,5 +94,33 @@
       To begin the development, run `npm start` or `yarn start`.
       To create a production bundle, use `npm run build` or `yarn build`.
     -->
+    <script>
+      window.CHATBOT_SETTINGS = {
+        apiEndpoint: "https://cb-be-api.rentphuketcar.com/api/interact/v2",
+        apiKey:
+          "d0548736ab672273d16c950f7d2f18a7571b1c00e131c737348d676890a3c1cc",
+        uniqueUserId: "",
+      };
+    </script>
+    <!-- <script
+      src="https://noetherlabchatbotinterface.s3.ap-south-1.amazonaws.com/chatbotV2.mobcom.js"
+      defer
+    ></script> -->
+
+    <script>
+      window.addEventListener("DOMContentLoaded", () => {
+        const link = document.createElement("link");
+        link.rel = "stylesheet";
+        link.href =
+          "https://noetherlabchatbotinterface.s3.ap-south-1.amazonaws.com/chatbotV2.2.mobcom.css";
+        document.head.appendChild(link);
+
+        const chatbotScript = document.createElement("script");
+        chatbotScript.src =
+          "https://noetherlabchatbotinterface.s3.ap-south-1.amazonaws.com/chatbotV2.mobcom.js";
+        chatbotScript.defer = true;
+        document.body.appendChild(chatbotScript);
+      });
+    </script>
   </body>
 </html>
