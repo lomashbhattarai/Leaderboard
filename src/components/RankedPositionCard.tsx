@@ -36,8 +36,8 @@ export default function RankedPositionCard({
   const navigate = useNavigate();
 
   const getPerformanceColor = (value: number) => {
-    if (value > 0) return currentTheme.accent.primary;
-    if (value < 0) return currentTheme.accent.secondary;
+    if (value > 0) return "text-green-600";
+    if (value < 0) return "text-red-600";
     return currentTheme.text.secondary;
   };
 
@@ -107,17 +107,17 @@ export default function RankedPositionCard({
               1D
             </Typography>
             <Box
+              className={getPerformanceColor(portfolio.performance1D)}
               sx={{
                 display: "flex",
                 alignItems: "center",
-                color: getPerformanceColor(portfolio.performance1D),
               }}
             >
               {getPerformanceIcon(portfolio.performance1D)}
               <Typography
                 variant="body2"
                 fontWeight={500}
-                sx={{ color: getPerformanceColor(portfolio.performance1D) }}
+                className={getPerformanceColor(portfolio.performance1D)}
               >
                 {portfolio.performance1D}%
               </Typography>
@@ -129,17 +129,17 @@ export default function RankedPositionCard({
               1W
             </Typography>
             <Box
+              className={getPerformanceColor(portfolio.performance1W)}
               sx={{
                 display: "flex",
                 alignItems: "center",
-                color: getPerformanceColor(portfolio.performance1W),
               }}
             >
               {getPerformanceIcon(portfolio.performance1W)}
               <Typography
                 variant="body2"
                 fontWeight={500}
-                sx={{ color: getPerformanceColor(portfolio.performance1W) }}
+                className={getPerformanceColor(portfolio.performance1W)}
               >
                 {portfolio.performance1W}%
               </Typography>
@@ -151,17 +151,17 @@ export default function RankedPositionCard({
               1M
             </Typography>
             <Box
+              className={getPerformanceColor(portfolio.performance1M)}
               sx={{
                 display: "flex",
                 alignItems: "center",
-                color: getPerformanceColor(portfolio.performance1M),
               }}
             >
               {getPerformanceIcon(portfolio.performance1M)}
               <Typography
                 variant="body2"
                 fontWeight={500}
-                sx={{ color: getPerformanceColor(portfolio.performance1M) }}
+                className={getPerformanceColor(portfolio.performance1M)}
               >
                 {portfolio.performance1M}%
               </Typography>

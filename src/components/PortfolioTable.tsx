@@ -39,38 +39,51 @@ const PORTFOLIO_TABLE_HEADERS_FROM_DB: Array<ColumnConfig> = [
     render: (value) => <StockLink symbol={value} />,
   },
   {
-    label: "Closing Price",
-    key: "latestClosingPrice",
-    render: (value) => formatAmount(value, true),
-  },
-  {
     label: "Quantity",
     key: "quantity",
-    render: (value) => value,
+    render: (value) => <Typography variant="body2">{value}</Typography>,
   },
   {
     label: "Value at LTP",
     key: "valueAtLTP",
-    render: (value) => formatAmount(value, true),
+    render: (value) => (
+      <Typography variant="body2">{formatAmount(value, true)}</Typography>
+    ),
   },
   {
     label: "1 Day",
     key: "performance1D",
-    render: (value) => formatPerformance(value),
+    render: (value) => (
+      <Typography variant="body2">{formatPerformance(value)}</Typography>
+    ),
   },
   {
     label: "1 Week",
     key: "performance1W",
-    render: (value) => formatPerformance(value),
+    render: (value) => (
+      <Typography variant="body2">{formatPerformance(value)}</Typography>
+    ),
   },
   {
     label: "1 Month",
     key: "performance1M",
-    render: (value) => formatPerformance(value),
+    render: (value) => (
+      <Typography variant="body2">{formatPerformance(value)}</Typography>
+    ),
   },
   {
     label: "Buy Price",
     key: "buyPrice",
+    render: (value) => (
+      <Typography variant="body2">{formatAmount(value, true)}</Typography>
+    ),
+  },
+  {
+    label: "Closing Price",
+    key: "latestClosingPrice",
+    render: (value) => (
+      <Typography variant="body2">{formatAmount(value, true)}</Typography>
+    ),
   },
   {
     label: "Stop Loss",
