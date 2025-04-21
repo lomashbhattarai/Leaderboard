@@ -30,6 +30,8 @@ import type { PortfolioStock, PortfolioStockDTO } from "../types/api";
 import { useTheme } from "../contexts/ThemeContext";
 import PortfolioInfo from "../components/PortfolioInfo";
 import { showToast } from "../utils/toast";
+import AllocationChart from "../components/charts/AllocationChart";
+import PerformanceChart from "../components/charts/PerformanceChart";
 
 const Portfolio: React.FC = () => {
   const queryClient = useQueryClient();
@@ -174,6 +176,14 @@ const Portfolio: React.FC = () => {
             <PortfolioChart portfolioStocksFromDb={portfolioStocksFromDb} />
           </Box>
         </Stack>
+        {/* 
+        <div className="mt-10 h-[300px]">
+          <PerformanceChart />
+        </div>
+
+        <div className="mt-10 h-[300px]">
+          <AllocationChart />
+        </div> */}
 
         <Drawer
           anchor="right"

@@ -262,6 +262,7 @@ const PortfolioTable: React.FC<PortfolioTableProps> = ({
       onDelete={onDelete}
       showActions={true}
       isCompact
+      defaultEmptyMessage="No holdings found. Add stocks to your portfolio."
       // renderExpandedRow={(row) => <ExpandedStopLossView stock={row} />}
       // expansionTriggerColumnKey="stopLoss"
     />

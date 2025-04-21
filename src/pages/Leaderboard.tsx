@@ -4,16 +4,9 @@ import {
   Button,
   Typography,
   Box,
-  Badge,
-  Tooltip,
   TextField,
   InputAdornment,
-  Grid,
-  Card,
-  CardHeader,
-  CardContent,
   Stack,
-  Chip,
 } from "@mui/material";
 import { ColumnConfig } from "../components/common/TableView";
 import TableView from "../components/common/TableView";
@@ -25,16 +18,9 @@ import { formatDistanceToNow } from "date-fns";
 import EmojiEventsIcon from "@mui/icons-material/EmojiEvents";
 import LeaderboardCard from "../components/LeaderboardCard";
 import LockIcon from "@mui/icons-material/Lock";
-import PublicIcon from "@mui/icons-material/Public";
 import CategoryIcon from "@mui/icons-material/Category";
 import { useTheme } from "../contexts/ThemeContext";
-import { Menu, MenuItem } from "@mui/material";
-import {
-  Search as SearchIcon,
-  FilterList as FilterListIcon,
-  ArrowUpward as ArrowUpIcon,
-  BarChart as BarChartIcon,
-} from "@mui/icons-material";
+import { Search as SearchIcon } from "@mui/icons-material";
 import RankedPositionCard from "../components/RankedPositionCard";
 import type { LeaderboardEntry } from "../types/api";
 
@@ -310,24 +296,6 @@ const Leaderboard: React.FC<{ rowLimit?: number; isCompact?: boolean }> = ({
               ),
             }}
           />
-          {/* <Button
-            variant="outlined"
-            size="small"
-            startIcon={<FilterListIcon />}
-            onClick={handleFilterClick}
-          >
-            Filter
-          </Button>
-          <Menu
-            anchorEl={filterAnchorEl}
-            open={Boolean(filterAnchorEl)}
-            onClose={handleFilterClose}
-          >
-            <MenuItem onClick={handleFilterClose}>All Portfolios</MenuItem>
-            <MenuItem onClick={handleFilterClose}>Public Only</MenuItem>
-            <MenuItem onClick={handleFilterClose}>Top Gainers</MenuItem>
-            <MenuItem onClick={handleFilterClose}>Recently Updated</MenuItem>
-          </Menu> */}
         </Box>
       </Box>
 
