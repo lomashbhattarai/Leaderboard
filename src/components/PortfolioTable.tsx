@@ -101,11 +101,28 @@ interface PortfolioTableProps {
   onDelete: (stockId: number) => void;
 }
 
+const getStopLossColor = (
+  stopLossValue: number,
+  latestPrice: number
+): "default" | "warning" | "error" => {
+  const difference = Math.abs(stopLossValue - latestPrice);
+
+  if (stopLossValue >= latestPrice) {
+    return "error"; // Red color
+  } else if (difference <= 5) {
+    // Within 5 point difference of latest price
+    return "warning"; // Yellow color
+  }
+  return "default"; // Default color
+};
+
 const StopLossAction: React.FC<{
   stock: PortfolioStock;
 }> = ({ stock }) => {
   const isMobile = useMediaQuery("(max-width:600px)");
-  const activeStopLosses = stock.stopLosses || [];
+  const activeStopLosses = (stock.stopLosses || []).sort(
+    (a, b) => b.value - a.value
+  ); // Sort by value in descending order
 
   if (activeStopLosses.length === 0) {
     return (
@@ -170,6 +187,10 @@ const StopLossAction: React.FC<{
             type={activeStopLosses[0].type}
             value={activeStopLosses[0].value}
             status={activeStopLosses[0].status}
+            color={getStopLossColor(
+              activeStopLosses[0].value,
+              stock.latestClosingPrice || 0
+            )}
           />
           {activeStopLosses.length > 1 && (
             <Typography

@@ -6,9 +6,15 @@ interface StopLossChipProps {
   type: "ABSOLUTE" | "PERCENTAGE";
   value: number;
   status: string;
+  color?: "default" | "warning" | "error";
 }
 
-const StopLossChip: React.FC<StopLossChipProps> = ({ type, value, status }) => {
+const StopLossChip: React.FC<StopLossChipProps> = ({
+  type,
+  value,
+  status,
+  color = "default",
+}) => {
   const label = type === "ABSOLUTE" ? `${formatAmount(value)}` : `${value}%`;
 
   return (
@@ -16,6 +22,7 @@ const StopLossChip: React.FC<StopLossChipProps> = ({ type, value, status }) => {
       <Chip
         label={label}
         size="small"
+        color={color}
         sx={{
           mr: 0.5,
           maxWidth: "120px",
