@@ -47,7 +47,14 @@ const PORTFOLIO_TABLE_HEADERS_FROM_DB: Array<ColumnConfig> = [
     key: "stock",
     getValue: (portfolioStock: PortfolioStock) => portfolioStock.stock?.symbol,
     render: (value, stock: PortfolioStock) => (
-      <Box sx={{ display: "flex", alignItems: "right", gap: 1 }}>
+      <Box
+        sx={{
+          display: "flex",
+          justifyContent: { xs: "right", sm: "left" },
+          alignItems: "right",
+          gap: 1,
+        }}
+      >
         <StockLink symbol={value} />
         <JournalIndicator portfolioStockId={stock.id} stockSymbol={value} />
       </Box>
