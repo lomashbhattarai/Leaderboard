@@ -149,7 +149,9 @@ const Portfolio: React.FC = () => {
           </Alert>
         )}
 
-        <PortfolioInfo />
+        <Box sx={{ px: { xs: 2, sm: 0 } }}>
+          <PortfolioInfo />
+        </Box>
 
         <Stack spacing={3}>
           <Stack

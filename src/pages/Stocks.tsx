@@ -62,35 +62,38 @@ const Stocks = () => {
 
   return (
     <div className="mt-3">
-      <div className="flex justify-between items-center mb-4">
-        <h1 className="text-2xl font-bold">
-          Nepal Stock Exchange Listed Companies
-        </h1>
-        {user?.role === "superadmin" && (
-          <CSVImport
-            handleFileImport={handleFileImport}
-            label="Upload Today's Prices"
-          />
-        )}
-      </div>
-      <div className="mb-4">
-        <TextField
-          fullWidth
-          variant="outlined"
-          size="small"
-          placeholder="Search by symbol or company name..."
-          value={searchQuery}
-          onChange={(e) => setSearchQuery(e.target.value)}
-          sx={{
-            backgroundColor: "white",
-            "& .MuiOutlinedInput-root": {
-              "&:hover fieldset": {
-                borderColor: "primary.main",
+      <Box sx={{ px: { xs: 2, sm: 0 } }}>
+        <div className="flex justify-between items-center mb-4">
+          <h1 className="text-2xl font-bold">
+            Nepal Stock Exchange Listed Companies
+          </h1>
+          {user?.role === "superadmin" && (
+            <CSVImport
+              handleFileImport={handleFileImport}
+              label="Upload Today's Prices"
+            />
+          )}
+        </div>
+        <div className="mb-4">
+          <TextField
+            fullWidth
+            variant="outlined"
+            size="small"
+            placeholder="Search by symbol or company name..."
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            sx={{
+              backgroundColor: "white",
+              "& .MuiOutlinedInput-root": {
+                "&:hover fieldset": {
+                  borderColor: "primary.main",
+                },
               },
-            },
-          }}
-        />
-      </div>
+            }}
+          />
+        </div>
+      </Box>
+
       <TableView
         isCompact
         columns={[

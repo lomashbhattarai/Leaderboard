@@ -47,7 +47,7 @@ const AppContent = () => {
       <div className="relative flex-1 flex flex-col">
         <Toaster position="top-right" />
         <Navbar />
-        <div className="flex-1 w-full px-4 max-w-[1200px] mx-auto">
+        <div className="flex-1 w-full max-w-[1200px] mx-auto">
           <Routes>
             <Route
               path="/"

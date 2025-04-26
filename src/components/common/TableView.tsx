@@ -118,16 +118,14 @@ const TableView = ({
   };
 
   const renderCardView = () => (
-    <Stack spacing={isCompact ? 1 : 2}>
+    <Stack spacing={isCompact ? 0 : 1}>
       {tableData.map((row, rowIndex) => (
         <Card
           key={row.id || rowIndex}
           sx={{
             backgroundColor: currentTheme.background.secondary,
-            borderRadius: 1,
-            "&:hover": {
-              boxShadow: `0 0 0 1px ${currentTheme.accent.primary}`,
-            },
+            borderRadius: 0,
+            borderBottom: "0.5px solid #e0e0e0",
           }}
         >
           <CardContent sx={{ p: isCompact ? 1 : 2 }}>

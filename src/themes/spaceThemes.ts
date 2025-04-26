@@ -105,8 +105,8 @@ export const spaceThemes: Record<string, SpaceTheme> = {
         },
       },
       card: {
-        shadow: '0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1)',
-        borderRadius: 4,
+        shadow: 'none', // '0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1)',
+        borderRadius: 0,
       },
       table: {
         headerBg: '#f8fafc',  // slate-50
@@ -161,8 +161,8 @@ export const spaceThemes: Record<string, SpaceTheme> = {
         },
       },
       card: {
-        shadow: '0 1px 3px 0 rgb(0 0 0 / 0.3), 0 1px 2px -1px rgb(0 0 0 / 0.3)',
-        borderRadius: 12,
+        shadow: 'none', // '0 1px 3px 0 rgb(0 0 0 / 0.3), 0 1px 2px -1px rgb(0 0 0 / 0.3)',
+        borderRadius: 0,
       },
       table: {
         headerBg: '#1e1e1e',

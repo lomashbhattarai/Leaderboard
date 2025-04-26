@@ -7,6 +7,7 @@ import {
   TextField,
   InputAdornment,
   Stack,
+  Divider,
 } from "@mui/material";
 import { ColumnConfig } from "../components/common/TableView";
 import TableView from "../components/common/TableView";
@@ -171,7 +172,7 @@ const columns: ColumnConfig[] = [
 ];
 
 const Leaderboard: React.FC<{ rowLimit?: number; isCompact?: boolean }> = ({
-  rowLimit,
+  rowLimit, // using roLimit to identify if the leaderboard is in dashboard or in leaderboard page
   isCompact = true,
 }) => {
   const { currentTheme } = useTheme();
@@ -246,14 +247,14 @@ const Leaderboard: React.FC<{ rowLimit?: number; isCompact?: boolean }> = ({
         sx={{
           display: "flex",
           flexDirection: { xs: "column", md: "row" },
-          justifyContent: "space-between",
-          alignItems: { xs: "flex-start", md: "center" },
-          mb: 4,
+          justifyContent: "flex-start",
+          alignItems: { xs: "flex-start", md: "flex-start" },
+          mb: 2,
           gap: 2,
           mt: 2,
         }}
       >
-        <Box>
+        <Box sx={{ paddingLeft: { xs: 2, sm: 0 } }}>
           <Typography
             variant="h5"
             component="h1"
@@ -266,37 +267,41 @@ const Leaderboard: React.FC<{ rowLimit?: number; isCompact?: boolean }> = ({
           </Typography>
         </Box>
 
-        <Box
-          sx={{
-            display: "flex",
-            gap: 1,
-            width: { xs: "100%", md: "auto" },
-            flexWrap: "wrap",
-          }}
-        >
-          <TextField
-            placeholder="Search portfolios..."
-            size="small"
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
+        {!rowLimit && (
+          <Box
             sx={{
-              width: { xs: "100%", md: "250px" },
-              "& .MuiOutlinedInput-root": {
-                borderRadius: 2,
-              },
+              display: "flex",
+              gap: 1,
+              width: { xs: "100%", md: "auto" },
+              flexWrap: "wrap",
+              paddingLeft: 2,
+              paddingRight: 2,
             }}
-            InputProps={{
-              startAdornment: (
-                <InputAdornment position="start">
-                  <SearchIcon
-                    fontSize="small"
-                    sx={{ color: "text.secondary" }}
-                  />
-                </InputAdornment>
-              ),
-            }}
-          />
-        </Box>
+          >
+            <TextField
+              placeholder="Search portfolios..."
+              size="small"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              sx={{
+                width: { xs: "100%", md: "250px" },
+                "& .MuiOutlinedInput-root": {
+                  borderRadius: 2,
+                },
+              }}
+              InputProps={{
+                startAdornment: (
+                  <InputAdornment position="start">
+                    <SearchIcon
+                      fontSize="small"
+                      sx={{ color: "text.secondary" }}
+                    />
+                  </InputAdornment>
+                ),
+              }}
+            />
+          </Box>
+        )}
       </Box>
 
       {!portfolioId && (
@@ -337,13 +342,22 @@ const Leaderboard: React.FC<{ rowLimit?: number; isCompact?: boolean }> = ({
         </Button>
       )}
 
-      <div className="mt-10">
+      <div className="mt-4">
         {rowLimit && (
-          <Stack direction={{ xs: "column", sm: "row" }} spacing={2}>
+          <Stack
+            direction={{ xs: "column", sm: "row" }}
+            sx={{ borderTop: { xs: "1px solid black", sm: "none" } }}
+            spacing={{ xs: 0, sm: 2 }}
+          >
             <RankedPositionCard
               label="Your Position"
               portfolio={userPortfolio}
               rank={userRank}
+            />
+            <Divider
+              orientation="vertical"
+              flexItem
+              sx={{ color: "text.secondary", height: "1px" }}
             />
 
             <RankedPositionCard
@@ -364,7 +378,11 @@ const Leaderboard: React.FC<{ rowLimit?: number; isCompact?: boolean }> = ({
               columns={columns}
               tableData={filteredData || []}
               customCardComponent={(row, index) => (
-                <LeaderboardCard row={row} index={index} />
+                <LeaderboardCard
+                  row={row}
+                  index={index}
+                  showLimitedInfo={!!rowLimit}
+                />
               )}
               isCompact={isCompact}
             />

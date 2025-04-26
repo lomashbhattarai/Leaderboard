@@ -66,7 +66,7 @@ const PortfolioValue: React.FC<PortfolioValueProps> = ({ portfolio }) => {
     <Box sx={{ display: "flex", flexDirection: "column", gap: 3 }}>
       <Grid container spacing={3}>
         <Grid item xs={12} md={6} lg={6}>
-          <Card>
+          <Card sx={{ borderRadius: 0 }}>
             <CardContent>
               <Typography variant="body2" color="text.secondary" gutterBottom>
                 Current Value
@@ -137,7 +137,7 @@ const PortfolioValue: React.FC<PortfolioValueProps> = ({ portfolio }) => {
         </Grid>
 
         <Grid item xs={12} lg={6}>
-          <Card>
+          <Card sx={{ borderRadius: 0 }}>
             <CardContent>
               <Typography variant="body2" color="text.secondary" gutterBottom>
                 Performance

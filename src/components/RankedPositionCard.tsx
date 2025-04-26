@@ -52,7 +52,7 @@ export default function RankedPositionCard({
   const { user } = useAuthContext();
 
   return portfolio ? (
-    <Card sx={{ height: "100%", flex: 0.3 }}>
+    <Card sx={{ height: "100%", flex: 0.3, borderRadius: 0 }}>
       <CardHeader
         title={label}
         titleTypographyProps={{
