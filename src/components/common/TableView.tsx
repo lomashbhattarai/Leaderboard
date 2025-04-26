@@ -101,6 +101,8 @@ const TableView = ({
   // Check if screen is mobile size
   const isMobile = useMediaQuery(`(max-width:${responsive.breakpoint}px)`);
 
+  console.log({ rowActions });
+
   // Determine view mode
   const viewMode: ViewMode =
     responsive.forceViewMode || (isMobile ? "card" : "table");
@@ -174,6 +176,9 @@ const TableView = ({
                     </Typography>
                   </Stack>
                 ))}
+
+                {rowActions && rowActions(row, rowIndex)}
+
                 {(showActions || onDeleteTransaction) && (
                   <Stack
                     direction="row"
@@ -733,9 +738,6 @@ const TableView = ({
                       <TableCell
                         style={{ paddingBottom: 0, paddingTop: 0 }}
                         colSpan={columns.length + (showActions ? 1 : 0)}
-                        sx={{
-                          backgroundColor: currentTheme.background.primary,
-                        }}
                       >
                         <Collapse in timeout="auto" unmountOnExit>
                           <Box sx={{ margin: 1 }}>{renderExpandedRow(row)}</Box>

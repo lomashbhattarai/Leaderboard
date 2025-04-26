@@ -76,7 +76,7 @@ const Navbar = () => {
   ];
 
   if (isMobile) {
-    navLinks = navLinks.slice(0, 4); // Show all items on mobile with icons
+    navLinks = navLinks.slice(0, 5); // Show all items on mobile with icons
   }
 
   const renderNavLinks = () => (
@@ -115,22 +115,6 @@ const Navbar = () => {
     </ul>
   );
 
-  const menuForMobile = (
-    <>
-      <IconButton
-        onClick={(e) => setMobileMenu(e.currentTarget)}
-        style={{
-          color: currentTheme.text.primary,
-        }}
-      >
-        <MenuIcon />
-      </IconButton>
-      <div className="flex items-center space-x-2">
-        <UserMenu />
-      </div>
-    </>
-  );
-
   return (
     <>
       <Box
@@ -139,6 +123,16 @@ const Navbar = () => {
         sx={{
           padding: "0.5rem 1rem",
           borderBottom: `1px solid ${currentTheme.background.primary}`,
+          position: "sticky",
+          top: 0,
+          left: 0,
+          right: 0,
+          zIndex: 1000,
+          backgroundColor: currentTheme.background.secondary,
+          backdropFilter: "blur(10px)",
+          width: "100%",
+          maxWidth: "100vw",
+          overflow: "hidden",
           ...navStyle,
         }}
       >
@@ -152,7 +146,7 @@ const Navbar = () => {
                 style={{ background: "transparent" }}
               />
             </Link>
-            <div className="flex flex-grow w-full px-2 md:px-8 max-w-[1200px] mx-auto">
+            <div className="flex flex-grow w-full !px-2 md:px-8 max-w-[1200px] mx-auto">
               {renderNavLinks()}
             </div>
           </div>

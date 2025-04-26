@@ -110,10 +110,19 @@ const Portfolio: React.FC = () => {
 
   const handleJournalSubmit = async (data: any) => {
     try {
+      const portfolioStockId = selectedStock?.id;
+
+      if (portfolioStockId) {
+        data.journalType = "stock";
+      } else {
+        data.journalType = "general";
+      }
+
+      data.title = data.title || " ";
+
       await createJournal.mutateAsync({
         ...data,
-        portfolioStockId: selectedStock?.id,
-        journalType: "stock",
+        portfolioStockId,
       });
       showToast.success("Journal created successfully");
       setIsJournalDrawerOpen(false);
@@ -131,7 +140,7 @@ const Portfolio: React.FC = () => {
 
   return (
     <Box sx={{ minHeight: "100vh", bgcolor: "background.default" }}>
-      <Container maxWidth="xl" sx={{ py: 4 }}>
+      <Container maxWidth="xl" sx={{ py: 2, px: "0 !important" }}>
         {!portfolioId && (
           <Alert severity="info" sx={{ mb: 4 }}>
             Login to your Meroshare account and go to "My Portfolio" page. Click
@@ -219,8 +228,6 @@ const Portfolio: React.FC = () => {
             sx: {
               width: 400,
               p: 2.5,
-              borderRadius: currentTheme.shape.borderRadius,
-              bgcolor: currentTheme.background.secondary,
             },
           }}
         >
@@ -268,8 +275,6 @@ const Portfolio: React.FC = () => {
             sx: {
               width: 400,
               p: 2.5,
-              borderRadius: currentTheme.shape.borderRadius,
-              bgcolor: currentTheme.background.secondary,
             },
           }}
         >

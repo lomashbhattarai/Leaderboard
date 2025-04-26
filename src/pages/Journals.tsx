@@ -163,8 +163,6 @@ const Journals: React.FC = () => {
             sx: {
               width: 400,
               p: 2.5,
-              borderRadius: currentTheme.shape.borderRadius,
-              bgcolor: currentTheme.background.secondary,
             },
           }}
         >

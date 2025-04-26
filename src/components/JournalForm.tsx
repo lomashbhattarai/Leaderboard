@@ -38,7 +38,7 @@ const JournalForm: React.FC<JournalFormProps> = ({
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (!formData.title || !formData.content || !formData.journalType) {
+    if (!formData.content) {
       showToast.error("Please fill in all required fields");
       return;
     }
@@ -49,14 +49,14 @@ const JournalForm: React.FC<JournalFormProps> = ({
   return (
     <form onSubmit={handleSubmit}>
       <Stack spacing={3}>
-        <TextField
+        {/* <TextField
           label="Title"
           name="title"
           required
           value={formData.title}
           onChange={handleChange}
           fullWidth
-        />
+        /> */}
 
         <TextField
           label="Content"
@@ -69,15 +69,15 @@ const JournalForm: React.FC<JournalFormProps> = ({
           fullWidth
         />
 
-        <TextField
+        {/* <TextField
           label="Tags (comma separated)"
           name="tags"
           value={formData.tags || ""}
           onChange={handleChange}
           fullWidth
-        />
+        /> */}
 
-        <TextField
+        {/* <TextField
           select
           label="Journal Type"
           name="journalType"
@@ -89,7 +89,7 @@ const JournalForm: React.FC<JournalFormProps> = ({
           <MenuItem value="general">General</MenuItem>
           <MenuItem value="stock">Stock</MenuItem>
           <MenuItem value="stop_loss">Stop Loss</MenuItem>
-        </TextField>
+        </TextField> */}
 
         <Box sx={{ display: "flex", justifyContent: "flex-end" }}>
           <Button type="submit" variant="contained" color="primary">

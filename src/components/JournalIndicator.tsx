@@ -1,6 +1,7 @@
 import React from "react";
 import { useJournals } from "../api/queries";
-import { Book as BookIcon } from "@mui/icons-material";
+import TextSnippetIcon from "@mui/icons-material/TextSnippet";
+import BookIcon from "@mui/icons-material/Book";
 import {
   IconButton,
   Dialog,
@@ -12,6 +13,7 @@ import {
   Box,
   Stack,
   Divider,
+  Tooltip,
 } from "@mui/material";
 import { useTheme } from "../contexts/ThemeContext";
 import { format } from "date-fns";
@@ -44,18 +46,14 @@ const JournalIndicator: React.FC<JournalIndicatorProps> = ({
 
   return (
     <>
-      <IconButton
-        size="small"
-        onClick={handleOpenModal}
-        sx={{
-          color: currentTheme.accent.primary,
-          "&:hover": {
-            color: currentTheme.accent.secondary,
-          },
-        }}
-      >
-        <BookIcon fontSize="small" sx={{ color: "blue" }} />
-      </IconButton>
+      <Tooltip title={`Journal Entry for ${stockSymbol}`} placement="top">
+        <BookIcon
+          className="cursor-pointer"
+          onClick={handleOpenModal}
+          fontSize="small"
+          sx={{ color: currentTheme.accent.primary, width: 15, height: 15 }}
+        />
+      </Tooltip>
 
       <Dialog
         open={isModalOpen}
@@ -81,7 +79,7 @@ const JournalIndicator: React.FC<JournalIndicatorProps> = ({
           <Stack spacing={2}>
             {journals.map((journal) => (
               <Box key={journal.id}>
-                <Typography
+                {/* <Typography
                   variant="subtitle1"
                   sx={{
                     color: currentTheme.text.primary,
@@ -89,7 +87,7 @@ const JournalIndicator: React.FC<JournalIndicatorProps> = ({
                   }}
                 >
                   {journal.title}
-                </Typography>
+                </Typography> */}
                 <Typography
                   variant="caption"
                   sx={{ color: currentTheme.text.secondary }}

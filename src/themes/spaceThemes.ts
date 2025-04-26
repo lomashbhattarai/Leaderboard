@@ -85,7 +85,7 @@ export const spaceThemes: Record<string, SpaceTheme> = {
       },
     },
     shape: {
-      borderRadius: 8,
+      borderRadius: 4,
     },
     components: {
       MuiButton: {
@@ -106,7 +106,7 @@ export const spaceThemes: Record<string, SpaceTheme> = {
       },
       card: {
         shadow: '0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1)',
-        borderRadius: 12,
+        borderRadius: 4,
       },
       table: {
         headerBg: '#f8fafc',  // slate-50

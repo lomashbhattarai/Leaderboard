@@ -3,11 +3,17 @@ import TableView, { ColumnConfig } from "./common/TableView";
 import { PortfolioStock } from "../types/api";
 import { formatPerformance } from "../pages/Leaderboard";
 import { formatAmount } from "../utils/helper";
-import { Button, Box, Typography, Stack, IconButton } from "@mui/material";
+import {
+  Button,
+  Box,
+  Typography,
+  Stack,
+  IconButton,
+  Tooltip,
+} from "@mui/material";
 import TrendingDownIcon from "@mui/icons-material/TrendingDown";
 import { Link as RouterLink } from "react-router-dom";
 import StopLossChip from "./StopLossChip";
-import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import { useMediaQuery } from "@mui/material";
 import { useTheme } from "../contexts/ThemeContext";
 import EditIcon from "@mui/icons-material/Edit";
@@ -41,7 +47,7 @@ const PORTFOLIO_TABLE_HEADERS_FROM_DB: Array<ColumnConfig> = [
     key: "stock",
     getValue: (portfolioStock: PortfolioStock) => portfolioStock.stock?.symbol,
     render: (value, stock: PortfolioStock) => (
-      <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+      <Box sx={{ display: "flex", alignItems: "right", gap: 1 }}>
         <StockLink symbol={value} />
         <JournalIndicator portfolioStockId={stock.id} stockSymbol={value} />
       </Box>
@@ -287,63 +293,60 @@ const PortfolioTable: React.FC<PortfolioTableProps> = ({
   onJournal,
 }) => {
   const { currentTheme } = useTheme();
+  const isMobile = useMediaQuery("(max-width:600px)");
 
   const renderRowActions = (row: PortfolioStock, rowIndex: number) => {
     return (
       <Box
         sx={{
-          position: "absolute",
-          right: 0,
-          top: "50%",
-          transform: "translateY(-50%)",
-          display: "flex",
-          gap: 1,
-          backgroundColor: currentTheme.background.secondary,
-          borderRadius: 1,
-          padding: "4px",
-          boxShadow: `0 0 0 1px ${currentTheme.accent.primary}`,
+          ...(isMobile
+            ? {
+                display: "flex",
+                gap: 1,
+                justifyContent: "flex-end",
+                mt: 1,
+              }
+            : {
+                position: "absolute",
+                right: 0,
+                top: "50%",
+                transform: "translateY(-50%)",
+                display: "flex",
+                gap: 1,
+                backgroundColor: "#f5f5f5",
+                borderRadius: 1,
+                p: 1,
+              }),
         }}
       >
-        <IconButton
-          onClick={() => onEdit(row)}
-          size="small"
-          aria-label="edit"
-          sx={{
-            color: currentTheme.accent.primary,
-            "&:hover": {
-              color: currentTheme.accent.secondary,
-            },
-          }}
-        >
-          <EditIcon />
-        </IconButton>
-        <IconButton
-          onClick={() => onDelete(row.id)}
-          size="small"
-          aria-label="delete"
-          sx={{
-            color: currentTheme.accent.primary,
-            "&:hover": {
-              color: currentTheme.accent.secondary,
-            },
-          }}
-        >
-          <DeleteIcon />
-        </IconButton>
-        {onJournal && (
+        <Tooltip title="Edit stock">
           <IconButton
-            onClick={() => onJournal(row)}
+            onClick={() => onEdit(row)}
             size="small"
-            aria-label="journal"
-            sx={{
-              color: currentTheme.accent.primary,
-              "&:hover": {
-                color: currentTheme.accent.secondary,
-              },
-            }}
+            aria-label="edit"
           >
-            <BookIcon />
+            <EditIcon />
           </IconButton>
+        </Tooltip>
+        <Tooltip title="Delete stock">
+          <IconButton
+            onClick={() => onDelete(row.id)}
+            size="small"
+            aria-label="delete"
+          >
+            <DeleteIcon />
+          </IconButton>
+        </Tooltip>
+        {onJournal && (
+          <Tooltip title="Add journal">
+            <IconButton
+              onClick={() => onJournal(row)}
+              size="small"
+              aria-label="journal"
+            >
+              <BookIcon />
+            </IconButton>
+          </Tooltip>
         )}
       </Box>
     );

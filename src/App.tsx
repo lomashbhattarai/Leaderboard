@@ -42,12 +42,12 @@ const AppContent = () => {
   const { currentTheme } = useTheme();
 
   const content = (
-    <>
+    <div className="relative min-h-screen flex flex-col">
       <SpaceBackground theme={currentTheme} />
-      <div className="w-full">
+      <div className="relative flex-1 flex flex-col">
         <Toaster position="top-right" />
         <Navbar />
-        <div className="w-full px-4 max-w-[1200px] mx-auto">
+        <div className="flex-1 w-full px-4 max-w-[1200px] mx-auto">
           <Routes>
             <Route
               path="/"
@@ -103,7 +103,7 @@ const AppContent = () => {
           </Routes>
         </div>
       </div>
-    </>
+    </div>
   );
 
   const containerStyle = {
@@ -115,7 +115,7 @@ const AppContent = () => {
     <>
       <SpaceBackground theme={currentTheme} />
       {currentTheme.name === "Default Theme" ? (
-        <div className="w-full overflow-x-hidden">{content}</div>
+        <div className="w-full ">{content}</div>
       ) : (
         <div style={containerStyle}>{content}</div>
       )}
