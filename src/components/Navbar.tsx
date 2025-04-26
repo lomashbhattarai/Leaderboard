@@ -76,7 +76,7 @@ const Navbar = () => {
   ];
 
   if (isMobile) {
-    navLinks = navLinks.slice(0, 5); // Show all items on mobile with icons
+    navLinks = navLinks.slice(0, 4); // Show all items on mobile with icons
   }
 
   const renderNavLinks = () => (
