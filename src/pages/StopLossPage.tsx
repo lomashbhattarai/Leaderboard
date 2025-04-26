@@ -20,13 +20,19 @@ import StopLossForm from "../components/StopLossForm";
 import AddIcon from "@mui/icons-material/Add";
 import CloseIcon from "@mui/icons-material/Close";
 import { showToast } from "../utils/toast";
+// import JournalIndicator from "../components/JournalIndicator";
 
 const STOP_LOSS_TABLE_HEADERS: Array<ColumnConfig> = [
   {
     label: "Type",
     key: "type",
-    render: (value: StopLossType) =>
-      value === StopLossType.ABSOLUTE ? "Absolute" : "Percentage",
+    render: (value: StopLossType, row: StopLoss) => (
+      <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+        <Typography>
+          {value === StopLossType.ABSOLUTE ? "Absolute" : "Percentage"}
+        </Typography>
+      </Box>
+    ),
   },
   {
     label: "Value",

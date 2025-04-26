@@ -40,6 +40,13 @@ export const ENDPOINTS = {
     DELETE: (stockId: number, id: number) => `/api/stocks/${stockId}/prices/${id}`,
     UPLOAD_CSV: '/api/stocks/prices/upload-csv',
   },
+  JOURNALS: {
+    LIST: '/journals',
+    DETAIL: (id: number) => `/journals/${id}`,
+    CREATE: '/journals',
+    UPDATE: (id: number) => `/journals/${id}`,
+    DELETE: (id: number) => `/journals/${id}`,
+  },
 } as const;
 
 export const API_URL = "http://localhost:3333/api"; 

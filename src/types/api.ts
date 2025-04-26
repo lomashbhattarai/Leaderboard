@@ -264,3 +264,25 @@ export interface HistoricalValue {
   change: number
   percentage: number
 }
+
+export type Journal = {
+  id: number
+  userId: number
+  portfolioStockId: number | null
+  stopLossId: number | null
+  title: string
+  content: string
+  tags: string | null
+  journalType: 'general' | 'stock' | 'stop_loss'
+  createdAt: string
+  updatedAt: string
+}
+
+export type JournalDTO = {
+  title: string
+  content: string
+  tags?: string
+  journalType: 'general' | 'stock' | 'stop_loss'
+  portfolioStockId?: number
+  stopLossId?: number
+}

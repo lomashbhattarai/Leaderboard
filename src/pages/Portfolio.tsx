@@ -4,6 +4,7 @@ import PortfolioChart from "../components/PortfolioChart";
 import PortfolioTable from "../components/PortfolioTable";
 import PortfolioValue from "../components/PortfolioValue";
 import { usePortfolio } from "../hooks/usePortfolio";
+import { useCreateJournal } from "../api/queries";
 
 import { Add as AddIcon } from "@mui/icons-material";
 
@@ -19,6 +20,7 @@ import {
 } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 import PortfolioStockForm from "../components/PortfolioStockForm";
+import JournalForm from "../components/JournalForm";
 import {
   useCreatePortfolioStock,
   useUpdatePortfolioStock,
@@ -38,6 +40,7 @@ const Portfolio: React.FC = () => {
   const { portfolioStocksFromDb, portfolioId, addPortfolio, portfolio } =
     usePortfolio();
   const [isDrawerOpen, setIsDrawerOpen] = React.useState(false);
+  const [isJournalDrawerOpen, setIsJournalDrawerOpen] = React.useState(false);
   const [selectedStock, setSelectedStock] =
     React.useState<PortfolioStock | null>(null);
 
@@ -47,6 +50,7 @@ const Portfolio: React.FC = () => {
     selectedStock?.id || 0
   );
   const deleteStock = useDeletePortfolioStock(portfolioId);
+  const createJournal = useCreateJournal();
 
   const { currentTheme } = useTheme();
 
@@ -102,6 +106,27 @@ const Portfolio: React.FC = () => {
     } catch (error) {
       showToast.error("Failed to import portfolio");
     }
+  };
+
+  const handleJournalSubmit = async (data: any) => {
+    try {
+      await createJournal.mutateAsync({
+        ...data,
+        portfolioStockId: selectedStock?.id,
+        journalType: "stock",
+      });
+      showToast.success("Journal created successfully");
+      setIsJournalDrawerOpen(false);
+      setSelectedStock(null);
+    } catch (error) {
+      console.error("Failed to create journal:", error);
+      showToast.error("Failed to create journal. Please try again.");
+    }
+  };
+
+  const handleJournalClick = (stock: PortfolioStock) => {
+    setSelectedStock(stock);
+    setIsJournalDrawerOpen(true);
   };
 
   return (
@@ -170,6 +195,7 @@ const Portfolio: React.FC = () => {
               portfolioStocksFromDb={portfolioStocksFromDb}
               onEdit={handleEdit}
               onDelete={handleDelete}
+              onJournal={handleJournalClick}
             />
           </Box>
           <Box sx={{ order: 3 }}>
@@ -228,6 +254,57 @@ const Portfolio: React.FC = () => {
             initialData={selectedStock || undefined}
             onSubmit={handleStockSubmit}
             portfolioId={portfolioId}
+          />
+        </Drawer>
+
+        <Drawer
+          anchor="right"
+          open={isJournalDrawerOpen}
+          onClose={() => {
+            setIsJournalDrawerOpen(false);
+            setSelectedStock(null);
+          }}
+          PaperProps={{
+            sx: {
+              width: 400,
+              p: 2.5,
+              borderRadius: currentTheme.shape.borderRadius,
+              bgcolor: currentTheme.background.secondary,
+            },
+          }}
+        >
+          <Box
+            sx={{
+              display: "flex",
+              justifyContent: "space-between",
+              alignItems: "center",
+              mb: 2.5,
+            }}
+          >
+            <Typography
+              variant="h6"
+              sx={{
+                fontWeight: currentTheme.typography.fontWeights.heading,
+                color: currentTheme.text.primary,
+              }}
+            >
+              Add Journal for {selectedStock?.stock?.symbol}
+            </Typography>
+            <IconButton
+              onClick={() => {
+                setIsJournalDrawerOpen(false);
+                setSelectedStock(null);
+              }}
+              edge="end"
+              aria-label="close"
+              sx={{ color: currentTheme.text.primary }}
+            >
+              <CloseIcon />
+            </IconButton>
+          </Box>
+          <JournalForm
+            onSubmit={handleJournalSubmit}
+            portfolioStockId={selectedStock?.id}
           />
         </Drawer>
       </Container>

@@ -80,7 +80,7 @@ const PortfolioChart: React.FC<Props> = ({ portfolioStocksFromDb }) => {
           height: chartDimensions.height,
           fontSize: chartDimensions.fontSize,
         }}
-      >
+      > 
         <ResponsiveContainer width="100%" height={chartDimensions.height}>
           <PieChart>
             <Pie

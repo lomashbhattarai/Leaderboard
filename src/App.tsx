@@ -25,6 +25,7 @@ import Navbar from "./components/Navbar";
 import StopLossPage from "./pages/StopLossPage";
 import { Toaster } from "react-hot-toast";
 import NewPortfolio from "./pages/NewPortfolio";
+import Journals from "./pages/Journals";
 const theme = createTheme();
 
 // Create a client
@@ -91,6 +92,14 @@ const AppContent = () => {
             <Route path="/stocks" element={<Stocks />} />
             <Route path="/stock/:symbol" element={<StockDetail />} />
             <Route path="/stop-loss/:stockSymbol" element={<StopLossPage />} />
+            <Route
+              path="/journals"
+              element={
+                <ProtectedRoute>
+                  <Journals />
+                </ProtectedRoute>
+              }
+            />
           </Routes>
         </div>
       </div>

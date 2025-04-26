@@ -66,6 +66,7 @@ interface TableViewProps {
   currentSort?: { key: string; order: "asc" | "desc" };
   isCompact?: boolean;
   defaultEmptyMessage?: string;
+  rowActions?: (row: any, rowIndex: number) => React.ReactNode;
 }
 
 const TableView = ({
@@ -89,11 +90,13 @@ const TableView = ({
   currentSort,
   isCompact = false,
   defaultEmptyMessage = "No Data found",
+  rowActions,
 }: TableViewProps) => {
   const { currentTheme } = useTheme();
   const styles = getCommonStyles(currentTheme);
   const muiTheme = useMuiTheme();
   const [expandedRows, setExpandedRows] = useState<Set<number>>(new Set());
+  const [hoveredRow, setHoveredRow] = useState<number | null>(null);
 
   // Check if screen is mobile size
   const isMobile = useMediaQuery(`(max-width:${responsive.breakpoint}px)`);
@@ -621,7 +624,11 @@ const TableView = ({
             <TableBody>
               {tableData.map((row, rowIndex) => (
                 <>
-                  <TableRow key={row.id || rowIndex}>
+                  <TableRow
+                    key={row.id || rowIndex}
+                    onMouseEnter={() => setHoveredRow(rowIndex)}
+                    onMouseLeave={() => setHoveredRow(null)}
+                  >
                     {columns.map((column, colIndex) => (
                       <TableCell
                         key={colIndex}
@@ -652,6 +659,17 @@ const TableView = ({
                           : row[column.key]}
                       </TableCell>
                     ))}
+                    {rowActions && (
+                      <TableCell
+                        sx={{
+                          position: "relative",
+                          width: "1%",
+                          whiteSpace: "nowrap",
+                        }}
+                      >
+                        {hoveredRow === rowIndex && rowActions(row, rowIndex)}
+                      </TableCell>
+                    )}
                     {(showActions || onDeleteTransaction) && (
                       <TableCell>
                         {showActions && (

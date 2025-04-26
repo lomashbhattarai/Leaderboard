@@ -12,6 +12,7 @@ import HomeIcon from "@mui/icons-material/Home";
 import AccountBalanceWalletIcon from "@mui/icons-material/AccountBalanceWallet";
 import TrendingUpIcon from "@mui/icons-material/TrendingUp";
 import EmojiEventsIcon from "@mui/icons-material/EmojiEvents";
+import BookIcon from "@mui/icons-material/Book";
 import UserMenu from "./UserMenu";
 import { useTheme } from "../contexts/ThemeContext";
 
@@ -64,6 +65,11 @@ const Navbar = () => {
       to: "/leaderboard",
       label: "Leaderboard",
       icon: <EmojiEventsIcon />,
+    },
+    {
+      to: "/journals",
+      label: "Journals",
+      icon: <BookIcon />,
     },
     // { to: "/earnings-tracker", label: "Earnings Tracker" },
     // { to: "/wealth-tracker", label: "Wealth Tracker" },

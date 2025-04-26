@@ -4,4 +4,5 @@ export * from './usePortfolios';
 export * from './usePortfolioStocks';
 export * from './useStockPrices';
 export * from './leaderboard';
-export * from './useUserSettings'; 
+export * from './useUserSettings';
+export * from './useJournals'; 

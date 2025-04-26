@@ -3,13 +3,17 @@ import TableView, { ColumnConfig } from "./common/TableView";
 import { PortfolioStock } from "../types/api";
 import { formatPerformance } from "../pages/Leaderboard";
 import { formatAmount } from "../utils/helper";
-import { Button, Box, Typography, Stack } from "@mui/material";
+import { Button, Box, Typography, Stack, IconButton } from "@mui/material";
 import TrendingDownIcon from "@mui/icons-material/TrendingDown";
 import { Link as RouterLink } from "react-router-dom";
 import StopLossChip from "./StopLossChip";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import { useMediaQuery } from "@mui/material";
 import { useTheme } from "../contexts/ThemeContext";
+import EditIcon from "@mui/icons-material/Edit";
+import DeleteIcon from "@mui/icons-material/Delete";
+import BookIcon from "@mui/icons-material/Book";
+import JournalIndicator from "./JournalIndicator";
 
 const StockLink: React.FC<{ symbol: string }> = ({ symbol }) => {
   const { currentTheme } = useTheme();
@@ -36,7 +40,12 @@ const PORTFOLIO_TABLE_HEADERS_FROM_DB: Array<ColumnConfig> = [
     label: "Stock",
     key: "stock",
     getValue: (portfolioStock: PortfolioStock) => portfolioStock.stock?.symbol,
-    render: (value) => <StockLink symbol={value} />,
+    render: (value, stock: PortfolioStock) => (
+      <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+        <StockLink symbol={value} />
+        <JournalIndicator portfolioStockId={stock.id} stockSymbol={value} />
+      </Box>
+    ),
   },
   {
     label: "Quantity",
@@ -99,6 +108,7 @@ interface PortfolioTableProps {
   portfolioStocksFromDb: PortfolioStock[];
   onEdit: (stock: PortfolioStock) => void;
   onDelete: (stockId: number) => void;
+  onJournal?: (stock: PortfolioStock) => void;
 }
 
 const getStopLossColor = (
@@ -274,20 +284,84 @@ const PortfolioTable: React.FC<PortfolioTableProps> = ({
   portfolioStocksFromDb,
   onEdit,
   onDelete,
+  onJournal,
 }) => {
+  const { currentTheme } = useTheme();
+
+  const renderRowActions = (row: PortfolioStock, rowIndex: number) => {
+    return (
+      <Box
+        sx={{
+          position: "absolute",
+          right: 0,
+          top: "50%",
+          transform: "translateY(-50%)",
+          display: "flex",
+          gap: 1,
+          backgroundColor: currentTheme.background.secondary,
+          borderRadius: 1,
+          padding: "4px",
+          boxShadow: `0 0 0 1px ${currentTheme.accent.primary}`,
+        }}
+      >
+        <IconButton
+          onClick={() => onEdit(row)}
+          size="small"
+          aria-label="edit"
+          sx={{
+            color: currentTheme.accent.primary,
+            "&:hover": {
+              color: currentTheme.accent.secondary,
+            },
+          }}
+        >
+          <EditIcon />
+        </IconButton>
+        <IconButton
+          onClick={() => onDelete(row.id)}
+          size="small"
+          aria-label="delete"
+          sx={{
+            color: currentTheme.accent.primary,
+            "&:hover": {
+              color: currentTheme.accent.secondary,
+            },
+          }}
+        >
+          <DeleteIcon />
+        </IconButton>
+        {onJournal && (
+          <IconButton
+            onClick={() => onJournal(row)}
+            size="small"
+            aria-label="journal"
+            sx={{
+              color: currentTheme.accent.primary,
+              "&:hover": {
+                color: currentTheme.accent.secondary,
+              },
+            }}
+          >
+            <BookIcon />
+          </IconButton>
+        )}
+      </Box>
+    );
+  };
+
   return (
     <TableView
       columns={PORTFOLIO_TABLE_HEADERS_FROM_DB}
       tableData={portfolioStocksFromDb}
       onEdit={onEdit}
       onDelete={onDelete}
-      showActions={true}
+      showActions={false}
       isCompact
       defaultEmptyMessage="No holdings found. Add stocks to your portfolio."
+      rowActions={renderRowActions}
       // renderExpandedRow={(row) => <ExpandedStopLossView stock={row} />}
       // expansionTriggerColumnKey="stopLoss"
     />
   );
 };
-
 export default PortfolioTable;
