@@ -39,6 +39,8 @@ const Journals: React.FC = () => {
 
   const handleJournalSubmit = async (data: JournalDTO) => {
     try {
+      data.journalType = "general";
+      data.title = data.title || " ";
       if (selectedJournal) {
         await updateJournal.mutateAsync({ id: selectedJournal.id, data });
         showToast.success("Journal updated successfully");
