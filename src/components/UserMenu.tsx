@@ -121,6 +121,12 @@ const UserMenu: React.FC = () => {
           <Button
             variant="contained"
             color="primary"
+            sx={{
+              backgroundColor: currentTheme.accent.primary,
+              "&:hover": {
+                backgroundColor: currentTheme.accent.secondary,
+              },
+            }}
             onClick={() => navigate("/login")}
           >
             Login
