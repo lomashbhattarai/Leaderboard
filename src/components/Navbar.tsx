@@ -15,6 +15,16 @@ import EmojiEventsIcon from "@mui/icons-material/EmojiEvents";
 import BookIcon from "@mui/icons-material/Book";
 import UserMenu from "./UserMenu";
 import { useTheme } from "../contexts/ThemeContext";
+import Logo from "./Logo";
+
+const logoAssetSrc = "/assets/branding/nepse-leader-transparent.png";
+
+// Navbar background color options for branding
+const NAVBAR_BG = {
+  solidLightGreen: "#e8f5e9", // Light green (default)
+  solidDeeperGreen: "#c8e6c9", // Slightly deeper green
+  gradient: "linear-gradient(90deg, #e8f5e9 60%, #c8e6c9 100%)", // Subtle gradient
+};
 
 const Navbar = () => {
   const { currentTheme, setTheme, availableThemes } = useTheme();
@@ -128,23 +138,26 @@ const Navbar = () => {
           left: 0,
           right: 0,
           zIndex: 1000,
-          backgroundColor: currentTheme.background.secondary,
+          backgroundColor: NAVBAR_BG.solidDeeperGreen,
+          // background: NAVBAR_BG.gradient,
           backdropFilter: "blur(10px)",
           width: "100%",
           maxWidth: "100vw",
           overflow: "hidden",
+          boxShadow: "0 2px 8px 0 rgba(44, 62, 80, 0.07)", // Subtle shadow at the bottom
           ...navStyle,
         }}
       >
         <>
           <div className="flex items-center flex-grow">
             <Link to="/" className="mr-4" style={{ background: "transparent" }}>
-              <img
-                src="/assets/branding/nepse-leader-transparent.png"
+              {/* <img
+                src={logoAssetSrc}
                 alt="Logo"
                 className="h-12 w-12 w-auto"
                 style={{ background: "transparent" }}
-              />
+              /> */}
+              <Logo />
             </Link>
             <div className="flex flex-grow w-full !px-2 md:px-8 max-w-[1200px] mx-auto">
               {renderNavLinks()}
