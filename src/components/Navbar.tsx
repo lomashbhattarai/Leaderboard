@@ -86,12 +86,12 @@ const Navbar = () => {
   ];
 
   if (isMobile) {
-    navLinks = navLinks.slice(0, 4); // Show all items on mobile with icons
+    navLinks = navLinks.slice(0, 5); // Show all items on mobile with icons
   }
 
   const renderNavLinks = () => (
     <ul
-      className="flex space-x-4"
+      className="flex space-x-0 sm:space-x-4"
       style={{
         color: currentTheme.text.primary,
       }}
@@ -109,7 +109,7 @@ const Navbar = () => {
                     : "transparent",
                 display: "flex",
                 alignItems: "center",
-                padding: isMobile ? "8px 12px" : "4px 0",
+                padding: isMobile ? "8px 10px" : "4px 0",
                 borderRadius: isMobile ? "4px" : "0",
               })}
             >
@@ -150,15 +150,22 @@ const Navbar = () => {
       >
         <>
           <div className="flex items-center flex-grow">
-            <Link to="/" className="mr-4" style={{ background: "transparent" }}>
-              {/* <img
+            {!isMobile && (
+              <Link
+                to="/"
+                className="mr-4"
+                style={{ background: "transparent" }}
+              >
+                {/* <img
                 src={logoAssetSrc}
                 alt="Logo"
                 className="h-12 w-12 w-auto"
                 style={{ background: "transparent" }}
               /> */}
-              <Logo />
-            </Link>
+                <Logo />
+              </Link>
+            )}
+
             <div className="flex flex-grow w-full !px-2 md:px-8 max-w-[1200px] mx-auto">
               {renderNavLinks()}
             </div>

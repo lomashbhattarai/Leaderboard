@@ -242,80 +242,35 @@ const Leaderboard: React.FC<{ rowLimit?: number; isCompact?: boolean }> = ({
       : undefined;
 
   return (
-    <div className="mb-10">
-      <Box
-        sx={{
-          display: "flex",
-          flexDirection: { xs: "column", md: "row" },
-          justifyContent: "flex-start",
-          alignItems: { xs: "flex-start", md: "flex-start" },
-          mb: 2,
-          gap: 2,
-          mt: 2,
-        }}
-      >
-        <Box sx={{ paddingLeft: { xs: 2, sm: 0 } }}>
-          <Typography
-            variant="h5"
-            component="h1"
-            sx={{ fontWeight: "bold", mb: 0.5 }}
-          >
-            NEPSE Leaderboard
-          </Typography>
-          <Typography variant="body2" color="text.secondary">
-            Track and compare top-performing portfolios
-          </Typography>
-        </Box>
+    <div className="mb-10 mt-5">
+      <div className="px-4 sm:px-0">
+        {!portfolioId && (
+          <Alert severity="info" className="mb-4">
+            Participate in the leaderboard by adding your portfolio.
+          </Alert>
+        )}
 
-        {!rowLimit && (
-          <Box
-            sx={{
-              display: "flex",
-              gap: 1,
-              width: { xs: "100%", md: "auto" },
-              flexWrap: "wrap",
-              paddingLeft: 2,
-              paddingRight: 2,
-            }}
-          >
-            <TextField
-              placeholder="Search portfolios..."
-              size="small"
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
+        {user ? (
+          portfolioId ? null : (
+            <Button
+              variant="contained"
+              color="primary"
+              onClick={() => navigate("/portfolio")}
               sx={{
-                width: { xs: "100%", md: "250px" },
-                "& .MuiOutlinedInput-root": {
-                  borderRadius: 2,
+                backgroundColor: currentTheme.accent.primary,
+                "&:hover": {
+                  backgroundColor: currentTheme.accent.secondary,
                 },
               }}
-              InputProps={{
-                startAdornment: (
-                  <InputAdornment position="start">
-                    <SearchIcon
-                      fontSize="small"
-                      sx={{ color: "text.secondary" }}
-                    />
-                  </InputAdornment>
-                ),
-              }}
-            />
-          </Box>
-        )}
-      </Box>
-
-      {!portfolioId && (
-        <Alert severity="info" className="mb-4">
-          Participate in the leaderboard by adding your portfolio.
-        </Alert>
-      )}
-
-      {user ? (
-        portfolioId ? null : (
+            >
+              Add Your Portfolio
+            </Button>
+          )
+        ) : (
           <Button
             variant="contained"
             color="primary"
-            onClick={() => navigate("/portfolio")}
+            onClick={() => navigate("/signup")}
             sx={{
               backgroundColor: currentTheme.accent.primary,
               "&:hover": {
@@ -323,24 +278,10 @@ const Leaderboard: React.FC<{ rowLimit?: number; isCompact?: boolean }> = ({
               },
             }}
           >
-            Add Your Portfolio
+            Sign up to participate
           </Button>
-        )
-      ) : (
-        <Button
-          variant="contained"
-          color="primary"
-          onClick={() => navigate("/signup")}
-          sx={{
-            backgroundColor: currentTheme.accent.primary,
-            "&:hover": {
-              backgroundColor: currentTheme.accent.secondary,
-            },
-          }}
-        >
-          Sign up to participate
-        </Button>
-      )}
+        )}
+      </div>
 
       <div className="mt-4">
         {rowLimit && (
@@ -369,7 +310,74 @@ const Leaderboard: React.FC<{ rowLimit?: number; isCompact?: boolean }> = ({
         )}
       </div>
 
-      <div className="mt-10">
+      <Stack
+        direction="row"
+        spacing={2}
+        sx={{ paddingLeft: { xs: 2, sm: 0 }, marginTop: 4 }}
+      >
+        <Box>
+          <Typography
+            variant="body1"
+            component="h1"
+            sx={{ fontWeight: "bold", mb: 0.5 }}
+          >
+            NEPSE Leaderboard
+          </Typography>
+          <Typography variant="body2" color="text.secondary">
+            Track and compare top-performing portfolios
+          </Typography>
+        </Box>
+
+        <Box
+          sx={{
+            display: "flex",
+            flexDirection: { xs: "column", md: "row" },
+            justifyContent: "flex-start",
+            alignItems: { xs: "flex-start", md: "flex-start" },
+            mb: 2,
+            gap: 2,
+            mt: 2,
+          }}
+        >
+          {!rowLimit && (
+            <Box
+              sx={{
+                display: "flex",
+                gap: 1,
+                width: { xs: "100%", md: "auto" },
+                flexWrap: "wrap",
+                paddingLeft: 2,
+                paddingRight: 2,
+              }}
+            >
+              <TextField
+                placeholder="Search portfolios..."
+                size="small"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                sx={{
+                  width: { xs: "100%", md: "250px" },
+                  "& .MuiOutlinedInput-root": {
+                    borderRadius: 2,
+                  },
+                }}
+                InputProps={{
+                  startAdornment: (
+                    <InputAdornment position="start">
+                      <SearchIcon
+                        fontSize="small"
+                        sx={{ color: "text.secondary" }}
+                      />
+                    </InputAdornment>
+                  ),
+                }}
+              />
+            </Box>
+          )}
+        </Box>
+      </Stack>
+
+      <div className="mt-5">
         {isLeaderboardError ? (
           <Alert severity="error">Failed to load leaderboard data</Alert>
         ) : (
