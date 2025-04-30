@@ -10,6 +10,7 @@ import { showToast } from "../utils/toast";
 import React, { useState } from "react";
 import StockSymbolLink from "../components/common/StockSymbolLink";
 import { useAuthContext } from "../contexts/AuthContext";
+import AddToWatchListHover from "../components/AddToWatchListHover";
 
 const Stocks = () => {
   const [sortConfig, setSortConfig] = useState<{
@@ -101,7 +102,11 @@ const Stocks = () => {
             label: "Symbol",
             key: "symbol",
             sortable: true,
-            render: (symbol: string) => <StockSymbolLink symbol={symbol} />,
+            render: (symbol: string, row) => (
+              <AddToWatchListHover stockId={row.id} alwaysShow={true}>
+                <StockSymbolLink symbol={symbol} />
+              </AddToWatchListHover>
+            ),
           },
           {
             label: "Name",

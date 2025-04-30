@@ -26,6 +26,7 @@ import StopLossPage from "./pages/StopLossPage";
 import { Toaster } from "react-hot-toast";
 import NewPortfolio from "./pages/NewPortfolio";
 import Journals from "./pages/Journals";
+import { WatchListProvider } from "./contexts/WatchListContext";
 const theme = createTheme();
 
 // Create a client
@@ -134,7 +135,9 @@ function App() {
                 <ThemeProvider theme={theme}>
                   <LocalizationProvider dateAdapter={AdapterDateFns}>
                     <CssBaseline />
-                    <AppContent />
+                    <WatchListProvider>
+                      <AppContent />
+                    </WatchListProvider>
                   </LocalizationProvider>
                 </ThemeProvider>
               </SpaceThemeProvider>

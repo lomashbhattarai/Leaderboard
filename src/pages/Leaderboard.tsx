@@ -24,6 +24,7 @@ import { useTheme } from "../contexts/ThemeContext";
 import { Search as SearchIcon } from "@mui/icons-material";
 import RankedPositionCard from "../components/RankedPositionCard";
 import type { LeaderboardEntry } from "../types/api";
+import WatchListTable from "../components/WatchListTable";
 
 export const formatPerformance = (value: number | string) => {
   if (!value && value !== 0) {
@@ -309,6 +310,8 @@ const Leaderboard: React.FC<{ rowLimit?: number; isCompact?: boolean }> = ({
           </Stack>
         )}
       </div>
+
+      {user && <WatchListTable />}
 
       <Stack
         direction="row"

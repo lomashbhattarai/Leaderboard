@@ -286,3 +286,26 @@ export type JournalDTO = {
   portfolioStockId?: number
   stopLossId?: number
 }
+
+export interface WatchListEntry {
+  id: number
+  userId: number
+  stockId: number
+  createdAt: string
+  updatedAt: string
+  name: string
+  symbol: string
+  latestPrice: number
+  performance1D: number
+  performance1W: number
+  performance1M: number
+}
+
+export interface WatchListResponse {
+  status: string
+  watchList: WatchListEntry[]
+}
+
+export interface AddToWatchListDTO {
+  stockId: number
+}

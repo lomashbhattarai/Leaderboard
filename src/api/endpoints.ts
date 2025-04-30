@@ -47,6 +47,11 @@ export const ENDPOINTS = {
     UPDATE: (id: number) => `/journals/${id}`,
     DELETE: (id: number) => `/journals/${id}`,
   },
+  WATCHLIST: {
+    LIST: '/watchlist',
+    CREATE: '/watchlist',
+    DELETE: (id: number) => `/watchlist/${id}`,
+  },
 } as const;
 
 export const API_URL = "http://localhost:3333/api"; 
