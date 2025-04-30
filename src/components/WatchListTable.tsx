@@ -89,20 +89,6 @@ const WatchListTable: React.FC = () => {
     },
   ];
 
-  if (isLoading) {
-    return <Typography>Loading watch list...</Typography>;
-  }
-
-  if (!watchList?.length) {
-    return (
-      <Box sx={{ textAlign: "center", py: 2 }}>
-        <Typography color="text.secondary">
-          Your watch list is empty. Add stocks to track them here!
-        </Typography>
-      </Box>
-    );
-  }
-
   return (
     <Box sx={{ mt: 4, mb: 4 }}>
       <Typography
@@ -112,7 +98,16 @@ const WatchListTable: React.FC = () => {
       >
         Your Watch List
       </Typography>
-      <TableView columns={columns} tableData={watchList} isCompact />
+
+      {isLoading ? (
+        <Typography>Loading watch list...</Typography>
+      ) : !watchList?.length ? (
+        <Typography variant="body2" color="text.secondary">
+          Your watch list is empty. Add stocks to track them here!
+        </Typography>
+      ) : (
+        <TableView columns={columns} tableData={watchList} isCompact />
+      )}
     </Box>
   );
 };
