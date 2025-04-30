@@ -176,6 +176,8 @@ const Leaderboard: React.FC<{ rowLimit?: number; isCompact?: boolean }> = ({
   rowLimit, // using roLimit to identify if the leaderboard is in dashboard or in leaderboard page
   isCompact = true,
 }) => {
+  const isRenderedInDashboard = !!rowLimit;
+
   const { currentTheme } = useTheme();
   const [searchQuery, setSearchQuery] = useState("");
 
@@ -285,7 +287,7 @@ const Leaderboard: React.FC<{ rowLimit?: number; isCompact?: boolean }> = ({
       </div>
 
       <div className="mt-4">
-        {rowLimit && (
+        {isRenderedInDashboard && (
           <Stack
             direction={{ xs: "column", sm: "row" }}
             sx={{ borderTop: { xs: "1px solid black", sm: "none" } }}
@@ -311,7 +313,7 @@ const Leaderboard: React.FC<{ rowLimit?: number; isCompact?: boolean }> = ({
         )}
       </div>
 
-      {user && <WatchListTable />}
+      {user && isRenderedInDashboard && <WatchListTable />}
 
       <Stack
         direction="row"
@@ -342,7 +344,7 @@ const Leaderboard: React.FC<{ rowLimit?: number; isCompact?: boolean }> = ({
             mt: 2,
           }}
         >
-          {!rowLimit && (
+          {!isRenderedInDashboard && (
             <Box
               sx={{
                 display: "flex",
@@ -392,12 +394,12 @@ const Leaderboard: React.FC<{ rowLimit?: number; isCompact?: boolean }> = ({
                 <LeaderboardCard
                   row={row}
                   index={index}
-                  showLimitedInfo={!!rowLimit}
+                  showLimitedInfo={isRenderedInDashboard}
                 />
               )}
               isCompact={isCompact}
             />
-            {rowLimit && (
+            {isRenderedInDashboard && (
               <Box sx={{ display: "flex", justifyContent: "center", mt: 3 }}>
                 <Button
                   variant="contained"
