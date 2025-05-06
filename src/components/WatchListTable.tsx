@@ -1,11 +1,13 @@
 import React from "react";
-import { Box, Typography, IconButton, Tooltip } from "@mui/material";
+import { Box, Typography, IconButton, Tooltip, Link } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { useWatchListContext } from "../contexts/WatchListContext";
 import { formatPerformance } from "../pages/Leaderboard";
 import { showToast } from "../utils/toast";
 import TableView from "./common/TableView";
 import { ColumnConfig } from "./common/TableView";
+import StockLink from "./common/StockLink";
+import { useTheme } from "../contexts/ThemeContext";
 
 const WatchListTable: React.FC = () => {
   const { watchList, isLoading, removeFromWatchList } = useWatchListContext();
@@ -23,7 +25,9 @@ const WatchListTable: React.FC = () => {
     {
       label: "Symbol",
       key: "symbol",
-      render: (_, row) => <Box>{row.symbol || "-"}</Box>,
+      render: (_, row) => (
+        <Box>{row.symbol ? <StockLink symbol={row.symbol} /> : "-"}</Box>
+      ),
     },
     {
       label: "Name",
@@ -91,13 +95,22 @@ const WatchListTable: React.FC = () => {
 
   return (
     <Box sx={{ mt: 4, mb: 4 }}>
-      <Typography
-        variant="body1"
-        component="h1"
-        sx={{ fontWeight: "bold", mb: 0.5 }}
-      >
-        Your Watch List
-      </Typography>
+      <Box sx={{ mb: 2 }}>
+        <Typography
+          variant="body1"
+          component="h1"
+          sx={{ fontWeight: "bold", mb: 0.5 }}
+        >
+          Your Watch List
+        </Typography>
+        <Typography variant="body2" color="text.secondary">
+          Add stocks to your watch list from the{" "}
+          <Link href="#/stocks" color="primary">
+            Stocks
+          </Link>{" "}
+          page
+        </Typography>
+      </Box>
 
       {isLoading ? (
         <Typography>Loading watch list...</Typography>

@@ -20,26 +20,7 @@ import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 import BookIcon from "@mui/icons-material/Book";
 import JournalIndicator from "./JournalIndicator";
-
-const StockLink: React.FC<{ symbol: string }> = ({ symbol }) => {
-  const { currentTheme } = useTheme();
-
-  return (
-    <RouterLink
-      to={`https://nepsealpha.com/trading/chart?symbol=${symbol}`}
-      className="hover:underline"
-      target="_blank"
-      rel="noopener noreferrer"
-      style={{
-        color: currentTheme.accent.primary,
-        textDecoration: "none",
-        fontWeight: currentTheme.typography.fontWeights.heading,
-      }}
-    >
-      {symbol}
-    </RouterLink>
-  );
-};
+import StockLink from "./common/StockLink";
 
 const PORTFOLIO_TABLE_HEADERS_FROM_DB: Array<ColumnConfig> = [
   {
