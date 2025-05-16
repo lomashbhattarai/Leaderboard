@@ -7,8 +7,16 @@ import {
   Button,
   Drawer,
   IconButton,
+  Card,
+  CardContent,
+  Chip,
 } from "@mui/material";
-import { Add as AddIcon, Close as CloseIcon } from "@mui/icons-material";
+import {
+  Add as AddIcon,
+  Close as CloseIcon,
+  Edit as EditIcon,
+  Delete as DeleteIcon,
+} from "@mui/icons-material";
 import { useTheme } from "../contexts/ThemeContext";
 import JournalForm from "../components/JournalForm";
 import {
@@ -73,17 +81,59 @@ const Journals: React.FC = () => {
   };
 
   return (
-    <Box sx={{ minHeight: "100vh", bgcolor: "background.default" }}>
-      <Container maxWidth="xl" sx={{ py: 4 }}>
-        <Stack
-          direction="row"
-          justifyContent="space-between"
-          alignItems="center"
-          mb={4}
+    <>
+      <Drawer
+        anchor="right"
+        open={isDrawerOpen}
+        onClose={handleDrawerClose}
+        PaperProps={{
+          sx: {
+            width: 400,
+            p: 2.5,
+          },
+        }}
+      >
+        <Box
+          sx={{
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center",
+            mb: 2.5,
+          }}
         >
-          <Typography variant="h4" sx={{ color: currentTheme.text.primary }}>
-            My Journals
+          <Typography
+            variant="h6"
+            sx={{
+              fontWeight: currentTheme.typography.fontWeights.heading,
+              color: currentTheme.text.primary,
+            }}
+          >
+            {selectedJournal ? "Edit Journal" : "Add Journal"}
           </Typography>
+          <IconButton
+            onClick={handleDrawerClose}
+            edge="end"
+            aria-label="close"
+            sx={{ color: currentTheme.text.primary }}
+          >
+            <CloseIcon />
+          </IconButton>
+        </Box>
+        <JournalForm
+          initialData={selectedJournal || undefined}
+          onSubmit={handleJournalSubmit}
+        />
+      </Drawer>
+      <div className="min-h-screen py-12">
+        <div className="max-w-3xl mx-auto">
+          <header className="text-center mb-12">
+            <h1 className="text-4xl font-serif font-medium text-gray-900 mb-2">
+              Trading Journal
+            </h1>
+            <p className="text-lg text-gray-600 font-light">
+              Your reflections and insights on the market
+            </p>
+          </header>
           <Button
             variant="contained"
             startIcon={<AddIcon />}
@@ -93,114 +143,88 @@ const Journals: React.FC = () => {
               "&:hover": {
                 backgroundColor: currentTheme.accent.secondary,
               },
+              marginBottom: "1rem",
             }}
           >
             Add Journal
           </Button>
-        </Stack>
 
-        <Stack spacing={3}>
-          {journals.map((journal) => (
-            <Box
-              key={journal.id}
-              sx={{
-                p: 3,
-                borderRadius: currentTheme.shape.borderRadius,
-                bgcolor: currentTheme.background.secondary,
-              }}
-            >
-              <Stack
-                direction="row"
-                justifyContent="space-between"
-                alignItems="flex-start"
-                mb={2}
+          <div className="space-y-6">
+            {journals.map((journal) => (
+              <Card
+                key={journal.id}
+                className="overflow-hidden border-0 shadow-sm hover:shadow-md transition-shadow duration-300"
+                sx={{
+                  borderRadius: "0.75rem",
+                  backgroundColor: "#fcfcfc",
+                }}
               >
-                <Typography
-                  variant="h6"
-                  sx={{ color: currentTheme.text.primary }}
-                >
-                  {journal.title}
-                </Typography>
-                <Stack direction="row" spacing={1}>
-                  <Button
-                    variant="outlined"
-                    size="small"
-                    onClick={() => handleEdit(journal)}
+                <CardContent className="p-6">
+                  <div className="flex justify-between items-start mb-4">
+                    <Typography
+                      variant="subtitle1"
+                      className="font-serif text-gray-500"
+                      sx={{ fontStyle: "italic" }}
+                    >
+                      {/* {formatDistanceToNow(new Date(journal.date))} */}
+                      {/* date */}
+                    </Typography>
+
+                    <Chip
+                      label={"STOCK"}
+                      size="small"
+                      sx={{
+                        backgroundColor: "#f0f7ff",
+                        color: "#3b82f6",
+                        fontWeight: 600,
+                        fontSize: "0.75rem",
+                        height: "1.5rem",
+                      }}
+                    />
+                  </div>
+
+                  <Typography
+                    variant="body1"
+                    className="font-serif text-gray-800 leading-relaxed mb-4"
+                    sx={{
+                      fontSize: "1.05rem",
+                      lineHeight: 1.7,
+                    }}
                   >
-                    Edit
-                  </Button>
-                  <Button
-                    variant="outlined"
-                    color="error"
-                    size="small"
-                    onClick={() => handleDelete(journal.id)}
-                  >
-                    Delete
-                  </Button>
-                </Stack>
-              </Stack>
-              <Typography
-                variant="body1"
-                sx={{ color: currentTheme.text.secondary, mb: 2 }}
-              >
-                {journal.content}
+                    {journal.content}
+                  </Typography>
+
+                  <div className="flex justify-end space-x-1">
+                    <IconButton
+                      size="small"
+                      onClick={() => handleEdit(journal)}
+                      sx={{ color: "#6b7280" }}
+                    >
+                      <EditIcon fontSize="small" />
+                    </IconButton>
+                    <IconButton
+                      size="small"
+                      onClick={() => handleDelete(journal.id)}
+                      sx={{ color: "#6b7280" }}
+                    >
+                      <DeleteIcon fontSize="small" />
+                    </IconButton>
+                  </div>
+                </CardContent>
+              </Card>
+            ))}
+          </div>
+
+          {journals.length === 0 && (
+            <div className="text-center py-12">
+              <Typography variant="body1" className="text-gray-500 italic">
+                No journal entries yet. Start documenting your trading journey.
               </Typography>
-              {journal.tags && (
-                <Typography
-                  variant="caption"
-                  sx={{ color: currentTheme.text.secondary }}
-                >
-                  Tags: {journal.tags}
-                </Typography>
-              )}
-            </Box>
-          ))}
-        </Stack>
-
-        <Drawer
-          anchor="right"
-          open={isDrawerOpen}
-          onClose={handleDrawerClose}
-          PaperProps={{
-            sx: {
-              width: 400,
-              p: 2.5,
-            },
-          }}
-        >
-          <Box
-            sx={{
-              display: "flex",
-              justifyContent: "space-between",
-              alignItems: "center",
-              mb: 2.5,
-            }}
-          >
-            <Typography
-              variant="h6"
-              sx={{
-                fontWeight: currentTheme.typography.fontWeights.heading,
-                color: currentTheme.text.primary,
-              }}
-            >
-              {selectedJournal ? "Edit Journal" : "Add Journal"}
-            </Typography>
-            <IconButton
-              onClick={handleDrawerClose}
-              edge="end"
-              aria-label="close"
-              sx={{ color: currentTheme.text.primary }}
-            >
-              <CloseIcon />
-            </IconButton>
-          </Box>
-          <JournalForm
-            initialData={selectedJournal || undefined}
-            onSubmit={handleJournalSubmit}
-          />
-        </Drawer>
-      </Container>
-    </Box>
+            </div>
+          )}
+        </div>
+      </div>
+    </>
   );
 };
 

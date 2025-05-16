@@ -43,7 +43,7 @@ const AppContent = () => {
   const { currentTheme } = useTheme();
 
   const content = (
-    <div className="relative min-h-screen flex flex-col">
+    <div className="relative min-h-screen flex flex-col bg-[aliceblue]">
       <SpaceBackground theme={currentTheme} />
       <div className="relative flex-1 flex flex-col">
         <Toaster position="top-right" />

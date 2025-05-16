@@ -139,7 +139,7 @@ const Portfolio: React.FC = () => {
   };
 
   return (
-    <Box sx={{ minHeight: "100vh", bgcolor: "background.default" }}>
+    <Box sx={{ minHeight: "100vh" }}>
       <Container maxWidth="xl" sx={{ py: 2, px: "0 !important" }}>
         {!portfolioId && (
           <Alert severity="info" sx={{ mb: 4 }}>

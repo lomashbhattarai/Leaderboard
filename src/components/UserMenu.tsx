@@ -79,7 +79,7 @@ const UserMenu: React.FC = () => {
               {settings?.isAnonymous ? "Anonymous User" : user.fullName}
             </MenuItem>
             <MenuItem disabled>{user.email}</MenuItem>
-            <MenuItem
+            {/* <MenuItem
               onClick={() => {
                 toggleTheme();
                 handleClose();
@@ -97,7 +97,7 @@ const UserMenu: React.FC = () => {
                   strokeWidth: 1,
                 }}
               />
-            </MenuItem>
+            </MenuItem> */}
             <MenuItem onClick={handleToggleAnonymous}>
               {settings?.isAnonymous ? "Show Identity" : "Go Anonymous"}
               {settings?.isAnonymous ? (
