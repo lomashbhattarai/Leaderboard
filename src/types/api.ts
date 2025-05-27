@@ -187,6 +187,11 @@ export interface LeaderboardEntry {
   userName: string;
   updatedAt: string;
   userId: number;
+  topStocks: Array<{
+    symbol: string;
+    name: string;
+    percentage: number;
+  }>;
 }
 
 export type BrokerCredential = {

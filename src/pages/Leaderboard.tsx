@@ -78,36 +78,61 @@ const columns: ColumnConfig[] = [
     minWidth: 200,
     render: (value, row) => {
       return (
-        <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
-          <RouterLink
-            to={`/portfolio/${row.portfolioId}`}
-            className="hover:underline truncate block"
-          >
-            <Typography variant="subtitle2" fontWeight={600}>
-              {value}
-            </Typography>
-          </RouterLink>
-          {row.privacy === "PRIVATE" && (
-            <LockIcon sx={{ fontSize: "0.875rem", color: "text.secondary" }} />
-          )}
+        <Box sx={{ display: "flex", flexDirection: "column" }}>
+          <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+            <RouterLink
+              to={`/portfolio/${row.portfolioId}`}
+              className="hover:underline truncate block"
+            >
+              <Typography variant="subtitle2" fontWeight={600}>
+                {value}
+              </Typography>
+            </RouterLink>
+            {row.privacy === "PRIVATE" && (
+              <LockIcon
+                sx={{ fontSize: "0.875rem", color: "text.secondary" }}
+              />
+            )}
 
-          {row.privacy === "SHARE_SECTORS" && (
-            <CategoryIcon
-              sx={{ fontSize: "0.875rem", color: "text.secondary" }}
-            />
-          )}
+            {row.privacy === "SHARE_SECTORS" && (
+              <CategoryIcon
+                sx={{ fontSize: "0.875rem", color: "text.secondary" }}
+              />
+            )}
+          </Box>
+          {/* {row.userName !== "Anonymous User" && (
+            <Typography variant="caption" color="text.secondary">
+              by {row.userName}
+            </Typography>
+          )} */}
         </Box>
       );
     },
   },
   {
-    label: "Owner",
-    key: "userName",
-    render: (value) => (
-      <Typography variant="subtitle2" sx={{ color: "text.secondary" }}>
-        {value}
-      </Typography>
-    ),
+    label: "Top Stocks",
+    key: "topStocks",
+    minWidth: 200,
+    render: (_, row) => {
+      if (!row.topStocks || row.topStocks.length === 0) {
+        return (
+          <Typography variant="caption" color="text.secondary">
+            -
+          </Typography>
+        );
+      }
+      return (
+        <Typography variant="caption" color="text.secondary">
+          {row.topStocks
+            .slice(0, 3)
+            .map(
+              (stock: { symbol: string; name: string; percentage: number }) =>
+                stock.symbol
+            )
+            .join(", ")}
+        </Typography>
+      );
+    },
   },
   {
     label: "1 Day",
