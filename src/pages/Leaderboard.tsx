@@ -114,6 +114,13 @@ const columns: ColumnConfig[] = [
     key: "topStocks",
     minWidth: 200,
     render: (_, row) => {
+      if (row.privacy !== "SHARE_ALL") {
+        return (
+          <Typography variant="caption" color="text.secondary">
+            -
+          </Typography>
+        );
+      }
       if (!row.topStocks || row.topStocks.length === 0) {
         return (
           <Typography variant="caption" color="text.secondary">
