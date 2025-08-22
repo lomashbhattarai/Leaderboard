@@ -25,6 +25,7 @@ import { Search as SearchIcon } from "@mui/icons-material";
 import RankedPositionCard from "../components/RankedPositionCard";
 import type { LeaderboardEntry } from "../types/api";
 import WatchListTable from "../components/WatchListTable";
+import LeaderboardIcon from "@mui/icons-material/Leaderboard";
 
 export const formatPerformance = (value: number | string) => {
   if (!value && value !== 0) {
@@ -353,13 +354,12 @@ const Leaderboard: React.FC<{ rowLimit?: number; isCompact?: boolean }> = ({
         sx={{ paddingLeft: { xs: 2, sm: 0 }, marginTop: 4 }}
       >
         <Box>
-          <Typography
-            variant="body1"
-            component="h1"
-            sx={{ fontWeight: "bold", mb: 0.5 }}
-          >
-            NEPSE Leaderboard
-          </Typography>
+          <Box sx={{ display: "flex", alignItems: "center", gap: 1, mb: 0.5 }}>
+            <LeaderboardIcon fontSize="small" />
+            <Typography variant="body1" component="h1" sx={{ fontWeight: "bold" }}>
+              NEPSE Leaderboard
+            </Typography>
+          </Box>
           <Typography variant="body2" color="text.secondary">
             Track and compare top-performing portfolios
           </Typography>
