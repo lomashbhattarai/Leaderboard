@@ -16,6 +16,7 @@ import {
   Close as CloseIcon,
   Edit as EditIcon,
   Delete as DeleteIcon,
+  MenuBook as MenuBookIcon,
 } from "@mui/icons-material";
 import { useTheme } from "../contexts/ThemeContext";
 import JournalForm from "../components/JournalForm";
@@ -127,7 +128,8 @@ const Journals: React.FC = () => {
       <div className="min-h-screen py-12">
         <div className="max-w-3xl mx-auto">
           <header className="text-center mb-12">
-            <h1 className="text-4xl font-serif font-medium text-gray-900 mb-2">
+            <h1 className="text-4xl font-serif font-medium text-gray-900 mb-2 flex items-center justify-center">
+              <MenuBookIcon className="mr-2" fontSize="inherit" />
               Trading Journal
             </h1>
             <p className="text-lg text-gray-600 font-light">
