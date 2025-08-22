@@ -24,9 +24,14 @@ jobs:
 
       - name: Install deps
         run: npm ci
+        env:
+          PUBLIC_URL: /pr-preview/pr-${{ github.event.number }}/
 
       - name: Build (don’t fail on warnings)
         run: CI=false npm run build
+      # Add SPA fallback so GH Pages serves index for unknown routes
+      - name: Add SPA fallback
+        run: cp build/index.html build/404.html
 
       # Publish a preview under /pr-preview/pr-<number>/ in the external repo
       - name: Deploy PR preview to Pages repo
