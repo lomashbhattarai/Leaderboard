@@ -36,7 +36,7 @@ jobs:
         run: npm ci
 
       - name: Build
-        run: npm run build
+        run: CI=false npm run build
 
       - name: Publish to external gh-pages repo
         uses: peaceiris/actions-gh-pages@v4
