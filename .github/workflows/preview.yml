@@ -1,0 +1,39 @@
+name: PR Preview (GitHub Pages)
+
+on:
+  pull_request:
+    types: [opened, reopened, synchronize, closed]
+
+permissions:
+  contents: read
+  pull-requests: write # to post the preview link comment
+
+jobs:
+  preview:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: "npm"
+
+      - name: Install deps
+        run: npm ci
+
+      - name: Build (don’t fail on warnings)
+        run: CI=false npm run build
+
+      # Publish a preview under /pr-preview/pr-<number>/ in the external repo
+      - name: Deploy PR preview to Pages repo
+        uses: rossjrw/pr-preview-action@v1
+        with:
+          source-dir: ./build
+          deploy-repository: lomashbhattarai/nepseleader-public
+          preview-branch: main
+          umbrella-dir: pr-preview
+          token: ${{ secrets.PERSONAL_TOKEN }}
