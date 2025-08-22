@@ -1,0 +1,52 @@
+name: Deploy FE to external Pages repo
+
+on:
+  pull_request:
+    types: [closed] # fires when PR is closed
+  # Optional: also deploy on direct push to main (uncomment if desired)
+  push:
+    branches: [main]
+
+jobs:
+  deploy:
+    # Only run when the PR was merged into main
+    if: >
+      github.event_name == 'push' ||
+      (github.event_name == 'pull_request' &&
+       github.event.pull_request.merged == true &&
+       github.event.pull_request.base.ref == 'main')
+    runs-on: ubuntu-latest
+    concurrency:
+      group: deploy-pages
+      cancel-in-progress: true
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: "npm"
+
+      - name: Install deps
+        run: npm ci
+
+      - name: Build
+        run: npm run build
+
+      - name: Publish to external gh-pages repo
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          personal_token: ${{ secrets.PERSONAL_TOKEN }}
+          external_repository: lomashbhattarai/nepseleader-public
+          publish_branch: main
+          publish_dir: ./build
+          # Optional niceties:
+          commit_message: "Deploy from ${GITHUB_REPOSITORY}@${GITHUB_SHA}"
+          # cname: example.com         # if you use a custom domain
+          # keep_files: false          # default false; set true if you want to retain files not in ./build
+          # allow_empty_commit: false  # default false
