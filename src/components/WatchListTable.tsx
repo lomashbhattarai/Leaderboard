@@ -97,8 +97,8 @@ const WatchListTable: React.FC = () => {
     <Box sx={{ mt: 4, mb: 4 }}>
       <Box sx={{ mb: 2 }}>
         <Box sx={{ display: "flex", alignItems: "center", gap: 1, mb: 0.5 }}>
-          <VisibilityIcon fontSize="small" />
-          <Typography variant="body1" component="h1" sx={{ fontWeight: "bold" }}>
+          <VisibilityIcon fontSize="small" aria-hidden />
+          <Typography variant="body1" component="h2" sx={{ fontWeight: "bold" }}>
             Your Watch List
           </Typography>
         </Box>
