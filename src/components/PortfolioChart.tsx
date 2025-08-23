@@ -94,6 +94,31 @@ const PortfolioChart: React.FC<Props> = ({ portfolioStocksFromDb }) => {
         }}
       >
         <ResponsiveContainer width="100%" height={chartDimensions.height}>
+          <BarChart
+            data={barChartData}
+            margin={{ top: 20, right: 30, left: 0, bottom: 5 }}
+          >
+            <CartesianGrid strokeDasharray="3 3" />
+            <XAxis dataKey="name" />
+            <YAxis />
+            <Tooltip formatter={(value: number) => formatAmount(value)} />
+            <Legend />
+            <Bar dataKey="totalCost" fill="#8884d8" name="Total Cost" />
+            <Bar dataKey="currentValue" fill="#82ca9d" name="Current Value" />
+          </BarChart>
+        </ResponsiveContainer>
+      </div>
+
+      <div
+        className="chart-container"
+        style={{
+          width: "100%",
+          height: chartDimensions.height,
+          marginTop: 32,
+          fontSize: chartDimensions.fontSize,
+        }}
+      >
+        <ResponsiveContainer width="100%" height={chartDimensions.height}>
           <PieChart>
             <Pie
               data={chartData}
@@ -118,31 +143,6 @@ const PortfolioChart: React.FC<Props> = ({ portfolioStocksFromDb }) => {
             </Pie>
             <Tooltip formatter={(value: number) => formatAmount(value)} />
           </PieChart>
-        </ResponsiveContainer>
-      </div>
-
-      <div
-        className="chart-container"
-        style={{
-          width: "100%",
-          height: chartDimensions.height,
-          marginTop: 32,
-          fontSize: chartDimensions.fontSize,
-        }}
-      >
-        <ResponsiveContainer width="100%" height={chartDimensions.height}>
-          <BarChart
-            data={barChartData}
-            margin={{ top: 20, right: 30, left: 0, bottom: 5 }}
-          >
-            <CartesianGrid strokeDasharray="3 3" />
-            <XAxis dataKey="name" />
-            <YAxis />
-            <Tooltip formatter={(value: number) => formatAmount(value)} />
-            <Legend />
-            <Bar dataKey="totalCost" fill="#8884d8" name="Total Cost" />
-            <Bar dataKey="currentValue" fill="#82ca9d" name="Current Value" />
-          </BarChart>
         </ResponsiveContainer>
       </div>
     </div>
