@@ -52,95 +52,87 @@ const LeaderboardCard: React.FC<LeaderboardCardProps> = ({
   return (
     <Box
       onClick={() => navigate(`/portfolio/${row.portfolioId}`)}
-      sx={{
-        cursor: "pointer",
-        borderRadius: 0,
-        paddingLeft: 2,
-        paddingRight: 2,
-        paddingTop: 1,
-        paddingBottom: 1,
-      }}
+      sx={{ cursor: "pointer" }}
     >
-      <Stack spacing={0}>
-        <Stack direction="row" spacing={2} alignItems="center" sx={{ mb: 1 }}>
-          {
+      <Stack spacing={1}>
+        <Stack direction="row" spacing={1.5} alignItems="center">
+          {index === 0 ? (
+            <EmojiEventsIcon
+              sx={{
+                color: "#FFD700",
+                animation: "bounce 2s infinite",
+                "@keyframes bounce": {
+                  "0%, 100%": { transform: "translateY(0)" },
+                  "50%": { transform: "translateY(-3px)" },
+                },
+              }}
+            />
+          ) : (
             <Box
               sx={{
-                display: "flex",
-                alignItems: "center",
+                px: 1,
+                py: 0.25,
+                borderRadius: 1,
+                backgroundColor: currentTheme.accent.primary,
+                color: "white",
+                fontSize: "0.75rem",
+                fontWeight: 600,
+                minWidth: 28,
+                textAlign: "center",
               }}
             >
-              {index === 0 ? (
-                <EmojiEventsIcon
-                  sx={{
-                    color: "#FFD700",
-                    animation: "bounce 2s infinite",
-                    "@keyframes bounce": {
-                      "0%, 100%": { transform: "translateY(0)" },
-                      "50%": { transform: "translateY(-3px)" },
-                    },
-                  }}
-                />
-              ) : (
-                <Typography
-                  variant="h6"
-                  sx={{ color: currentTheme.accent.secondary }}
-                >
-                  {index + 1 + (index === 1 ? "nd" : index === 2 ? "rd" : "th")}{" "}
-                  •
-                </Typography>
-              )}
+              #{index + 1}
             </Box>
-          }
-          <Typography variant="h6" component="div">
-            <Stack direction="row" spacing={1} alignItems="center">
-              <Typography>{row.portfolioName}</Typography>
-              {renderPrivacyIcon()}
-              {row.userName !== "Anonymous User" && (
-                <Stack direction="row" justifyContent="space-between">
-                  <Typography variant="body2" sx={{ color: "text.secondary" }}>
-                    by {row.userName}
-                  </Typography>
-                </Stack>
-              )}
-            </Stack>
-          </Typography>
-        </Stack>
-
-        <Stack spacing={2}>
-          <Stack direction="row" justifyContent="space-between">
-            <Box>
-              <Typography variant="body2">
-                {formatPerformance(row.performance1D)}
-              </Typography>
-              <Typography variant="body2">1 Day</Typography>
-            </Box>
-            <Box>
-              <Typography variant="body2">
-                {formatPerformance(row.performance1W)}
-              </Typography>
-              <Typography variant="body2">1 Week</Typography>
-            </Box>
-            <Box>
-              <Typography variant="body2">
-                {formatPerformance(row.performance1M)}
-              </Typography>
-              <Typography variant="body2">1 Month</Typography>
-            </Box>
-          </Stack>
-
-          {!showLimitedInfo && (
-            <Stack direction="row" justifyContent="space-between">
-              <Typography variant="body2">
-                {row.updatedAt
-                  ? `Last updated ${formatDistanceToNow(
-                      new Date(row.updatedAt)
-                    )} ago`
-                  : ""}
-              </Typography>
-            </Stack>
           )}
+          <Box sx={{ flex: 1, minWidth: 0 }}>
+            <Typography variant="subtitle1" fontWeight={600} noWrap>
+              {row.portfolioName}
+            </Typography>
+            {row.userName !== "Anonymous User" && (
+              <Typography variant="caption" color="text.secondary" noWrap>
+                by {row.userName}
+              </Typography>
+            )}
+          </Box>
+          {renderPrivacyIcon()}
         </Stack>
+
+        <Stack direction="row" justifyContent="space-between" textAlign="center">
+          <Box>
+            <Typography variant="body2" fontWeight={500}>
+              {formatPerformance(row.performance1D)}
+            </Typography>
+            <Typography variant="caption" color="text.secondary">
+              1 Day
+            </Typography>
+          </Box>
+          <Box>
+            <Typography variant="body2" fontWeight={500}>
+              {formatPerformance(row.performance1W)}
+            </Typography>
+            <Typography variant="caption" color="text.secondary">
+              1 Week
+            </Typography>
+          </Box>
+          <Box>
+            <Typography variant="body2" fontWeight={500}>
+              {formatPerformance(row.performance1M)}
+            </Typography>
+            <Typography variant="caption" color="text.secondary">
+              1 Month
+            </Typography>
+          </Box>
+        </Stack>
+
+        {!showLimitedInfo && (
+          <Typography variant="caption" color="text.secondary">
+            {row.updatedAt
+              ? `Last updated ${formatDistanceToNow(
+                  new Date(row.updatedAt)
+                )} ago`
+              : ""}
+          </Typography>
+        )}
       </Stack>
     </Box>
   );

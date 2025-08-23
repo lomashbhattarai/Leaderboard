@@ -118,17 +118,18 @@ const TableView = ({
   };
 
   const renderCardView = () => (
-    <Stack spacing={isCompact ? 0 : 1}>
+    <Stack spacing={1}>
       {tableData.map((row, rowIndex) => (
         <Card
           key={row.id || rowIndex}
           sx={{
             backgroundColor: currentTheme.background.secondary,
-            borderRadius: 0,
-            borderBottom: "0.5px solid #e0e0e0",
+            borderRadius: 2,
+            border: "1px solid rgba(0,0,0,0.06)",
+            boxShadow: "0 1px 2px rgba(0,0,0,0.08)",
           }}
         >
-          <CardContent sx={{ p: isCompact ? 1 : 2 }}>
+          <CardContent sx={{ px: 2, py: isCompact ? 1 : 2 }}>
             {customCardComponent ? (
               customCardComponent(row, rowIndex)
             ) : (
