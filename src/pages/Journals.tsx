@@ -7,6 +7,7 @@ import {
   Button,
   Drawer,
   IconButton,
+  Fab,
   Card,
   CardContent,
   Chip,
@@ -35,6 +36,7 @@ const Journals: React.FC = () => {
   const [selectedJournal, setSelectedJournal] = React.useState<Journal | null>(
     null
   );
+  const [expandedId, setExpandedId] = React.useState<number | null>(null);
 
   const { data: journals = [] } = useJournals();
   const createJournal = useCreateJournal();
@@ -127,76 +129,74 @@ const Journals: React.FC = () => {
       </Drawer>
       <div className="min-h-screen py-12">
         <div className="max-w-3xl mx-auto">
-          <header className="text-center mb-12">
-            <h1 className="text-4xl font-serif font-medium text-gray-900 mb-2 flex items-center justify-center">
+          <header className="text-center mb-6">
+            <h1 className="text-2xl font-serif font-medium text-gray-900 mb-2 flex items-center justify-center">
               <MenuBookIcon className="mr-2" fontSize="inherit" />
               Trading Journal
             </h1>
-            <p className="text-lg text-gray-600 font-light">
+            <p className="text-sm text-gray-600 font-light">
               Your reflections and insights on the market
             </p>
           </header>
-          <Button
-            variant="contained"
-            startIcon={<AddIcon />}
-            onClick={() => setIsDrawerOpen(true)}
-            sx={{
-              backgroundColor: currentTheme.accent.primary,
-              "&:hover": {
-                backgroundColor: currentTheme.accent.secondary,
-              },
-              marginBottom: "1rem",
-            }}
-          >
-            Add Journal
-          </Button>
-
-          <div className="space-y-6">
+          <div className="space-y-4">
             {journals.map((journal) => (
               <Card
                 key={journal.id}
-                className="overflow-hidden border-0 shadow-sm hover:shadow-md transition-shadow duration-300"
+                className="overflow-hidden border border-gray-200 shadow-sm hover:shadow-md transition-shadow duration-300"
                 sx={{
                   borderRadius: "0.75rem",
                   backgroundColor: "#fcfcfc",
                 }}
               >
-                <CardContent className="p-6">
-                  <div className="flex justify-between items-start mb-4">
+                <CardContent className="p-3">
+                  <div className="flex justify-between items-start mb-2">
                     <Typography
-                      variant="subtitle1"
-                      className="font-serif text-gray-500"
-                      sx={{ fontStyle: "italic" }}
+                      variant="subtitle2"
+                      className="text-lg font-semibold text-gray-800"
                     >
-                      {/* {formatDistanceToNow(new Date(journal.date))} */}
-                      {/* date */}
+                      {journal.title || "Untitled"}
                     </Typography>
 
-                    <Chip
-                      label={"STOCK"}
-                      size="small"
-                      sx={{
-                        backgroundColor: "#f0f7ff",
-                        color: "#3b82f6",
-                        fontWeight: 600,
-                        fontSize: "0.75rem",
-                        height: "1.5rem",
-                      }}
-                    />
+                    {journal.tags && (
+                      <Chip
+                        label={journal.tags}
+                        size="small"
+                        sx={{
+                          backgroundColor: "#e0f2ff",
+                          color: "#0369a1",
+                          fontWeight: 600,
+                          fontSize: "0.625rem",
+                          height: "1rem",
+                          borderRadius: "9999px",
+                        }}
+                      />
+                    )}
                   </div>
 
                   <Typography
-                    variant="body1"
-                    className="font-serif text-gray-800 leading-relaxed mb-4"
-                    sx={{
-                      fontSize: "1.05rem",
-                      lineHeight: 1.7,
-                    }}
+                    variant="body2"
+                    className="text-sm text-gray-700 leading-relaxed mb-2 max-w-prose"
                   >
-                    {journal.content}
+                    {expandedId === journal.id
+                      ? journal.content
+                      : journal.content.length > 200
+                      ? `${journal.content.slice(0, 200)}...`
+                      : journal.content}
                   </Typography>
+                  {journal.content.length > 200 && (
+                    <Button
+                      size="small"
+                      onClick={() =>
+                        setExpandedId(
+                          expandedId === journal.id ? null : journal.id
+                        )
+                      }
+                    >
+                      {expandedId === journal.id ? "Show Less" : "Read More"}
+                    </Button>
+                  )}
 
-                  <div className="flex justify-end space-x-1">
+                  <div className="flex justify-end space-x-1 mt-2">
                     <IconButton
                       size="small"
                       onClick={() => handleEdit(journal)}
@@ -226,6 +226,20 @@ const Journals: React.FC = () => {
           )}
         </div>
       </div>
+      <Fab
+        color="primary"
+        aria-label="add"
+        onClick={() => setIsDrawerOpen(true)}
+        sx={{
+          position: "fixed",
+          bottom: 16,
+          right: 16,
+          backgroundColor: currentTheme.accent.primary,
+          "&:hover": { backgroundColor: currentTheme.accent.secondary },
+        }}
+      >
+        <AddIcon />
+      </Fab>
     </>
   );
 };
