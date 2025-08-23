@@ -95,7 +95,7 @@ const WatchListTable: React.FC = () => {
 
   return (
     <Box sx={{ mt: 4, mb: 4 }}>
-      <Box sx={{ mb: 2 }}>
+      <Box sx={{ mb: 2, paddingLeft: { xs: 2, sm: 0 } }}>
         <Box sx={{ display: "flex", alignItems: "center", gap: 1, mb: 0.5 }}>
           <VisibilityIcon fontSize="small" aria-hidden />
           <Typography variant="body1" component="h2" sx={{ fontWeight: "bold" }}>
