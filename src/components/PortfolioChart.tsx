@@ -6,6 +6,11 @@ import {
   ResponsiveContainer,
   Tooltip,
   Legend,
+  BarChart,
+  Bar,
+  XAxis,
+  YAxis,
+  CartesianGrid,
 } from "recharts";
 import { formatAmount } from "../utils/helper";
 import { PortfolioStock } from "../types/api";
@@ -29,6 +34,13 @@ const PortfolioChart: React.FC<Props> = ({ portfolioStocksFromDb }) => {
   const chartData = portfolioStocksFromDb.map((item) => ({
     name: item.stock?.symbol,
     value: item.quantity * (item.latestClosingPrice || 1),
+  }));
+
+  // Data for the bar chart showing total cost vs current value
+  const barChartData = portfolioStocksFromDb.map((item) => ({
+    name: item.stock?.symbol,
+    totalCost: (item.buyPrice || 0) * item.quantity,
+    currentValue: (item.latestClosingPrice || 0) * item.quantity,
   }));
 
   // Get the window width to determine chart dimensions
@@ -80,7 +92,7 @@ const PortfolioChart: React.FC<Props> = ({ portfolioStocksFromDb }) => {
           height: chartDimensions.height,
           fontSize: chartDimensions.fontSize,
         }}
-      > 
+      >
         <ResponsiveContainer width="100%" height={chartDimensions.height}>
           <PieChart>
             <Pie
@@ -92,7 +104,6 @@ const PortfolioChart: React.FC<Props> = ({ portfolioStocksFromDb }) => {
                 `${name} (${(percent * 100).toFixed(1)}%)`
               }
               outerRadius={chartDimensions.outerRadius}
-              // innerRadius={60}
               fill="#8884d8"
               nameKey="name"
               dataKey="value"
@@ -106,8 +117,32 @@ const PortfolioChart: React.FC<Props> = ({ portfolioStocksFromDb }) => {
               ))}
             </Pie>
             <Tooltip formatter={(value: number) => formatAmount(value)} />
-            {/* <Legend verticalAlign="bottom" height={36} /> */}
           </PieChart>
+        </ResponsiveContainer>
+      </div>
+
+      <div
+        className="chart-container"
+        style={{
+          width: "100%",
+          height: chartDimensions.height,
+          marginTop: 32,
+          fontSize: chartDimensions.fontSize,
+        }}
+      >
+        <ResponsiveContainer width="100%" height={chartDimensions.height}>
+          <BarChart
+            data={barChartData}
+            margin={{ top: 20, right: 30, left: 0, bottom: 5 }}
+          >
+            <CartesianGrid strokeDasharray="3 3" />
+            <XAxis dataKey="name" />
+            <YAxis />
+            <Tooltip formatter={(value: number) => formatAmount(value)} />
+            <Legend />
+            <Bar dataKey="totalCost" fill="#8884d8" name="Total Cost" />
+            <Bar dataKey="currentValue" fill="#82ca9d" name="Current Value" />
+          </BarChart>
         </ResponsiveContainer>
       </div>
     </div>
