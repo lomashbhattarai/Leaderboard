@@ -8,6 +8,7 @@ import { showToast } from "../utils/toast";
 import TableView from "./common/TableView";
 import { ColumnConfig } from "./common/TableView";
 import StockLink from "./common/StockLink";
+import WatchListCard from "./WatchListCard";
 
 const WatchListTable: React.FC = () => {
   const { watchList, isLoading, removeFromWatchList } = useWatchListContext();
@@ -118,7 +119,14 @@ const WatchListTable: React.FC = () => {
           Your watch list is empty. Add stocks to track them here!
         </Typography>
       ) : (
-        <TableView columns={columns} tableData={watchList} isCompact />
+        <TableView
+          columns={columns}
+          tableData={watchList}
+          isCompact
+          customCardComponent={(row) => (
+            <WatchListCard row={row} onRemove={handleRemoveFromWatchList} />
+          )}
+        />
       )}
     </Box>
   );
