@@ -1,142 +1,35 @@
 import React from "react";
-import { Link, useParams } from "react-router-dom";
-import {
-  PieChart,
-  Pie,
-  Cell,
-  Tooltip as RechartTooltip,
-  Legend,
-  ResponsiveContainer,
-} from "recharts";
+import { useParams } from "react-router-dom";
 import { usePublicPortfolio } from "../api/queries/usePortfolios";
-import TableView, { ColumnConfig } from "../components/common/TableView";
-import { Link as RouterLink } from "react-router-dom";
-import { formatPerformance } from "./Leaderboard";
-import Tooltip from "../components/common/Tooltip";
-import { format } from "date-fns";
-import { Stack, Box, Tooltip as MuiTooltip, Typography } from "@mui/material";
+import {
+  Avatar,
+  Box,
+  Stack,
+  Tooltip as MuiTooltip,
+  Typography,
+} from "@mui/material";
+import { alpha } from "@mui/material/styles";
 import LockIcon from "@mui/icons-material/Lock";
 import PublicIcon from "@mui/icons-material/Public";
 import CategoryIcon from "@mui/icons-material/Category";
 import { PortfolioPrivacy } from "../types/api";
-import StockSymbolLink from "../components/common/StockSymbolLink";
 import { useTheme } from "../contexts/ThemeContext";
 
 const SharedPortfolio: React.FC = () => {
   const { currentTheme } = useTheme();
   const { id } = useParams<{ id: string }>();
 
-  const {
-    data: publicPortfolio,
-    isLoading,
-    error,
-  } = usePublicPortfolio(Number(id));
+  const { data: publicPortfolio, isLoading, error } = usePublicPortfolio(
+    Number(id)
+  );
 
-  const columns: ColumnConfig[] = [
-    {
-      label: "Symbol",
-      key: "symbol",
-      render: (value) => <StockSymbolLink symbol={value} />,
-    },
-    {
-      label: "Closing Price",
-      key: "latestPrice",
-      align: "right",
-      render: (value) => `${value}`,
-    },
-    {
-      label: "1D",
-      key: "dailyPerformancePercentage",
-      align: "right",
-      render: (value, row) => {
-        const { latestPrice, latestDate, dayAgoPrice, dayAgoDate } = row;
-        return (
-          <PriceChangeTooltip
-            previousPrice={dayAgoPrice}
-            previousDate={dayAgoDate}
-            latestPrice={latestPrice}
-            latestDate={latestDate}
-            value={value}
-          />
-        );
-      },
-    },
-    {
-      label: "1W",
-      key: "weeklyPerformancePercentage",
-      align: "right",
-      render: (value, row) => {
-        const { weekAgoPrice, latestPrice, weekAgoDate, latestDate } = row;
-        return (
-          <PriceChangeTooltip
-            previousPrice={weekAgoPrice}
-            previousDate={weekAgoDate}
-            latestPrice={latestPrice}
-            latestDate={latestDate}
-            value={value}
-          />
-        );
-      },
-    },
-    {
-      label: "1M",
-      key: "monthlyPerformancePercentage",
-      align: "right",
-      render: (value, row) => {
-        const { monthAgoPrice, latestPrice, monthAgoDate, latestDate } = row;
-        return (
-          <PriceChangeTooltip
-            previousPrice={monthAgoPrice}
-            previousDate={monthAgoDate}
-            latestPrice={latestPrice}
-            latestDate={latestDate}
-            value={value}
-          />
-        );
-      },
-    },
-    {
-      label: "Allocation (%)",
-      key: "percentage",
-      align: "right",
-      render: (value) => `${value.toFixed(2)}%`,
-    },
-  ];
-
-  // Add chart dimensions state
-  const [chartDimensions, setChartDimensions] = React.useState({
-    height: 350,
-    outerRadius: 100,
-    fontSize: "10px",
-  });
-
-  React.useEffect(() => {
-    const handleResize = () => {
-      const width = window.innerWidth;
-      if (width < 768) {
-        setChartDimensions({
-          height: 300,
-          outerRadius: 100,
-          fontSize: "10px",
-        });
-      } else {
-        setChartDimensions({
-          height: 400,
-          outerRadius: 130,
-          fontSize: "12px",
-        });
-      }
-    };
-
-    // Set initial dimensions
-    handleResize();
-
-    // Add event listener
-    window.addEventListener("resize", handleResize);
-
-    // Cleanup
-    return () => window.removeEventListener("resize", handleResize);
-  }, []);
+  const sortedStocks = React.useMemo(
+    () =>
+      [...(publicPortfolio?.portfolioStocks || [])].sort(
+        (a, b) => b.percentage - a.percentage
+      ),
+    [publicPortfolio?.portfolioStocks]
+  );
 
   if (isLoading) return <div>Loading...</div>;
   if (error) return <div>Error loading portfolio</div>;
@@ -160,119 +53,80 @@ const SharedPortfolio: React.FC = () => {
       </Box>
 
       {publicPortfolio.privacy === PortfolioPrivacy.PRIVATE ? (
-        <div style={{ color: currentTheme.text.primary }}>
-          Private Portfolio
-        </div>
+        <div style={{ color: currentTheme.text.primary }}>Private Portfolio</div>
       ) : (
-        <Stack
-          direction={{ xs: "column", md: "row" }}
-          spacing={4}
-          sx={{ width: "100%" }}
-        >
+        <Box>
           <Box
             sx={{
-              flex: "0 0 60%",
-              order: { xs: 2, md: 1 },
+              display: "flex",
+              justifyContent: "space-between",
+              mb: 1,
+              color: currentTheme.text.secondary,
             }}
           >
-            <TableView
-              columns={columns}
-              tableData={publicPortfolio.portfolioStocks || []}
-              isCompact
-            />
+            <Typography variant="body2">Stock</Typography>
+            <Typography variant="body2">Weight</Typography>
           </Box>
-
-          <Box
-            sx={{
-              flex: "0 0 40%",
-              order: { xs: 1, md: 2 },
-              fontSize: chartDimensions.fontSize,
-            }}
-          >
-            <ResponsiveContainer width="100%" height={chartDimensions.height}>
-              <PieChart>
-                <Pie
-                  data={publicPortfolio.portfolioStocks}
-                  dataKey="percentage"
-                  nameKey="symbol"
-                  cx="50%"
-                  cy="50%"
-                  outerRadius={chartDimensions.outerRadius}
-                  fill={currentTheme.accent.primary}
-                  label={({ symbol, percent }) =>
-                    `${symbol} ${(percent * 100).toFixed(0)}%`
-                  }
+          <Stack spacing={1}>
+            {sortedStocks.map((stock) => (
+              <Box
+                key={stock.symbol}
+                sx={{
+                  position: "relative",
+                  display: "flex",
+                  alignItems: "center",
+                  p: 1.5,
+                  borderRadius: 4,
+                  backgroundColor: currentTheme.background.secondary,
+                  overflow: "hidden",
+                }}
+              >
+                <Box
+                  sx={{
+                    position: "absolute",
+                    top: 0,
+                    left: 0,
+                    bottom: 0,
+                    width: `${stock.percentage}%`,
+                    backgroundColor: alpha(
+                      currentTheme.accent.primary,
+                      currentTheme.name === "Dark Theme" ? 0.4 : 0.2
+                    ),
+                  }}
+                />
+                <Avatar
+                  sx={{
+                    bgcolor: currentTheme.accent.primary,
+                    mr: 2,
+                    zIndex: 1,
+                  }}
                 >
-                  {publicPortfolio.portfolioStocks?.map((entry, index) => (
-                    <Cell
-                      key={`cell-${index}`}
-                      fill={COLORS[index % COLORS.length]}
-                    />
-                  ))}
-                </Pie>
-                <RechartTooltip />
-              </PieChart>
-            </ResponsiveContainer>
-          </Box>
-        </Stack>
+                  {stock.name.charAt(0)}
+                </Avatar>
+                <Typography
+                  sx={{ color: currentTheme.text.primary, zIndex: 1 }}
+                >
+                  {stock.name}
+                </Typography>
+                <Typography
+                  sx={{
+                    ml: "auto",
+                    color: currentTheme.text.primary,
+                    zIndex: 1,
+                  }}
+                >
+                  {stock.percentage.toFixed(2)}%
+                </Typography>
+              </Box>
+            ))}
+          </Stack>
+        </Box>
       )}
     </div>
   );
 };
 
-const COLORS = [
-  "#0088FE",
-  "#00C49F",
-  "#FFBB28",
-  "#FF8042",
-  "#8884D8",
-  "#82CA9D",
-  "#FFC658",
-  "#FF6B6B",
-  "#4ECDC4",
-  "#45B7D1",
-];
-
 export default SharedPortfolio;
-
-const PriceChangeTooltip = ({
-  previousPrice,
-  previousDate,
-  latestPrice,
-  latestDate,
-  value,
-}: {
-  previousPrice: number;
-  previousDate: string;
-  latestPrice: number;
-  latestDate: string;
-  value: number;
-}) => {
-  const { currentTheme } = useTheme();
-  const formattedValue = formatPerformance(value);
-
-  return (
-    <Tooltip
-      content={
-        <>
-          <div style={{ color: currentTheme.text.primary }}>
-            {previousDate
-              ? `${format(new Date(previousDate), "do MMMM")}: ${previousPrice}`
-              : "No historical data"}
-          </div>
-          <div style={{ color: currentTheme.text.primary }}>
-            {latestDate
-              ? `${format(new Date(latestDate), "do MMMM")}: ${latestPrice}`
-              : "No historical data"}
-          </div>
-        </>
-      }
-      position="top"
-    >
-      {formattedValue}
-    </Tooltip>
-  );
-};
 
 const getPrivacyInfo = (privacy: string) => {
   switch (privacy) {
@@ -286,3 +140,4 @@ const getPrivacyInfo = (privacy: string) => {
       return { icon: <PublicIcon />, text: "Public Portfolio" };
   }
 };
+
