@@ -1,109 +1,43 @@
 import React from "react";
-import { Link, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
+import { usePublicPortfolio } from "../api/queries/usePortfolios";
+import {
+  Avatar,
+  Box,
+  Stack,
+  Tooltip as MuiTooltip,
+  Typography,
+} from "@mui/material";
+import { alpha } from "@mui/material/styles";
+import LockIcon from "@mui/icons-material/Lock";
+import PublicIcon from "@mui/icons-material/Public";
+import CategoryIcon from "@mui/icons-material/Category";
+import { PortfolioPrivacy } from "../types/api";
+import { useTheme } from "../contexts/ThemeContext";
 import {
   PieChart,
   Pie,
   Cell,
   Tooltip as RechartTooltip,
-  Legend,
   ResponsiveContainer,
 } from "recharts";
-import { usePublicPortfolio } from "../api/queries/usePortfolios";
-import TableView, { ColumnConfig } from "../components/common/TableView";
-import { Link as RouterLink } from "react-router-dom";
-import { formatPerformance } from "./Leaderboard";
-import Tooltip from "../components/common/Tooltip";
-import { format } from "date-fns";
-import { Stack, Box, Tooltip as MuiTooltip, Typography } from "@mui/material";
-import LockIcon from "@mui/icons-material/Lock";
-import PublicIcon from "@mui/icons-material/Public";
-import CategoryIcon from "@mui/icons-material/Category";
-import { PortfolioPrivacy } from "../types/api";
-import StockSymbolLink from "../components/common/StockSymbolLink";
-import { useTheme } from "../contexts/ThemeContext";
 
 const SharedPortfolio: React.FC = () => {
   const { currentTheme } = useTheme();
   const { id } = useParams<{ id: string }>();
 
-  const {
-    data: publicPortfolio,
-    isLoading,
-    error,
-  } = usePublicPortfolio(Number(id));
+  const { data: publicPortfolio, isLoading, error } = usePublicPortfolio(
+    Number(id)
+  );
 
-  const columns: ColumnConfig[] = [
-    {
-      label: "Symbol",
-      key: "symbol",
-      render: (value) => <StockSymbolLink symbol={value} />,
-    },
-    {
-      label: "Closing Price",
-      key: "latestPrice",
-      align: "right",
-      render: (value) => `${value}`,
-    },
-    {
-      label: "1D",
-      key: "dailyPerformancePercentage",
-      align: "right",
-      render: (value, row) => {
-        const { latestPrice, latestDate, dayAgoPrice, dayAgoDate } = row;
-        return (
-          <PriceChangeTooltip
-            previousPrice={dayAgoPrice}
-            previousDate={dayAgoDate}
-            latestPrice={latestPrice}
-            latestDate={latestDate}
-            value={value}
-          />
-        );
-      },
-    },
-    {
-      label: "1W",
-      key: "weeklyPerformancePercentage",
-      align: "right",
-      render: (value, row) => {
-        const { weekAgoPrice, latestPrice, weekAgoDate, latestDate } = row;
-        return (
-          <PriceChangeTooltip
-            previousPrice={weekAgoPrice}
-            previousDate={weekAgoDate}
-            latestPrice={latestPrice}
-            latestDate={latestDate}
-            value={value}
-          />
-        );
-      },
-    },
-    {
-      label: "1M",
-      key: "monthlyPerformancePercentage",
-      align: "right",
-      render: (value, row) => {
-        const { monthAgoPrice, latestPrice, monthAgoDate, latestDate } = row;
-        return (
-          <PriceChangeTooltip
-            previousPrice={monthAgoPrice}
-            previousDate={monthAgoDate}
-            latestPrice={latestPrice}
-            latestDate={latestDate}
-            value={value}
-          />
-        );
-      },
-    },
-    {
-      label: "Allocation (%)",
-      key: "percentage",
-      align: "right",
-      render: (value) => `${value.toFixed(2)}%`,
-    },
-  ];
+  const sortedStocks = React.useMemo(
+    () =>
+      [...(publicPortfolio?.portfolioStocks || [])].sort(
+        (a, b) => b.percentage - a.percentage
+      ),
+    [publicPortfolio?.portfolioStocks]
+  );
 
-  // Add chart dimensions state
   const [chartDimensions, setChartDimensions] = React.useState({
     height: 350,
     outerRadius: 100,
@@ -128,13 +62,8 @@ const SharedPortfolio: React.FC = () => {
       }
     };
 
-    // Set initial dimensions
     handleResize();
-
-    // Add event listener
     window.addEventListener("resize", handleResize);
-
-    // Cleanup
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
@@ -160,36 +89,85 @@ const SharedPortfolio: React.FC = () => {
       </Box>
 
       {publicPortfolio.privacy === PortfolioPrivacy.PRIVATE ? (
-        <div style={{ color: currentTheme.text.primary }}>
-          Private Portfolio
-        </div>
+        <div style={{ color: currentTheme.text.primary }}>Private Portfolio</div>
       ) : (
-        <Stack
-          direction={{ xs: "column", md: "row" }}
-          spacing={4}
-          sx={{ width: "100%" }}
-        >
+        <Box>
           <Box
             sx={{
-              flex: "0 0 60%",
-              order: { xs: 2, md: 1 },
+              display: "flex",
+              justifyContent: "space-between",
+              mb: 1,
+              color: currentTheme.text.secondary,
             }}
           >
-            <TableView
-              columns={columns}
-              tableData={publicPortfolio.portfolioStocks || []}
-              isCompact
-            />
+            <Typography variant="body2">Stock</Typography>
+            <Typography variant="body2">Weight</Typography>
           </Box>
-
+          <Stack spacing={1}>
+            {sortedStocks.map((stock) => {
+              const displayName = stock.name || stock.symbol;
+              const initials = displayName?.charAt(0) || "";
+              return (
+                <Box
+                  key={stock.symbol}
+                  sx={{
+                    position: "relative",
+                    display: "flex",
+                    alignItems: "center",
+                    p: 1.5,
+                    borderRadius: 4,
+                    backgroundColor: currentTheme.background.secondary,
+                    overflow: "hidden",
+                  }}
+                >
+                  <Box
+                    sx={{
+                      position: "absolute",
+                      top: 0,
+                      left: 0,
+                      bottom: 0,
+                      width: `${stock.percentage}%`,
+                      backgroundColor: alpha(
+                        currentTheme.accent.primary,
+                        currentTheme.name === "Dark Theme" ? 0.4 : 0.2
+                      ),
+                    }}
+                  />
+                  <Avatar
+                    sx={{
+                      bgcolor: currentTheme.accent.primary,
+                      mr: 2,
+                      zIndex: 1,
+                    }}
+                  >
+                    {initials}
+                  </Avatar>
+                  <Typography
+                    sx={{ color: currentTheme.text.primary, zIndex: 1 }}
+                  >
+                    {displayName}
+                  </Typography>
+                  <Typography
+                    sx={{
+                      ml: "auto",
+                      color: currentTheme.text.primary,
+                      zIndex: 1,
+                    }}
+                  >
+                    {stock.percentage.toFixed(2)}%
+                  </Typography>
+                </Box>
+              );
+            })}
+          </Stack>
           <Box
             sx={{
-              flex: "0 0 40%",
-              order: { xs: 1, md: 2 },
+              mt: 4,
+              height: chartDimensions.height,
               fontSize: chartDimensions.fontSize,
             }}
           >
-            <ResponsiveContainer width="100%" height={chartDimensions.height}>
+            <ResponsiveContainer width="100%" height="100%">
               <PieChart>
                 <Pie
                   data={publicPortfolio.portfolioStocks}
@@ -214,10 +192,22 @@ const SharedPortfolio: React.FC = () => {
               </PieChart>
             </ResponsiveContainer>
           </Box>
-        </Stack>
+        </Box>
       )}
     </div>
   );
+};
+const getPrivacyInfo = (privacy: string) => {
+  switch (privacy) {
+    case "PRIVATE":
+      return { icon: <LockIcon />, text: "Private Portfolio" };
+    case "SHARE_ALL":
+      return { icon: <PublicIcon />, text: "Showing All Holdings" };
+    case "SHARE_SECTORS":
+      return { icon: <CategoryIcon />, text: "Showing Sector-wise Holdings" };
+    default:
+      return { icon: <PublicIcon />, text: "Public Portfolio" };
+  }
 };
 
 const COLORS = [
@@ -235,54 +225,3 @@ const COLORS = [
 
 export default SharedPortfolio;
 
-const PriceChangeTooltip = ({
-  previousPrice,
-  previousDate,
-  latestPrice,
-  latestDate,
-  value,
-}: {
-  previousPrice: number;
-  previousDate: string;
-  latestPrice: number;
-  latestDate: string;
-  value: number;
-}) => {
-  const { currentTheme } = useTheme();
-  const formattedValue = formatPerformance(value);
-
-  return (
-    <Tooltip
-      content={
-        <>
-          <div style={{ color: currentTheme.text.primary }}>
-            {previousDate
-              ? `${format(new Date(previousDate), "do MMMM")}: ${previousPrice}`
-              : "No historical data"}
-          </div>
-          <div style={{ color: currentTheme.text.primary }}>
-            {latestDate
-              ? `${format(new Date(latestDate), "do MMMM")}: ${latestPrice}`
-              : "No historical data"}
-          </div>
-        </>
-      }
-      position="top"
-    >
-      {formattedValue}
-    </Tooltip>
-  );
-};
-
-const getPrivacyInfo = (privacy: string) => {
-  switch (privacy) {
-    case "PRIVATE":
-      return { icon: <LockIcon />, text: "Private Portfolio" };
-    case "SHARE_ALL":
-      return { icon: <PublicIcon />, text: "Showing All Holdings" };
-    case "SHARE_SECTORS":
-      return { icon: <CategoryIcon />, text: "Showing Sector-wise Holdings" };
-    default:
-      return { icon: <PublicIcon />, text: "Public Portfolio" };
-  }
-};
