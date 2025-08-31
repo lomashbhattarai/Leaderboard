@@ -89,6 +89,28 @@ const PORTFOLIO_TABLE_HEADERS_FROM_DB: Array<ColumnConfig> = [
     ),
   },
   {
+    label: "P/L",
+    key: "profitLoss",
+    render: (_, stock: PortfolioStock) => {
+      const buyPrice = stock.buyPrice ?? 0;
+      const currentPrice = stock.latestClosingPrice ?? 0;
+      const profitLoss = (currentPrice - buyPrice) * stock.quantity;
+      const profitLossPercent =
+        buyPrice !== 0 ? ((currentPrice - buyPrice) / buyPrice) * 100 : 0;
+
+      return (
+        <Tooltip title={`${profitLossPercent.toFixed(2)}%`} arrow>
+          <Typography
+            variant="body2"
+            sx={{ color: profitLoss >= 0 ? "success.main" : "error.main" }}
+          >
+            {formatAmount(profitLoss, true)}
+          </Typography>
+        </Tooltip>
+      );
+    },
+  },
+  {
     label: "Stop Loss",
     key: "stopLoss",
     minWidth: 150,
