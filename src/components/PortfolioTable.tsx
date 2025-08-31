@@ -99,12 +99,14 @@ const PORTFOLIO_TABLE_HEADERS_FROM_DB: Array<ColumnConfig> = [
         buyPrice !== 0 ? ((currentPrice - buyPrice) / buyPrice) * 100 : 0;
 
       return (
-        <Typography
-          variant="body2"
-          sx={{ color: profitLoss >= 0 ? "success.main" : "error.main" }}
-        >
-          {formatAmount(profitLoss, true)} ({profitLossPercent.toFixed(2)}%)
-        </Typography>
+        <Tooltip title={`${profitLossPercent.toFixed(2)}%`} arrow>
+          <Typography
+            variant="body2"
+            sx={{ color: profitLoss >= 0 ? "success.main" : "error.main" }}
+          >
+            {formatAmount(profitLoss, true)}
+          </Typography>
+        </Tooltip>
       );
     },
   },
