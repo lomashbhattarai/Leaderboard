@@ -7,6 +7,7 @@ import WealthEntryForm from "../components/WealthEntryForm";
 import { WealthEntry } from "../types/wealth";
 import { useWealth } from "../hooks/useWealth";
 import WealthChart from "../components/WealthChart";
+import WealthProjectionChart from "../components/WealthProjectionChart";
 
 const WealthTracker: React.FC = () => {
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
@@ -93,7 +94,7 @@ const WealthTracker: React.FC = () => {
       <Stack
         direction="row"
         justifyContent="space-between"
-        alignItems="end"
+        alignItems=""
         sx={{ mb: 3 }}
       >
         <Button
@@ -123,12 +124,15 @@ const WealthTracker: React.FC = () => {
       </Stack>
 
       <TableView
+        isCompact
         tableData={wealthEntries}
         columns={columns}
         onEdit={handleEditWealth}
         onDelete={handleDeleteWealth}
         showActions={true}
       />
+
+      <WealthProjectionChart amount={netWorth} />
 
       <Drawer anchor="right" open={isDrawerOpen} onClose={handleCloseDrawer}>
         <Box sx={{ width: 400 }}>
