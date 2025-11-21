@@ -33,9 +33,11 @@ const SharedPortfolio: React.FC = () => {
   const { currentTheme } = useTheme();
   const { id } = useParams<{ id: string }>();
 
-  const { data: publicPortfolio, isLoading, error } = usePublicPortfolio(
-    Number(id)
-  );
+  const {
+    data: publicPortfolio,
+    isLoading,
+    error,
+  } = usePublicPortfolio(Number(id));
 
   const columns: ColumnConfig[] = [
     {
@@ -116,7 +118,7 @@ const SharedPortfolio: React.FC = () => {
     [publicPortfolio?.portfolioStocks]
   );
 
-  const [viewMode, setViewMode] = React.useState<"list" | "table">("list");
+  const [viewMode, setViewMode] = React.useState<"list" | "table">("table");
 
   const [chartDimensions, setChartDimensions] = React.useState({
     height: 350,
@@ -157,13 +159,12 @@ const SharedPortfolio: React.FC = () => {
         cy="50%"
         outerRadius={chartDimensions.outerRadius}
         fill={currentTheme.accent.primary}
-        label={({ symbol, percent }) => `${symbol} ${(percent * 100).toFixed(0)}%`}
+        label={({ symbol, percent }) =>
+          `${symbol} ${(percent * 100).toFixed(0)}%`
+        }
       >
         {publicPortfolio?.portfolioStocks?.map((entry, index) => (
-          <Cell
-            key={`cell-${index}`}
-            fill={COLORS[index % COLORS.length]}
-          />
+          <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
         ))}
       </Pie>
       <RechartTooltip />
@@ -216,7 +217,9 @@ const SharedPortfolio: React.FC = () => {
       </Box>
 
       {publicPortfolio.privacy === PortfolioPrivacy.PRIVATE ? (
-        <div style={{ color: currentTheme.text.primary }}>Private Portfolio</div>
+        <div style={{ color: currentTheme.text.primary }}>
+          Private Portfolio
+        </div>
       ) : viewMode === "list" ? (
         <Box>
           <Box
@@ -324,10 +327,7 @@ const SharedPortfolio: React.FC = () => {
               fontSize: chartDimensions.fontSize,
             }}
           >
-            <ResponsiveContainer
-              width="100%"
-              height={chartDimensions.height}
-            >
+            <ResponsiveContainer width="100%" height={chartDimensions.height}>
               {renderPieChartContent()}
             </ResponsiveContainer>
           </Box>
@@ -402,4 +402,3 @@ const PriceChangeTooltip = ({
     </Tooltip>
   );
 };
-
