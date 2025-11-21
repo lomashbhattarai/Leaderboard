@@ -11,6 +11,7 @@ import React, { useState } from "react";
 import StockSymbolLink from "../components/common/StockSymbolLink";
 import { useAuthContext } from "../contexts/AuthContext";
 import AddToWatchListHover from "../components/AddToWatchListHover";
+import StockCard from "../components/StockCard";
 
 const Stocks = () => {
   const [sortConfig, setSortConfig] = useState<{
@@ -161,6 +162,7 @@ const Stocks = () => {
         tableData={filteredStocks}
         onSort={handleSort}
         currentSort={sortConfig}
+        customCardComponent={(row) => <StockCard row={row} />}
       />
     </div>
   );
