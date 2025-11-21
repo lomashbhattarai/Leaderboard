@@ -10,10 +10,6 @@ const StockDetail = () => {
   const stockId = stockMap[symbol!];
   const { data: stockPrices, isLoading, error } = useStockPrices(stockId || 0);
 
-  console.log({
-    stockPrices,
-  });
-
   const columns: ColumnConfig[] = [
     { label: "Date", key: "date", align: "left" },
     { label: "Open", key: "open", align: "right" },

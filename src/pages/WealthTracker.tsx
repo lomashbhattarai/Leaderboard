@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { Box, Typography, Stack, Drawer, Button } from "@mui/material";
 import TableView, { ColumnConfig } from "../components/common/TableView";
 import { formatAmount } from "../utils/helper";
@@ -10,10 +10,12 @@ import WealthChart from "../components/WealthChart";
 
 const WealthTracker: React.FC = () => {
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
+  const [editingEntry, setEditingEntry] = useState<WealthEntry | null>(null);
 
   const {
     wealthEntries,
     addWealthEntry,
+    updateWealthEntry,
     netWorth,
     addMultipleWealthEntries,
     deleteWealthEntry,
@@ -40,9 +42,50 @@ const WealthTracker: React.FC = () => {
     },
   ];
 
-  const handleAddWealth = (newWealth: Omit<WealthEntry, "id">) => {
-    addWealthEntry(newWealth);
+  const handleAddWealth = async (newWealth: Omit<WealthEntry, "id">) => {
+    try {
+      await addWealthEntry(newWealth);
+      setIsDrawerOpen(false);
+      setEditingEntry(null);
+    } catch (error) {
+      // Error is handled in the hook, but we can add additional UI feedback here if needed
+      console.error("Failed to add wealth entry:", error);
+    }
+  };
+
+  const handleUpdateWealth = async (
+    id: string,
+    updatedWealth: Partial<Omit<WealthEntry, "id">>
+  ) => {
+    try {
+      await updateWealthEntry(id, updatedWealth);
+      setIsDrawerOpen(false);
+      setEditingEntry(null);
+    } catch (error) {
+      // Error is handled in the hook, but we can add additional UI feedback here if needed
+      console.error("Failed to update wealth entry:", error);
+    }
+  };
+
+  const handleEditWealth = (entry: WealthEntry) => {
+    setEditingEntry(entry);
+    setIsDrawerOpen(true);
+  };
+
+  const handleCloseDrawer = () => {
     setIsDrawerOpen(false);
+    setEditingEntry(null);
+  };
+
+  const handleDeleteWealth = async (id: number | string) => {
+    try {
+      // TableView may pass number or string depending on row.id type
+      // The hook handles both string and number IDs
+      await deleteWealthEntry(id);
+    } catch (error) {
+      // Error is handled in the hook, but we can add additional UI feedback here if needed
+      console.error("Failed to delete wealth entry:", error);
+    }
   };
 
   return (
@@ -50,14 +93,16 @@ const WealthTracker: React.FC = () => {
       <Stack
         direction="row"
         justifyContent="space-between"
-        alignItems="center"
+        alignItems="end"
         sx={{ mb: 3 }}
       >
-        <Typography variant="h4">Wealth Tracker</Typography>
         <Button
           variant="contained"
           color="primary"
-          onClick={() => setIsDrawerOpen(true)}
+          onClick={() => {
+            setEditingEntry(null);
+            setIsDrawerOpen(true);
+          }}
         >
           Add New Asset
         </Button>
@@ -80,19 +125,21 @@ const WealthTracker: React.FC = () => {
       <TableView
         tableData={wealthEntries}
         columns={columns}
-        onDeleteTransaction={deleteWealthEntry}
+        onEdit={handleEditWealth}
+        onDelete={handleDeleteWealth}
+        showActions={true}
       />
 
-      <Drawer
-        anchor="right"
-        open={isDrawerOpen}
-        onClose={() => setIsDrawerOpen(false)}
-      >
+      <Drawer anchor="right" open={isDrawerOpen} onClose={handleCloseDrawer}>
         <Box sx={{ width: 400 }}>
           <Typography variant="h6" sx={{ p: 3, pb: 0 }}>
-            Add New Asset
+            {editingEntry ? "Edit Asset" : "Add New Asset"}
           </Typography>
-          <WealthEntryForm onAddWealth={handleAddWealth} />
+          <WealthEntryForm
+            onAddWealth={handleAddWealth}
+            onUpdateWealth={handleUpdateWealth}
+            entry={editingEntry || undefined}
+          />
         </Box>
       </Drawer>
     </Box>

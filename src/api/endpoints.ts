@@ -52,6 +52,14 @@ export const ENDPOINTS = {
     CREATE: '/watchlist',
     DELETE: (id: number) => `/watchlist/${id}`,
   },
+  WEALTH_ENTRIES: {
+    LIST: '/wealth-entries',
+    DETAIL: (id: number) => `/wealth-entries/${id}`,
+    CREATE: '/wealth-entries',
+    CREATE_BULK: '/wealth-entries/bulk',
+    UPDATE: (id: number) => `/wealth-entries/${id}`,
+    DELETE: (id: number) => `/wealth-entries/${id}`,
+  },
 } as const;
 
 export const API_URL = "http://localhost:3333/api"; 

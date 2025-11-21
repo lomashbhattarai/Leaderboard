@@ -82,7 +82,7 @@ const Navbar = () => {
       icon: <BookIcon />,
     },
     // { to: "/earnings-tracker", label: "Earnings Tracker" },
-    // { to: "/wealth-tracker", label: "Wealth Tracker" },
+    { to: "/wealth-tracker", label: "Wealth Tracker" },
   ];
 
   if (isMobile) {

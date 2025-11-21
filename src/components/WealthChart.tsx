@@ -13,11 +13,15 @@ const WealthChart: React.FC<WealthChartProps> = ({ wealthEntries }) => {
   // Group and sum amounts by asset type
   const chartData = wealthEntries.reduce(
     (acc: { name: string; value: number }[], entry) => {
+      console.log("entry", entry);
       const existingType = acc.find((item) => item.name === entry.assetType);
       if (existingType) {
-        existingType.value += entry.amount;
+        existingType.value += parseFloat(entry.amount.toString());
       } else {
-        acc.push({ name: entry.assetType, value: entry.amount });
+        acc.push({
+          name: entry.assetType,
+          value: parseFloat(entry.amount.toString()),
+        });
       }
       return acc;
     },

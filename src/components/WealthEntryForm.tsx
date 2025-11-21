@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   TextField,
   Button,
@@ -11,6 +11,11 @@ import { WealthEntry } from "../types/wealth";
 
 interface WealthEntryFormProps {
   onAddWealth: (wealth: Omit<WealthEntry, "id">) => void;
+  onUpdateWealth?: (
+    id: string,
+    wealth: Partial<Omit<WealthEntry, "id">>
+  ) => void;
+  entry?: WealthEntry;
 }
 
 interface FormState {
@@ -20,29 +25,59 @@ interface FormState {
   amount: string;
 }
 
-const WealthEntryForm: React.FC<WealthEntryFormProps> = ({ onAddWealth }) => {
+const WealthEntryForm: React.FC<WealthEntryFormProps> = ({
+  onAddWealth,
+  onUpdateWealth,
+  entry,
+}) => {
+  const isEditMode = !!entry;
+
   const [formState, setFormState] = useState<FormState>({
-    name: "",
-    assetType: "Cash",
-    description: "",
-    amount: "",
+    name: entry?.name || "",
+    assetType: entry?.assetType || "Cash",
+    description: entry?.description || "",
+    amount: entry?.amount?.toString() || "",
   });
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (formState.name && formState.amount) {
-      onAddWealth({
-        name: formState.name,
-        assetType: formState.assetType,
-        description: formState.description,
-        amount: parseFloat(formState.amount),
+  useEffect(() => {
+    if (entry) {
+      setFormState({
+        name: entry.name || "",
+        assetType: entry.assetType || "Cash",
+        description: entry.description || "",
+        amount: entry.amount?.toString() || "",
       });
+    } else {
       setFormState({
         name: "",
         assetType: "Cash",
         description: "",
         amount: "",
       });
+    }
+  }, [entry]);
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (formState.name && formState.amount) {
+      const wealthData = {
+        name: formState.name,
+        assetType: formState.assetType,
+        description: formState.description,
+        amount: parseFloat(formState.amount),
+      };
+
+      if (isEditMode && entry && onUpdateWealth) {
+        onUpdateWealth(entry.id, wealthData);
+      } else {
+        onAddWealth(wealthData);
+        setFormState({
+          name: "",
+          assetType: "Cash",
+          description: "",
+          amount: "",
+        });
+      }
     }
   };
 
@@ -104,7 +139,7 @@ const WealthEntryForm: React.FC<WealthEntryFormProps> = ({ onAddWealth }) => {
       />
 
       <Button type="submit" variant="contained" color="primary" fullWidth>
-        Add Asset
+        {isEditMode ? "Update Asset" : "Add Asset"}
       </Button>
     </Box>
   );

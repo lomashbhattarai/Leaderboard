@@ -12,9 +12,6 @@ export const useLeaderboard = () => {
     queryKey: QUERY_KEYS.leaderboard,
     queryFn: async () => {
       const { data } = await apiClient.get<{ leaderboard: LeaderboardEntry[] }>(LEADERBOARD.GET);
-      console.log({
-        data,
-      });
       return data.leaderboard;
     }
   })
