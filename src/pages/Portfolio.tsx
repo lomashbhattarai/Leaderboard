@@ -20,15 +20,31 @@ import {
 } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 import PortfolioStockForm from "../components/PortfolioStockForm";
+import AddTransactionForm from "../components/AddTransactionForm";
 import JournalForm from "../components/JournalForm";
+import TransactionForm from "../components/TransactionForm";
+import TransactionTimeline from "../components/TransactionTimeline";
 import {
   useCreatePortfolioStock,
   useUpdatePortfolioStock,
   useDeletePortfolioStock,
 } from "../api/queries/usePortfolioStocks";
+import {
+  useStockTransactions,
+  useCreateStockTransaction,
+  useUpdateStockTransaction,
+  useDeleteStockTransaction,
+  useCreateTransactionWithStock,
+} from "../api/queries/useStockTransactions";
 import { useQueryClient } from "@tanstack/react-query";
 import { portfolioKeys } from "../api/queries/usePortfolios";
-import type { PortfolioStock, PortfolioStockDTO } from "../types/api";
+import type {
+  PortfolioStock,
+  PortfolioStockDTO,
+  StockTransaction,
+  StockTransactionDTO,
+  StockTransactionWithStockDTO,
+} from "../types/api";
 import { useTheme } from "../contexts/ThemeContext";
 import PortfolioInfo from "../components/PortfolioInfo";
 import { showToast } from "../utils/toast";
@@ -41,8 +57,14 @@ const Portfolio: React.FC = () => {
     usePortfolio();
   const [isDrawerOpen, setIsDrawerOpen] = React.useState(false);
   const [isJournalDrawerOpen, setIsJournalDrawerOpen] = React.useState(false);
+  const [isTransactionDrawerOpen, setIsTransactionDrawerOpen] =
+    React.useState(false);
+  const [isTransactionFormOpen, setIsTransactionFormOpen] =
+    React.useState(false);
   const [selectedStock, setSelectedStock] =
     React.useState<PortfolioStock | null>(null);
+  const [selectedTransaction, setSelectedTransaction] =
+    React.useState<StockTransaction | null>(null);
 
   const createStock = useCreatePortfolioStock(portfolioId);
   const updateStock = useUpdatePortfolioStock(
@@ -51,6 +73,16 @@ const Portfolio: React.FC = () => {
   );
   const deleteStock = useDeletePortfolioStock(portfolioId);
   const createJournal = useCreateJournal();
+  const createTransactionWithStock = useCreateTransactionWithStock(portfolioId);
+
+  const { data: transactionsData } = useStockTransactions(
+    selectedStock?.id || 0
+  );
+  const createTransaction = useCreateStockTransaction(selectedStock?.id || 0);
+  const updateTransaction = useUpdateStockTransaction(
+    selectedTransaction?.id || 0
+  );
+  const deleteTransaction = useDeleteStockTransaction();
 
   const { currentTheme } = useTheme();
 
@@ -75,6 +107,25 @@ const Portfolio: React.FC = () => {
     } catch (error) {
       console.error("Failed to save stock:", error);
       showToast.error("Failed to save stock. Please try again.");
+    }
+  };
+
+  const handleAddTransactionSubmit = async (
+    data: StockTransactionWithStockDTO
+  ) => {
+    try {
+      await createTransactionWithStock.mutateAsync(data);
+      showToast.success("Transaction added successfully");
+      queryClient.invalidateQueries({
+        queryKey: portfolioKeys.userPortfolios(),
+      });
+      handleDrawerClose();
+    } catch (error: any) {
+      console.error("Failed to add transaction:", error);
+      const errorMessage =
+        error?.response?.data?.message ||
+        "Failed to add transaction. Please try again.";
+      showToast.error(errorMessage);
     }
   };
 
@@ -138,6 +189,67 @@ const Portfolio: React.FC = () => {
     setIsJournalDrawerOpen(true);
   };
 
+  const handleViewTransactions = (stock: PortfolioStock) => {
+    setSelectedStock(stock);
+    setIsTransactionDrawerOpen(true);
+  };
+
+  const handleAddTransaction = () => {
+    setSelectedTransaction(null);
+    setIsTransactionFormOpen(true);
+  };
+
+  const handleAddTransactionFromPortfolio = () => {
+    setSelectedStock(null);
+    setIsDrawerOpen(true);
+  };
+
+  const handleEditTransaction = (transaction: StockTransaction) => {
+    setSelectedTransaction(transaction);
+    setIsTransactionFormOpen(true);
+  };
+
+  const handleDeleteTransaction = async (transactionId: number) => {
+    if (window.confirm("Are you sure you want to delete this transaction?")) {
+      try {
+        await deleteTransaction.mutateAsync(transactionId);
+        showToast.success("Transaction deleted successfully");
+        queryClient.invalidateQueries({
+          queryKey: portfolioKeys.userPortfolios(),
+        });
+      } catch (error) {
+        console.error("Failed to delete transaction:", error);
+        showToast.error("Failed to delete transaction. Please try again.");
+      }
+    }
+  };
+
+  const handleTransactionSubmit = async (data: StockTransactionDTO) => {
+    try {
+      if (selectedTransaction) {
+        await updateTransaction.mutateAsync(data);
+        showToast.success("Transaction updated successfully");
+      } else {
+        await createTransaction.mutateAsync(data);
+        showToast.success("Transaction added successfully");
+      }
+      queryClient.invalidateQueries({
+        queryKey: portfolioKeys.userPortfolios(),
+      });
+      setIsTransactionFormOpen(false);
+      setSelectedTransaction(null);
+    } catch (error) {
+      console.error("Failed to save transaction:", error);
+      showToast.error("Failed to save transaction. Please try again.");
+    }
+  };
+
+  const handleTransactionDrawerClose = () => {
+    setIsTransactionDrawerOpen(false);
+    setIsTransactionFormOpen(false);
+    setSelectedTransaction(null);
+  };
+
   return (
     <Box sx={{ minHeight: "100vh" }}>
       <Container maxWidth="xl" sx={{ py: 2, px: "0 !important" }}>
@@ -183,7 +295,7 @@ const Portfolio: React.FC = () => {
                 variant="contained"
                 color="primary"
                 startIcon={<AddIcon />}
-                onClick={() => setIsDrawerOpen(true)}
+                onClick={handleAddTransactionFromPortfolio}
                 sx={{
                   backgroundColor: currentTheme.accent.primary,
                   "&:hover": {
@@ -191,7 +303,7 @@ const Portfolio: React.FC = () => {
                   },
                 }}
               >
-                Add Stock to Portfolio
+                Add Transaction
               </Button>
             </Stack>
             <MeroshareImport
@@ -207,6 +319,7 @@ const Portfolio: React.FC = () => {
               onEdit={handleEdit}
               onDelete={handleDelete}
               onJournal={handleJournalClick}
+              onViewTransactions={handleViewTransactions}
             />
           </Box>
           <Box sx={{ order: 3 }}>
@@ -248,7 +361,7 @@ const Portfolio: React.FC = () => {
                 color: currentTheme.text.primary,
               }}
             >
-              {selectedStock ? "Edit Stock" : "Add Stock"}
+              {selectedStock ? "Edit Stock" : "Add Transaction"}
             </Typography>
             <IconButton
               onClick={handleDrawerClose}
@@ -259,11 +372,19 @@ const Portfolio: React.FC = () => {
               <CloseIcon />
             </IconButton>
           </Box>
-          <PortfolioStockForm
-            initialData={selectedStock || undefined}
-            onSubmit={handleStockSubmit}
-            portfolioId={portfolioId}
-          />
+          {selectedStock ? (
+            <PortfolioStockForm
+              initialData={selectedStock}
+              onSubmit={handleStockSubmit}
+              portfolioId={portfolioId}
+            />
+          ) : (
+            <AddTransactionForm
+              portfolioId={portfolioId}
+              onSubmit={handleAddTransactionSubmit}
+              onCancel={handleDrawerClose}
+            />
+          )}
         </Drawer>
 
         <Drawer
@@ -313,6 +434,66 @@ const Portfolio: React.FC = () => {
             onSubmit={handleJournalSubmit}
             portfolioStockId={selectedStock?.id}
           />
+        </Drawer>
+
+        <Drawer
+          anchor="right"
+          open={isTransactionDrawerOpen}
+          onClose={handleTransactionDrawerClose}
+          PaperProps={{
+            sx: {
+              width: { xs: "100%", sm: 600 },
+              p: 2.5,
+            },
+          }}
+        >
+          <Box
+            sx={{
+              display: "flex",
+              justifyContent: "space-between",
+              alignItems: "center",
+              mb: 2.5,
+            }}
+          >
+            <Typography
+              variant="h6"
+              sx={{
+                fontWeight: currentTheme.typography.fontWeights.heading,
+                color: currentTheme.text.primary,
+              }}
+            >
+              Transactions for {selectedStock?.stock?.symbol}
+            </Typography>
+            <IconButton
+              onClick={handleTransactionDrawerClose}
+              edge="end"
+              aria-label="close"
+              sx={{ color: currentTheme.text.primary }}
+            >
+              <CloseIcon />
+            </IconButton>
+          </Box>
+
+          {isTransactionFormOpen ? (
+            <TransactionForm
+              key={selectedTransaction?.id || "new"}
+              initialData={selectedTransaction || undefined}
+              portfolioStockId={selectedStock?.id || 0}
+              currentHoldings={selectedStock?.quantity || 0}
+              onSubmit={handleTransactionSubmit}
+              onCancel={() => {
+                setIsTransactionFormOpen(false);
+                setSelectedTransaction(null);
+              }}
+            />
+          ) : (
+            <TransactionTimeline
+              transactions={transactionsData?.data.transactions || []}
+              onEdit={handleEditTransaction}
+              onDelete={handleDeleteTransaction}
+              onAddNew={handleAddTransaction}
+            />
+          )}
         </Drawer>
       </Container>
     </Box>

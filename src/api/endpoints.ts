@@ -60,6 +60,14 @@ export const ENDPOINTS = {
     UPDATE: (id: number) => `/wealth-entries/${id}`,
     DELETE: (id: number) => `/wealth-entries/${id}`,
   },
+  STOCK_TRANSACTIONS: {
+    LIST: (portfolioStockId: number) => `/portfolio-stocks/${portfolioStockId}/transactions`,
+    CREATE: (portfolioStockId: number) => `/portfolio-stocks/${portfolioStockId}/transactions`,
+    CREATE_WITH_STOCK: '/transactions/create-with-stock',
+    BY_STOCK_ID: (stockId: number) => `/stocks/${stockId}/my-transactions`,
+    UPDATE: (id: number) => `/transactions/${id}`,
+    DELETE: (id: number) => `/transactions/${id}`,
+  },
 } as const;
 
 export const API_URL = "http://localhost:3333/api"; 

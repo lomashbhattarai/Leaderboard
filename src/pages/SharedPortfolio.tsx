@@ -24,7 +24,7 @@ import {
   ResponsiveContainer,
 } from "recharts";
 import TableView, { ColumnConfig } from "../components/common/TableView";
-import StockSymbolLink from "../components/common/StockSymbolLink";
+import StockLink from "../components/common/StockLink";
 import Tooltip from "../components/common/Tooltip";
 import { formatPerformance } from "./Leaderboard";
 import { format } from "date-fns";
@@ -43,7 +43,7 @@ const SharedPortfolio: React.FC = () => {
     {
       label: "Symbol",
       key: "symbol",
-      render: (value) => <StockSymbolLink symbol={value} />,
+      render: (value) => <StockLink symbol={value} />,
     },
     {
       label: "Closing Price",

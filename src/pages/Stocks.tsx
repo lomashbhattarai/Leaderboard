@@ -8,7 +8,7 @@ import { formatAmount } from "../utils/helper";
 import { Box, Tooltip, TextField } from "@mui/material";
 import { showToast } from "../utils/toast";
 import React, { useState } from "react";
-import StockSymbolLink from "../components/common/StockSymbolLink";
+import StockLink from "../components/common/StockLink";
 import { useAuthContext } from "../contexts/AuthContext";
 import AddToWatchListHover from "../components/AddToWatchListHover";
 import StockCard from "../components/StockCard";
@@ -105,7 +105,7 @@ const Stocks = () => {
             sortable: true,
             render: (symbol: string, row) => (
               <AddToWatchListHover stockId={row.id} alwaysShow={true}>
-                <StockSymbolLink symbol={symbol} />
+                <StockLink symbol={symbol} />
               </AddToWatchListHover>
             ),
           },

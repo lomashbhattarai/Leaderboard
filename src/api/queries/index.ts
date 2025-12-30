@@ -5,4 +5,5 @@ export * from './usePortfolioStocks';
 export * from './useStockPrices';
 export * from './leaderboard';
 export * from './useUserSettings';
-export * from './useJournals'; 
+export * from './useJournals';
+export * from './useStockTransactions'; 

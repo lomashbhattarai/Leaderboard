@@ -314,3 +314,63 @@ export interface WatchListResponse {
 export interface AddToWatchListDTO {
   stockId: number
 }
+
+export enum TransactionType {
+  BUY = 'BUY',
+  SELL = 'SELL',
+}
+
+export interface StockTransaction {
+  id: number
+  portfolioStockId: number
+  stockId: number
+  transactionType: TransactionType
+  quantity: number
+  price: number
+  transactionDate: string
+  notes: string | null
+  createdAt: string
+  updatedAt: string
+  stock?: Stock
+  portfolioStock?: PortfolioStock & {
+    portfolio?: Portfolio
+  }
+}
+
+export interface StockTransactionDTO {
+  portfolioStockId: number
+  transactionType: TransactionType
+  quantity: number
+  price: number
+  transactionDate: string
+  notes?: string
+}
+
+export interface StockTransactionWithStockDTO {
+  portfolioId: number
+  stockId: number
+  transactionType: TransactionType
+  quantity: number
+  price: number
+  transactionDate: string
+  notes?: string
+}
+
+export interface TransactionStats {
+  totalBought: number
+  totalSold: number
+  totalBuyValue: number
+  totalSellValue: number
+  currentHoldings: number
+  avgBuyPrice: number
+  avgSellPrice: number
+}
+
+export interface StockTransactionsResponse {
+  status: string
+  data: {
+    stock: Stock
+    transactions: StockTransaction[]
+    stats: TransactionStats
+  }
+}

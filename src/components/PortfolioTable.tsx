@@ -19,6 +19,7 @@ import { useTheme } from "../contexts/ThemeContext";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 import BookIcon from "@mui/icons-material/Book";
+import HistoryIcon from "@mui/icons-material/History";
 import JournalIndicator from "./JournalIndicator";
 import StockLink from "./common/StockLink";
 
@@ -125,6 +126,7 @@ interface PortfolioTableProps {
   onEdit: (stock: PortfolioStock) => void;
   onDelete: (stockId: number) => void;
   onJournal?: (stock: PortfolioStock) => void;
+  onViewTransactions?: (stock: PortfolioStock) => void;
 }
 
 const getStopLossColor = (
@@ -301,6 +303,7 @@ const PortfolioTable: React.FC<PortfolioTableProps> = ({
   onEdit,
   onDelete,
   onJournal,
+  onViewTransactions,
 }) => {
   const { currentTheme } = useTheme();
   const isMobile = useMediaQuery("(max-width:600px)");
@@ -329,24 +332,17 @@ const PortfolioTable: React.FC<PortfolioTableProps> = ({
               }),
         }}
       >
-        <Tooltip title="Edit stock">
-          <IconButton
-            onClick={() => onEdit(row)}
-            size="small"
-            aria-label="edit"
-          >
-            <EditIcon />
-          </IconButton>
-        </Tooltip>
-        <Tooltip title="Delete stock">
-          <IconButton
-            onClick={() => onDelete(row.id)}
-            size="small"
-            aria-label="delete"
-          >
-            <DeleteIcon />
-          </IconButton>
-        </Tooltip>
+        {onViewTransactions && (
+          <Tooltip title="View transactions">
+            <IconButton
+              onClick={() => onViewTransactions(row)}
+              size="small"
+              aria-label="transactions"
+            >
+              <HistoryIcon />
+            </IconButton>
+          </Tooltip>
+        )}
         {onJournal && (
           <Tooltip title="Add journal">
             <IconButton
@@ -358,6 +354,25 @@ const PortfolioTable: React.FC<PortfolioTableProps> = ({
             </IconButton>
           </Tooltip>
         )}
+
+        {/* <Tooltip title="Edit stock">
+          <IconButton
+            onClick={() => onEdit(row)}
+            size="small"
+            aria-label="edit"
+          >
+            <EditIcon />
+          </IconButton>
+        </Tooltip> */}
+        <Tooltip title="Delete stock">
+          <IconButton
+            onClick={() => onDelete(row.id)}
+            size="small"
+            aria-label="delete"
+          >
+            <DeleteIcon />
+          </IconButton>
+        </Tooltip>
       </Box>
     );
   };
