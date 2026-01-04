@@ -26,6 +26,31 @@ const WealthProjectionChart: React.FC<WealthProjectionChartProps> = ({
   amount,
 }) => {
   const [annualRate, setAnnualRate] = useState<number>(7);
+  const [monthlyContribution, setMonthlyContribution] = useState<number>(0);
+
+  // Helper function to calculate projected value for a given number of years
+  const calculateProjection = (years: number): number => {
+    const monthlyRate = annualRate / 100 / 12;
+    const months = years * 12;
+
+    // Future value of initial amount with compound interest
+    const futureValueOfPrincipal =
+      amount * Math.pow(1 + annualRate / 100, years);
+
+    // Future value of monthly contributions (if any)
+    let futureValueOfContributions = 0;
+    if (monthlyContribution > 0 && monthlyRate > 0 && months > 0) {
+      // FV of annuity formula: PMT × [((1 + r)^n - 1) / r]
+      futureValueOfContributions =
+        monthlyContribution *
+        ((Math.pow(1 + monthlyRate, months) - 1) / monthlyRate);
+    } else if (monthlyContribution > 0 && months > 0) {
+      // If rate is 0, just multiply contribution by number of months
+      futureValueOfContributions = monthlyContribution * months;
+    }
+
+    return futureValueOfPrincipal + futureValueOfContributions;
+  };
 
   // Calculate projection data for the next 30 years
   const projectionData = useMemo(() => {
@@ -35,7 +60,8 @@ const WealthProjectionChart: React.FC<WealthProjectionChartProps> = ({
     const data = [];
 
     for (let year = 0; year <= years; year++) {
-      const projectedAmount = amount * Math.pow(1 + annualRate / 100, year);
+      const projectedAmount = calculateProjection(year);
+
       data.push({
         year: year,
         amount: Math.round(projectedAmount),
@@ -44,12 +70,25 @@ const WealthProjectionChart: React.FC<WealthProjectionChartProps> = ({
     }
 
     return data;
-  }, [amount, annualRate]);
+  }, [amount, annualRate, monthlyContribution]);
 
   const handleRateChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const value = parseFloat(event.target.value);
     if (!isNaN(value) && value >= 0 && value <= 100) {
       setAnnualRate(value);
+    } else if (event.target.value === "") {
+      setAnnualRate(0);
+    }
+  };
+
+  const handleContributionChange = (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    const value = parseFloat(event.target.value);
+    if (!isNaN(value) && value >= 0) {
+      setMonthlyContribution(value);
+    } else if (event.target.value === "") {
+      setMonthlyContribution(0);
     }
   };
 
@@ -85,29 +124,56 @@ const WealthProjectionChart: React.FC<WealthProjectionChartProps> = ({
           <Typography variant="body2" color="text.secondary">
             See how your wealth could grow over time with compound interest
           </Typography>
-          <TextField
-            label="Annual Compounding Rate"
-            type="number"
-            value={annualRate}
-            onChange={handleRateChange}
-            size="small"
-            inputProps={{
-              min: 0,
-              max: 100,
-              step: 0.1,
-            }}
-            InputProps={{
-              endAdornment: <InputAdornment position="end">%</InputAdornment>,
-            }}
-            sx={{
-              width: { xs: "100%", sm: 200 },
-              "& .MuiOutlinedInput-root": {
-                backgroundColor: "white",
-                borderRadius: 1,
-              },
-            }}
-            variant="outlined"
-          />
+          <Box sx={{ display: "flex", gap: 2, flexWrap: "wrap" }}>
+            <TextField
+              label="Monthly Contribution"
+              type="number"
+              value={monthlyContribution || ""}
+              onChange={handleContributionChange}
+              size="small"
+              placeholder="0"
+              inputProps={{
+                min: 0,
+                step: 100,
+              }}
+              InputProps={{
+                startAdornment: (
+                  <InputAdornment position="start">NPR</InputAdornment>
+                ),
+              }}
+              sx={{
+                width: { xs: "100%", sm: 180 },
+                "& .MuiOutlinedInput-root": {
+                  backgroundColor: "white",
+                  borderRadius: 1,
+                },
+              }}
+              variant="outlined"
+            />
+            <TextField
+              label="Annual Return Rate"
+              type="number"
+              value={annualRate || ""}
+              onChange={handleRateChange}
+              size="small"
+              inputProps={{
+                min: 0,
+                max: 100,
+                step: 0.1,
+              }}
+              InputProps={{
+                endAdornment: <InputAdornment position="end">%</InputAdornment>,
+              }}
+              sx={{
+                width: { xs: "100%", sm: 180 },
+                "& .MuiOutlinedInput-root": {
+                  backgroundColor: "white",
+                  borderRadius: 1,
+                },
+              }}
+              variant="outlined"
+            />
+          </Box>
         </Box>
       </Box>
 
@@ -162,7 +228,13 @@ const WealthProjectionChart: React.FC<WealthProjectionChartProps> = ({
             />
             <Legend
               wrapperStyle={{ paddingTop: "10px" }}
-              formatter={() => `Projected Wealth (${annualRate}% annual)`}
+              formatter={() =>
+                monthlyContribution > 0
+                  ? `Projected Wealth (${annualRate}% annual + ${formatAmount(
+                      monthlyContribution
+                    )}/month)`
+                  : `Projected Wealth (${annualRate}% annual)`
+              }
             />
             <Line
               type="monotone"
@@ -203,7 +275,7 @@ const WealthProjectionChart: React.FC<WealthProjectionChartProps> = ({
             10 Year Projection
           </Typography>
           <Typography variant="body2" fontWeight={600}>
-            {formatAmount(amount * Math.pow(1 + annualRate / 100, 10))}
+            {formatAmount(calculateProjection(10))}
           </Typography>
         </Box>
         <Box
@@ -217,7 +289,7 @@ const WealthProjectionChart: React.FC<WealthProjectionChartProps> = ({
             30 Year Projection
           </Typography>
           <Typography variant="body2" fontWeight={600}>
-            {formatAmount(amount * Math.pow(1 + annualRate / 100, 30))}
+            {formatAmount(calculateProjection(30))}
           </Typography>
         </Box>
       </Box>
