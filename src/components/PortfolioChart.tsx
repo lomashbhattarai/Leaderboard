@@ -14,6 +14,7 @@ import {
 } from "recharts";
 import { formatAmount } from "../utils/helper";
 import { PortfolioStock } from "../types/api";
+import { useShowAmounts } from "../contexts/ShowAmountsContext";
 
 interface Props {
   portfolioStocksFromDb: PortfolioStock[];
@@ -30,6 +31,8 @@ const COLORS = [
 ];
 
 const PortfolioChart: React.FC<Props> = ({ portfolioStocksFromDb }) => {
+  const { showAmounts } = useShowAmounts();
+
   // Transform portfolio data for the pie chart
   const chartData = portfolioStocksFromDb.map((item) => ({
     name: item.stock?.symbol,
@@ -100,8 +103,22 @@ const PortfolioChart: React.FC<Props> = ({ portfolioStocksFromDb }) => {
           >
             <CartesianGrid strokeDasharray="3 3" />
             <XAxis dataKey="name" />
-            <YAxis />
-            <Tooltip formatter={(value: number) => formatAmount(value)} />
+            <YAxis
+              tickFormatter={(value) => {
+                if (!showAmounts) return "••••";
+                if (value >= 1000000) {
+                  return `${(value / 1000000).toFixed(1)}M`;
+                } else if (value >= 1000) {
+                  return `${(value / 1000).toFixed(0)}K`;
+                }
+                return value.toString();
+              }}
+            />
+            <Tooltip
+              formatter={(value: number) =>
+                showAmounts ? formatAmount(value) : "Rs. ••••••"
+              }
+            />
             <Legend />
             <Bar dataKey="totalCost" fill="#8884d8" name="Total Cost" />
             <Bar dataKey="currentValue" fill="#82ca9d" name="Current Value" />
@@ -141,7 +158,11 @@ const PortfolioChart: React.FC<Props> = ({ portfolioStocksFromDb }) => {
                 />
               ))}
             </Pie>
-            <Tooltip formatter={(value: number) => formatAmount(value)} />
+            <Tooltip
+              formatter={(value: number) =>
+                showAmounts ? formatAmount(value) : "Rs. ••••••"
+              }
+            />
           </PieChart>
         </ResponsiveContainer>
       </div>
