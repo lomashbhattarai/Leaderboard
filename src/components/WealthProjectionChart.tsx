@@ -207,6 +207,7 @@ const WealthProjectionChart: React.FC<WealthProjectionChartProps> = ({
               }}
               stroke="#666"
               tickFormatter={(value) => {
+                if (!showAmounts) return "••••";
                 if (value >= 1000000) {
                   return `${(value / 1000000).toFixed(1)}M`;
                 } else if (value >= 1000) {
