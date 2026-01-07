@@ -1,7 +1,7 @@
 import React from "react";
 import { Chip, Tooltip } from "@mui/material";
 import { formatAmount } from "../utils/helper";
-import { useShowAmounts } from "../hooks/useShowAmounts";
+import { useShowAmounts } from "../contexts/ShowAmountsContext";
 
 interface StopLossChipProps {
   type: "ABSOLUTE" | "PERCENTAGE";

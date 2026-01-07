@@ -16,7 +16,7 @@ import {
   useToggleAnonymous,
 } from "../api/queries/useUserSettings";
 import { showToast } from "../utils/toast";
-import { useShowAmounts } from "../hooks/useShowAmounts";
+import { useShowAmounts } from "../contexts/ShowAmountsContext";
 
 const UserMenu: React.FC = () => {
   const { user, logout } = useAuthContext();

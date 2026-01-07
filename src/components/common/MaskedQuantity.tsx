@@ -1,5 +1,5 @@
 import React from "react";
-import { useShowAmounts } from "../../hooks/useShowAmounts";
+import { useShowAmounts } from "../../contexts/ShowAmountsContext";
 
 interface MaskedQuantityProps {
   value: number;

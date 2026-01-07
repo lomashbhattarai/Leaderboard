@@ -28,6 +28,7 @@ import NewPortfolio from "./pages/NewPortfolio";
 import Journals from "./pages/Journals";
 import TransactionHistory from "./pages/TransactionHistory";
 import { WatchListProvider } from "./contexts/WatchListContext";
+import { ShowAmountsProvider } from "./contexts/ShowAmountsContext";
 const theme = createTheme();
 
 // Create a client
@@ -145,7 +146,9 @@ function App() {
                   <LocalizationProvider dateAdapter={AdapterDateFns}>
                     <CssBaseline />
                     <WatchListProvider>
-                      <AppContent />
+                      <ShowAmountsProvider>
+                        <AppContent />
+                      </ShowAmountsProvider>
                     </WatchListProvider>
                   </LocalizationProvider>
                 </ThemeProvider>

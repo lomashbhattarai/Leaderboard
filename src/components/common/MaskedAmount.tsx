@@ -1,6 +1,6 @@
 import React from "react";
 import { formatAmount } from "../../utils/helper";
-import { useShowAmounts } from "../../hooks/useShowAmounts";
+import { useShowAmounts } from "../../contexts/ShowAmountsContext";
 
 interface MaskedAmountProps {
   value: number;
