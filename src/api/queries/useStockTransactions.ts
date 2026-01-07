@@ -1,7 +1,7 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { apiClient } from '../client';
 import { ENDPOINTS } from '../endpoints';
-import type { StockTransaction, StockTransactionDTO, StockTransactionWithStockDTO, StockTransactionsResponse, PortfolioStock } from '../../types/api';
+import type { StockTransaction, StockTransactionDTO, StockTransactionWithStockDTO, StockTransactionsResponse, PortfolioStock, Portfolio } from '../../types/api';
 import { portfolioKeys } from './usePortfolios';
 
 // Query keys
@@ -35,6 +35,19 @@ export const useMyStockTransactions = (stockId: number) => {
       return response.data;
     },
     enabled: stockId > 0,
+  });
+};
+
+export const usePortfolioTransactions = (portfolioId: number) => {
+  return useQuery<{ status: string; data: { portfolio: Portfolio; transactions: StockTransaction[] } }>({
+    queryKey: [...stockTransactionKeys.all, 'portfolio', portfolioId],
+    queryFn: async () => {
+      const response = await apiClient.get(
+        ENDPOINTS.STOCK_TRANSACTIONS.BY_PORTFOLIO_ID(portfolioId)
+      );
+      return response.data;
+    },
+    enabled: portfolioId > 0,
   });
 };
 

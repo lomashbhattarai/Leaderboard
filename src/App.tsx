@@ -26,6 +26,7 @@ import StopLossPage from "./pages/StopLossPage";
 import { Toaster } from "react-hot-toast";
 import NewPortfolio from "./pages/NewPortfolio";
 import Journals from "./pages/Journals";
+import TransactionHistory from "./pages/TransactionHistory";
 import { WatchListProvider } from "./contexts/WatchListContext";
 const theme = createTheme();
 
@@ -98,6 +99,14 @@ const AppContent = () => {
               element={
                 <ProtectedRoute>
                   <Journals />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/portfolio/:portfolioId/transactions"
+              element={
+                <ProtectedRoute>
+                  <TransactionHistory />
                 </ProtectedRoute>
               }
             />

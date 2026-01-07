@@ -1,4 +1,5 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
 import MeroshareImport from "../components/MeroshareImport";
 import PortfolioChart from "../components/PortfolioChart";
 import PortfolioTable from "../components/PortfolioTable";
@@ -6,7 +7,7 @@ import PortfolioValue from "../components/PortfolioValue";
 import { usePortfolio } from "../hooks/usePortfolio";
 import { useCreateJournal } from "../api/queries";
 
-import { Add as AddIcon } from "@mui/icons-material";
+import { Add as AddIcon, History as HistoryIcon } from "@mui/icons-material";
 
 import {
   Alert,
@@ -52,6 +53,7 @@ import AllocationChart from "../components/charts/AllocationChart";
 import PerformanceChart from "../components/charts/PerformanceChart";
 
 const Portfolio: React.FC = () => {
+  const navigate = useNavigate();
   const queryClient = useQueryClient();
   const { portfolioStocksFromDb, portfolioId, addPortfolio, portfolio } =
     usePortfolio();
@@ -305,6 +307,24 @@ const Portfolio: React.FC = () => {
               >
                 Add Transaction
               </Button>
+              {portfolioId && (
+                <Button
+                  variant="outlined"
+                  color="primary"
+                  startIcon={<HistoryIcon />}
+                  onClick={() => navigate(`/portfolio/${portfolioId}/transactions`)}
+                  sx={{
+                    borderColor: currentTheme.accent.primary,
+                    color: currentTheme.accent.primary,
+                    "&:hover": {
+                      borderColor: currentTheme.accent.secondary,
+                      backgroundColor: `${currentTheme.accent.primary}10`,
+                    },
+                  }}
+                >
+                  Transaction History
+                </Button>
+              )}
             </Stack>
             <MeroshareImport
               addPortfolio={handlePortfolioAdd}

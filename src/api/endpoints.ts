@@ -65,6 +65,7 @@ export const ENDPOINTS = {
     CREATE: (portfolioStockId: number) => `/portfolio-stocks/${portfolioStockId}/transactions`,
     CREATE_WITH_STOCK: '/transactions/create-with-stock',
     BY_STOCK_ID: (stockId: number) => `/stocks/${stockId}/my-transactions`,
+    BY_PORTFOLIO_ID: (portfolioId: number) => `/portfolios/${portfolioId}/transactions`,
     UPDATE: (id: number) => `/transactions/${id}`,
     DELETE: (id: number) => `/transactions/${id}`,
   },
