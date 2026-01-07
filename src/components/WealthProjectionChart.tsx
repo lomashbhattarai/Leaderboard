@@ -17,6 +17,8 @@ import {
   ResponsiveContainer,
 } from "recharts";
 import { formatAmount } from "../utils/helper";
+import { useShowAmounts } from "../contexts/ShowAmountsContext";
+import MaskedAmount from "./common/MaskedAmount";
 
 interface WealthProjectionChartProps {
   amount: number;
@@ -25,6 +27,7 @@ interface WealthProjectionChartProps {
 const WealthProjectionChart: React.FC<WealthProjectionChartProps> = ({
   amount,
 }) => {
+  const { showAmounts } = useShowAmounts();
   const [annualRate, setAnnualRate] = useState<number>(7);
   const [monthlyContribution, setMonthlyContribution] = useState<number>(0);
 
@@ -213,7 +216,9 @@ const WealthProjectionChart: React.FC<WealthProjectionChartProps> = ({
               }}
             />
             <Tooltip
-              formatter={(value: number) => formatAmount(value)}
+              formatter={(value: number) =>
+                showAmounts ? formatAmount(value) : "Rs. ••••••"
+              }
               labelFormatter={(label, payload) => {
                 if (payload && payload[0]) {
                   return payload[0].payload.label;
@@ -230,9 +235,11 @@ const WealthProjectionChart: React.FC<WealthProjectionChartProps> = ({
               wrapperStyle={{ paddingTop: "10px" }}
               formatter={() =>
                 monthlyContribution > 0
-                  ? `Projected Wealth (${annualRate}% annual + ${formatAmount(
-                      monthlyContribution
-                    )}/month)`
+                  ? `Projected Wealth (${annualRate}% annual + ${
+                      showAmounts
+                        ? formatAmount(monthlyContribution)
+                        : "Rs. ••••••"
+                    }/month)`
                   : `Projected Wealth (${annualRate}% annual)`
               }
             />
@@ -261,7 +268,7 @@ const WealthProjectionChart: React.FC<WealthProjectionChartProps> = ({
             Current Value
           </Typography>
           <Typography variant="body2" fontWeight={600}>
-            {formatAmount(amount)}
+            <MaskedAmount value={amount} />
           </Typography>
         </Box>
         <Box
@@ -275,7 +282,7 @@ const WealthProjectionChart: React.FC<WealthProjectionChartProps> = ({
             10 Year Projection
           </Typography>
           <Typography variant="body2" fontWeight={600}>
-            {formatAmount(calculateProjection(10))}
+            <MaskedAmount value={calculateProjection(10)} />
           </Typography>
         </Box>
         <Box
@@ -289,7 +296,7 @@ const WealthProjectionChart: React.FC<WealthProjectionChartProps> = ({
             30 Year Projection
           </Typography>
           <Typography variant="body2" fontWeight={600}>
-            {formatAmount(calculateProjection(30))}
+            <MaskedAmount value={calculateProjection(30)} />
           </Typography>
         </Box>
       </Box>

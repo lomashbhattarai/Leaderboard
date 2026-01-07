@@ -1,7 +1,6 @@
 import React from "react";
 import { Chip, Tooltip } from "@mui/material";
 import { formatAmount } from "../utils/helper";
-import { useShowAmounts } from "../contexts/ShowAmountsContext";
 
 interface StopLossChipProps {
   type: "ABSOLUTE" | "PERCENTAGE";
@@ -16,13 +15,7 @@ const StopLossChip: React.FC<StopLossChipProps> = ({
   status,
   color = "default",
 }) => {
-  const { showAmounts } = useShowAmounts();
-  const label =
-    type === "ABSOLUTE"
-      ? showAmounts
-        ? `${formatAmount(value)}`
-        : "Rs. ••••••"
-      : `${value}%`;
+  const label = type === "ABSOLUTE" ? `${formatAmount(value)}` : `${value}%`;
 
   return (
     <Tooltip title={`${status}: ${label}`}>

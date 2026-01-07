@@ -2,6 +2,7 @@ import React from "react";
 import TableView, { ColumnConfig } from "./common/TableView";
 import { PortfolioStock } from "../types/api";
 import { formatPerformance } from "../pages/Leaderboard";
+import { formatAmount } from "../utils/helper";
 import {
   Button,
   Box,
@@ -95,9 +96,7 @@ const PORTFOLIO_TABLE_HEADERS_FROM_DB: Array<ColumnConfig> = [
     label: "Closing Price",
     key: "latestClosingPrice",
     render: (value) => (
-      <Typography variant="body2">
-        <MaskedAmount value={value} hideCurrency={true} />
-      </Typography>
+      <Typography variant="body2">{formatAmount(value, true)}</Typography>
     ),
   },
   {

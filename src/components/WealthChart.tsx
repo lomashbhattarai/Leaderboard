@@ -2,6 +2,7 @@ import React from "react";
 import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip } from "recharts";
 import { WealthEntry } from "../types/wealth";
 import { formatAmount } from "../utils/helper";
+import { useShowAmounts } from "../contexts/ShowAmountsContext";
 
 interface WealthChartProps {
   wealthEntries: WealthEntry[];
@@ -10,6 +11,8 @@ interface WealthChartProps {
 const COLORS = ["#0088FE", "#00C49F", "#FFBB28", "#FF8042", "#8884D8"];
 
 const WealthChart: React.FC<WealthChartProps> = ({ wealthEntries }) => {
+  const { showAmounts } = useShowAmounts();
+
   // Group and sum amounts by asset type
   const chartData = wealthEntries.reduce(
     (acc: { name: string; value: number }[], entry) => {
@@ -46,7 +49,11 @@ const WealthChart: React.FC<WealthChartProps> = ({ wealthEntries }) => {
             <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
           ))}
         </Pie>
-        <Tooltip formatter={(value: number) => formatAmount(value)} />
+        <Tooltip
+          formatter={(value: number) =>
+            showAmounts ? formatAmount(value) : "Rs. ••••••"
+          }
+        />
       </PieChart>
     </ResponsiveContainer>
   );
