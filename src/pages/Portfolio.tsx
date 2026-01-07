@@ -308,7 +308,7 @@ const Portfolio: React.FC = () => {
               >
                 Add Transaction
               </Button>
-              {portfolioId && (
+              {portfolioId ? (
                 <Button
                   variant="outlined"
                   color="primary"
@@ -327,7 +327,7 @@ const Portfolio: React.FC = () => {
                 >
                   Transaction History
                 </Button>
-              )}
+              ) : null}
             </Stack>
             <MeroshareImport
               addPortfolio={handlePortfolioAdd}
