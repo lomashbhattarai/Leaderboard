@@ -2,7 +2,6 @@ import React from "react";
 import TableView, { ColumnConfig } from "./common/TableView";
 import { PortfolioStock } from "../types/api";
 import { formatPerformance } from "../pages/Leaderboard";
-import { formatAmount } from "../utils/helper";
 import {
   Button,
   Box,
@@ -11,6 +10,8 @@ import {
   IconButton,
   Tooltip,
 } from "@mui/material";
+import MaskedAmount from "./common/MaskedAmount";
+import MaskedQuantity from "./common/MaskedQuantity";
 import TrendingDownIcon from "@mui/icons-material/TrendingDown";
 import { Link as RouterLink } from "react-router-dom";
 import StopLossChip from "./StopLossChip";
@@ -45,13 +46,19 @@ const PORTFOLIO_TABLE_HEADERS_FROM_DB: Array<ColumnConfig> = [
   {
     label: "Quantity",
     key: "quantity",
-    render: (value) => <Typography variant="body2">{value}</Typography>,
+    render: (value) => (
+      <Typography variant="body2">
+        <MaskedQuantity value={value} />
+      </Typography>
+    ),
   },
   {
     label: "Value at LTP",
     key: "valueAtLTP",
     render: (value) => (
-      <Typography variant="body2">{formatAmount(value, true)}</Typography>
+      <Typography variant="body2">
+        <MaskedAmount value={value} hideCurrency={true} />
+      </Typography>
     ),
   },
   {
@@ -79,14 +86,18 @@ const PORTFOLIO_TABLE_HEADERS_FROM_DB: Array<ColumnConfig> = [
     label: "Buy Price",
     key: "buyPrice",
     render: (value) => (
-      <Typography variant="body2">{formatAmount(value, true)}</Typography>
+      <Typography variant="body2">
+        <MaskedAmount value={value} hideCurrency={true} />
+      </Typography>
     ),
   },
   {
     label: "Closing Price",
     key: "latestClosingPrice",
     render: (value) => (
-      <Typography variant="body2">{formatAmount(value, true)}</Typography>
+      <Typography variant="body2">
+        <MaskedAmount value={value} hideCurrency={true} />
+      </Typography>
     ),
   },
   {
@@ -105,7 +116,7 @@ const PORTFOLIO_TABLE_HEADERS_FROM_DB: Array<ColumnConfig> = [
             variant="body2"
             sx={{ color: profitLoss >= 0 ? "success.main" : "error.main" }}
           >
-            {formatAmount(profitLoss, true)}
+            <MaskedAmount value={profitLoss} hideCurrency={true} />
           </Typography>
         </Tooltip>
       );

@@ -46,3 +46,16 @@ export const getPortfolio = (): ScriptInPortfolio[] => {
   const storedPortfolio = getFromLocalStorage(PORTFOLIO_KEY);
   return storedPortfolio || [];
 };
+
+// Show Amounts Preference
+const SHOW_AMOUNTS_KEY = 'show_amounts_preference';
+
+export const getShowAmounts = (): boolean => {
+  const stored = localStorage.getItem(SHOW_AMOUNTS_KEY);
+  // Default to true (show amounts by default)
+  return stored === null ? true : stored === 'true';
+};
+
+export const setShowAmounts = (value: boolean): void => {
+  localStorage.setItem(SHOW_AMOUNTS_KEY, String(value));
+};

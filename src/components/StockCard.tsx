@@ -2,9 +2,9 @@ import React from "react";
 import { Box, Stack, Typography } from "@mui/material";
 import AddToWatchListHover from "./AddToWatchListHover";
 import StockLink from "./common/StockLink";
-import { formatAmount } from "../utils/helper";
 import { formatPerformance } from "../pages/Leaderboard";
 import type { StockWithPerformance } from "../types/api";
+import MaskedAmount from "./common/MaskedAmount";
 
 interface StockCardProps {
   row: StockWithPerformance;
@@ -31,7 +31,11 @@ const StockCard: React.FC<StockCardProps> = ({ row }) => {
         >
           <Box>
             <Typography variant="body2" fontWeight={500}>
-              {row.latestPrice ? formatAmount(row.latestPrice, true) : "-"}
+              {row.latestPrice ? (
+                <MaskedAmount value={row.latestPrice} hideCurrency={true} />
+              ) : (
+                "-"
+              )}
             </Typography>
             <Typography variant="caption" color="text.secondary">
               Latest Price

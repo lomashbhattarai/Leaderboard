@@ -13,9 +13,9 @@ import {
   Grid,
 } from "@mui/material";
 import { formatPerformance } from "../pages/Leaderboard";
-import { formatAmount } from "../utils/helper";
 import TrendingUpIcon from "@mui/icons-material/TrendingUp";
 import TrendingDownIcon from "@mui/icons-material/TrendingDown";
+import MaskedAmount from "./common/MaskedAmount";
 
 interface PortfolioValueProps {
   portfolio?: Portfolio;
@@ -79,7 +79,7 @@ const PortfolioValue: React.FC<PortfolioValueProps> = ({ portfolio }) => {
                   mb: 0.5,
                 }}
               >
-                {formatAmount(currentValue)}
+                <MaskedAmount value={currentValue} />
               </Typography>
               <Box sx={{ display: "flex", alignItems: "center" }}>
                 <Typography
@@ -98,7 +98,7 @@ const PortfolioValue: React.FC<PortfolioValueProps> = ({ portfolio }) => {
                     color: currentTheme.text.primary,
                   }}
                 >
-                  {formatAmount(initialInvestment)}
+                  <MaskedAmount value={initialInvestment} />
                 </Typography>
               </Box>
 
@@ -129,7 +129,10 @@ const PortfolioValue: React.FC<PortfolioValueProps> = ({ portfolio }) => {
                   }}
                 >
                   {totalReturnData.isPositive ? "+" : "-"}
-                  {formatAmount(totalReturnData.formattedChange, true)}
+                  <MaskedAmount
+                    value={totalReturnData.formattedChange}
+                    hideCurrency={true}
+                  />
                 </Typography>
               </Box>
             </CardContent>
@@ -175,7 +178,10 @@ const PortfolioValue: React.FC<PortfolioValueProps> = ({ portfolio }) => {
                       }}
                     >
                       {oneDayData.change >= 0 ? "+" : "-"}
-                      {formatAmount(oneDayData.formattedChange, true)}
+                      <MaskedAmount
+                        value={oneDayData.formattedChange}
+                        hideCurrency={true}
+                      />
                     </Typography>
                   </Box>
                 </Grid>
@@ -212,7 +218,10 @@ const PortfolioValue: React.FC<PortfolioValueProps> = ({ portfolio }) => {
                       }}
                     >
                       {oneWeekData.change >= 0 ? "+" : "-"}
-                      {formatAmount(oneWeekData.formattedChange, true)}
+                      <MaskedAmount
+                        value={oneWeekData.formattedChange}
+                        hideCurrency={true}
+                      />
                     </Typography>
                   </Box>
                 </Grid>
@@ -249,7 +258,10 @@ const PortfolioValue: React.FC<PortfolioValueProps> = ({ portfolio }) => {
                       }}
                     >
                       {oneMonthData.change >= 0 ? "+" : "-"}
-                      {formatAmount(oneMonthData.formattedChange, true)}
+                      <MaskedAmount
+                        value={oneMonthData.formattedChange}
+                        hideCurrency={true}
+                      />
                     </Typography>
                   </Box>
                 </Grid>

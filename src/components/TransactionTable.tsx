@@ -2,7 +2,7 @@ import React, { useMemo } from "react";
 import { Button } from "@mui/material";
 import { Transaction } from "../hooks/useEarningsCalculator";
 import TableView, { ColumnConfig } from "./common/TableView";
-import { formatAmount } from "../utils/helper";
+import MaskedAmount from "./common/MaskedAmount";
 
 interface TransactionTableProps {
   transactions: Transaction[];
@@ -49,12 +49,12 @@ const tableHeaders: ColumnConfig[] = [
     label: "Monthly Amount",
     key: "amount",
     render: (value: number, row: TransactionTableData) =>
-      row.type === "salary" ? formatAmount(value) : "-",
+      row.type === "salary" ? <MaskedAmount value={value} /> : "-",
   },
   {
     label: "Total Amount",
     key: "totalAmount",
-    render: (value: number) => formatAmount(value),
+    render: (value: number) => <MaskedAmount value={value} />,
   },
   // {
   //   label: "Cumulative Amount",

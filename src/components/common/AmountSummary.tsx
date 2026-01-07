@@ -1,10 +1,10 @@
-import { formatAmount } from "../../utils/helper";
 import { useTheme } from "../../contexts/ThemeContext";
 import { getCommonStyles } from "../../themes/commonComponents";
 import { alpha } from "@mui/material/styles";
 
 import { Paper } from "@mui/material";
 import { Typography } from "@mui/material";
+import MaskedAmount from "./MaskedAmount";
 
 const AmountSummary = ({ label, value }: { label: string; value: number }) => {
   const { currentTheme } = useTheme();
@@ -39,7 +39,7 @@ const AmountSummary = ({ label, value }: { label: string; value: number }) => {
           letterSpacing: "-0.5px",
         }}
       >
-        {formatAmount(value)}
+        <MaskedAmount value={value} />
       </Typography>
     </Paper>
   );

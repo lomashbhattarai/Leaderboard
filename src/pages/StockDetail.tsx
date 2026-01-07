@@ -22,9 +22,10 @@ import {
 } from "../api/queries/useStockTransactions";
 import TransactionTimeline from "../components/TransactionTimeline";
 import TransactionForm from "../components/TransactionForm";
-import { formatAmount } from "../utils/helper";
 import { showToast } from "../utils/toast";
 import { StockTransaction } from "../types/api";
+import MaskedAmount from "../components/common/MaskedAmount";
+import MaskedQuantity from "../components/common/MaskedQuantity";
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -131,7 +132,9 @@ const StockDetail = () => {
                 <Typography variant="caption" color="text.secondary">
                   Total Bought
                 </Typography>
-                <Typography variant="h6">{stats.totalBought}</Typography>
+                <Typography variant="h6">
+                  <MaskedQuantity value={stats.totalBought} />
+                </Typography>
               </CardContent>
             </Card>
           </Grid>
@@ -142,7 +145,7 @@ const StockDetail = () => {
                   Avg Buy Price
                 </Typography>
                 <Typography variant="h6">
-                  {formatAmount(stats.avgBuyPrice, true)}
+                  <MaskedAmount value={stats.avgBuyPrice} hideCurrency={true} />
                 </Typography>
               </CardContent>
             </Card>
@@ -153,7 +156,9 @@ const StockDetail = () => {
                 <Typography variant="caption" color="text.secondary">
                   Total Sold
                 </Typography>
-                <Typography variant="h6">{stats.totalSold}</Typography>
+                <Typography variant="h6">
+                  <MaskedQuantity value={stats.totalSold} />
+                </Typography>
               </CardContent>
             </Card>
           </Grid>

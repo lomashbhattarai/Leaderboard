@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import { Box, Typography, Stack, Drawer, Button } from "@mui/material";
 import TableView, { ColumnConfig } from "../components/common/TableView";
-import { formatAmount } from "../utils/helper";
 import AmountSummary from "../components/common/AmountSummary";
+import MaskedAmount from "../components/common/MaskedAmount";
 import WealthEntryForm from "../components/WealthEntryForm";
 import { WealthEntry } from "../types/wealth";
 import { useWealth } from "../hooks/useWealth";
@@ -39,7 +39,7 @@ const WealthTracker: React.FC = () => {
     {
       label: "Current amount",
       key: "amount",
-      render: (value: any) => formatAmount(value),
+      render: (value: any) => <MaskedAmount value={value} />,
     },
   ];
 

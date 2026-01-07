@@ -29,8 +29,9 @@ import {
   TransactionType,
   TransactionSummary,
 } from "../types/api";
-import { formatAmount } from "../utils/helper";
 import { format } from "date-fns";
+import MaskedAmount from "./common/MaskedAmount";
+import MaskedQuantity from "./common/MaskedQuantity";
 
 interface TransactionTimelineProps {
   transactions: StockTransactionWithBalance[];
@@ -179,15 +180,19 @@ const TransactionTimeline: React.FC<TransactionTimelineProps> = ({
                   {/* Transaction details */}
                   <Box>
                     <Typography variant="caption" color="text.secondary">
-                      Qty: {transaction.quantity} × Rate:{" "}
-                      {formatAmount(transaction.price, true)}
+                      Qty: <MaskedQuantity value={transaction.quantity} /> ×
+                      Rate:{" "}
+                      <MaskedAmount
+                        value={transaction.price}
+                        hideCurrency={true}
+                      />
                     </Typography>
                     <Typography variant="body2" fontWeight="bold">
                       Amount:{" "}
-                      {formatAmount(
-                        transaction.quantity * transaction.price,
-                        true
-                      )}
+                      <MaskedAmount
+                        value={transaction.quantity * transaction.price}
+                        hideCurrency={true}
+                      />
                     </Typography>
                   </Box>
 
@@ -199,7 +204,10 @@ const TransactionTimeline: React.FC<TransactionTimelineProps> = ({
                           Capital Balance:
                         </Typography>
                         <Typography variant="caption" fontWeight="medium">
-                          {formatAmount(transaction.capitalBalance, true)}
+                          <MaskedAmount
+                            value={transaction.capitalBalance}
+                            hideCurrency={true}
+                          />
                         </Typography>
                       </Stack>
                       <Stack direction="row" justifyContent="space-between">
@@ -207,7 +215,7 @@ const TransactionTimeline: React.FC<TransactionTimelineProps> = ({
                           Shares Balance:
                         </Typography>
                         <Typography variant="caption" fontWeight="medium">
-                          {transaction.sharesBalance}
+                          <MaskedQuantity value={transaction.sharesBalance} />
                         </Typography>
                       </Stack>
                       {transaction.transactionPL !== undefined && (
@@ -226,7 +234,10 @@ const TransactionTimeline: React.FC<TransactionTimelineProps> = ({
                             }}
                           >
                             {transaction.transactionPL >= 0 ? "+" : ""}
-                            {formatAmount(transaction.transactionPL, true)}
+                            <MaskedAmount
+                              value={transaction.transactionPL}
+                              hideCurrency={true}
+                            />
                           </Typography>
                         </Stack>
                       )}
@@ -245,7 +256,10 @@ const TransactionTimeline: React.FC<TransactionTimelineProps> = ({
                           }}
                         >
                           {transaction.realizedPL >= 0 ? "+" : ""}
-                          {formatAmount(transaction.realizedPL, true)}
+                          <MaskedAmount
+                            value={transaction.realizedPL}
+                            hideCurrency={true}
+                          />
                         </Typography>
                       </Stack>
                     </Stack>
@@ -356,30 +370,36 @@ const TransactionTimeline: React.FC<TransactionTimelineProps> = ({
                 </TableCell>
                 <TableCell align="right">
                   <Typography variant="body2">
-                    {transaction.quantity}
+                    <MaskedQuantity value={transaction.quantity} />
                   </Typography>
                 </TableCell>
                 <TableCell align="right">
                   <Typography variant="body2">
-                    {formatAmount(transaction.price, true)}
+                    <MaskedAmount
+                      value={transaction.price}
+                      hideCurrency={true}
+                    />
                   </Typography>
                 </TableCell>
                 <TableCell align="right">
                   <Typography variant="body2" fontWeight="medium">
-                    {formatAmount(
-                      transaction.quantity * transaction.price,
-                      true
-                    )}
+                    <MaskedAmount
+                      value={transaction.quantity * transaction.price}
+                      hideCurrency={true}
+                    />
                   </Typography>
                 </TableCell>
                 <TableCell align="right">
                   <Typography variant="body2" fontWeight="medium">
-                    {formatAmount(transaction.capitalBalance, true)}
+                    <MaskedAmount
+                      value={transaction.capitalBalance}
+                      hideCurrency={true}
+                    />
                   </Typography>
                 </TableCell>
                 <TableCell align="right">
                   <Typography variant="body2">
-                    {transaction.sharesBalance}
+                    <MaskedQuantity value={transaction.sharesBalance} />
                   </Typography>
                 </TableCell>
                 <TableCell align="right">
@@ -395,7 +415,10 @@ const TransactionTimeline: React.FC<TransactionTimelineProps> = ({
                       }}
                     >
                       {transaction.transactionPL >= 0 ? "+" : ""}
-                      {formatAmount(transaction.transactionPL, true)}
+                      <MaskedAmount
+                        value={transaction.transactionPL}
+                        hideCurrency={true}
+                      />
                     </Typography>
                   ) : (
                     <Typography variant="body2" color="text.secondary">
@@ -415,7 +438,10 @@ const TransactionTimeline: React.FC<TransactionTimelineProps> = ({
                     }}
                   >
                     {transaction.realizedPL >= 0 ? "+" : ""}
-                    {formatAmount(transaction.realizedPL, true)}
+                    <MaskedAmount
+                      value={transaction.realizedPL}
+                      hideCurrency={true}
+                    />
                   </Typography>
                 </TableCell>
                 <TableCell align="center">

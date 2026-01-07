@@ -16,6 +16,7 @@ import {
   useToggleAnonymous,
 } from "../api/queries/useUserSettings";
 import { showToast } from "../utils/toast";
+import { useShowAmounts } from "../hooks/useShowAmounts";
 
 const UserMenu: React.FC = () => {
   const { user, logout } = useAuthContext();
@@ -24,6 +25,7 @@ const UserMenu: React.FC = () => {
 
   const { data: settings } = useUserSettings();
   const toggleAnonymousMutation = useToggleAnonymous();
+  const { showAmounts, toggleShowAmounts } = useShowAmounts();
 
   const navigate = useNavigate();
 
@@ -104,6 +106,19 @@ const UserMenu: React.FC = () => {
                 <VisibilityIcon sx={{ ml: 1 }} />
               ) : (
                 <VisibilityOffIcon sx={{ ml: 1 }} />
+              )}
+            </MenuItem>
+            <MenuItem
+              onClick={() => {
+                toggleShowAmounts();
+                handleClose();
+              }}
+            >
+              {showAmounts ? "Mask Amounts" : "Unmask Amounts"}
+              {showAmounts ? (
+                <VisibilityOffIcon sx={{ ml: 1 }} />
+              ) : (
+                <VisibilityIcon sx={{ ml: 1 }} />
               )}
             </MenuItem>
             <MenuItem

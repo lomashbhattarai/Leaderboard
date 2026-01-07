@@ -2,9 +2,9 @@ import React from "react";
 import { Portfolio } from "../types/api";
 import { useTheme } from "../contexts/ThemeContext";
 import { Stack, Typography, Box, Paper } from "@mui/material";
-import { formatAmount } from "../utils/helper";
 import TrendingUpIcon from "@mui/icons-material/TrendingUp";
 import TrendingDownIcon from "@mui/icons-material/TrendingDown";
+import MaskedAmount from "./common/MaskedAmount";
 
 interface InvestmentPerformanceProps {
   portfolio?: Portfolio;
@@ -36,7 +36,7 @@ const InvestmentPerformance: React.FC<InvestmentPerformanceProps> = ({
             Initial Investment
           </Typography>
           <Typography variant="h6" sx={{ color: currentTheme.text.primary }}>
-            {formatAmount(initialInvestment)}
+            <MaskedAmount value={initialInvestment} />
           </Typography>
         </Box>
 
@@ -85,7 +85,7 @@ const InvestmentPerformance: React.FC<InvestmentPerformanceProps> = ({
               }}
             >
               {isPositive ? "+" : ""}
-              {formatAmount(profitLossValue)}
+              <MaskedAmount value={profitLossValue} />
             </Typography>
           </Stack>
         </Box>
