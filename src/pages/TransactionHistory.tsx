@@ -10,8 +10,17 @@ import {
   DialogContent,
   Button,
   CircularProgress,
+  Grid,
+  Card,
+  CardContent,
 } from "@mui/material";
-import { ArrowBack as ArrowBackIcon } from "@mui/icons-material";
+import {
+  ArrowBack as ArrowBackIcon,
+  TrendingUp as TrendingUpIcon,
+  TrendingDown as TrendingDownIcon,
+  AccountBalance as AccountBalanceIcon,
+  ShowChart as ShowChartIcon,
+} from "@mui/icons-material";
 import {
   usePortfolioTransactions,
   useUpdateStockTransaction,
@@ -19,10 +28,11 @@ import {
 } from "../api/queries/useStockTransactions";
 import TransactionTimeline from "../components/TransactionTimeline";
 import TransactionForm from "../components/TransactionForm";
-import { StockTransaction } from "../types/api";
+import { StockTransactionWithBalance } from "../types/api";
 import { showToast } from "../utils/toast";
 import { useQueryClient } from "@tanstack/react-query";
 import { portfolioKeys } from "../api/queries/usePortfolios";
+import { formatAmount } from "../utils/helper";
 
 const TransactionHistory: React.FC = () => {
   const { portfolioId } = useParams<{ portfolioId: string }>();
@@ -30,7 +40,7 @@ const TransactionHistory: React.FC = () => {
   const queryClient = useQueryClient();
   const [isFormOpen, setIsFormOpen] = useState(false);
   const [selectedTransaction, setSelectedTransaction] =
-    useState<StockTransaction | null>(null);
+    useState<StockTransactionWithBalance | null>(null);
 
   const { data, isLoading, error } = usePortfolioTransactions(
     Number(portfolioId) || 0
@@ -44,7 +54,7 @@ const TransactionHistory: React.FC = () => {
     navigate("/my-portfolio");
   };
 
-  const handleEditTransaction = (transaction: StockTransaction) => {
+  const handleEditTransaction = (transaction: StockTransactionWithBalance) => {
     setSelectedTransaction(transaction);
     setIsFormOpen(true);
   };
@@ -116,9 +126,10 @@ const TransactionHistory: React.FC = () => {
 
   const portfolio = data?.data?.portfolio;
   const transactions = data?.data?.transactions || [];
+  const summary = data?.data?.summary;
 
   return (
-    <Box sx={{ p: 3, maxWidth: 1200, mx: "auto" }}>
+    <Box sx={{ p: 3, maxWidth: 1400, mx: "auto" }}>
       <Box sx={{ display: "flex", alignItems: "center", mb: 3 }}>
         <IconButton onClick={handleBack} sx={{ mr: 2 }}>
           <ArrowBackIcon />
@@ -128,9 +139,108 @@ const TransactionHistory: React.FC = () => {
         </Typography>
       </Box>
 
-      <Paper sx={{ p: 3, maxHeight: "calc(100vh - 200px)", overflow: "auto" }}>
+      {/* Summary Cards */}
+      {summary && (
+        <Grid container spacing={2} sx={{ mb: 3 }}>
+          <Grid item xs={12} sm={6} md={3}>
+            <Card>
+              <CardContent>
+                <Box sx={{ display: "flex", alignItems: "center", mb: 1 }}>
+                  <AccountBalanceIcon sx={{ mr: 1, color: "primary.main" }} />
+                  <Typography variant="body2" color="text.secondary">
+                    Capital Invested
+                  </Typography>
+                </Box>
+                <Typography variant="h6" fontWeight="bold">
+                  {formatAmount(summary.totalCapitalInvested, true)}
+                </Typography>
+                <Typography variant="caption" color="text.secondary">
+                  Total money invested
+                </Typography>
+              </CardContent>
+            </Card>
+          </Grid>
+
+          <Grid item xs={12} sm={6} md={3}>
+            <Card>
+              <CardContent>
+                <Box sx={{ display: "flex", alignItems: "center", mb: 1 }}>
+                  <ShowChartIcon sx={{ mr: 1, color: "info.main" }} />
+                  <Typography variant="body2" color="text.secondary">
+                    Current Balance
+                  </Typography>
+                </Box>
+                <Typography variant="h6" fontWeight="bold">
+                  {formatAmount(summary.currentCapitalBalance, true)}
+                </Typography>
+                <Typography variant="caption" color="text.secondary">
+                  Capital after sells
+                </Typography>
+              </CardContent>
+            </Card>
+          </Grid>
+
+          <Grid item xs={12} sm={6} md={3}>
+            <Card>
+              <CardContent>
+                <Box sx={{ display: "flex", alignItems: "center", mb: 1 }}>
+                  {summary.totalRealizedPL >= 0 ? (
+                    <TrendingUpIcon sx={{ mr: 1, color: "success.main" }} />
+                  ) : (
+                    <TrendingDownIcon sx={{ mr: 1, color: "error.main" }} />
+                  )}
+                  <Typography variant="body2" color="text.secondary">
+                    Realized P/L
+                  </Typography>
+                </Box>
+                <Typography
+                  variant="h6"
+                  fontWeight="bold"
+                  sx={{
+                    color:
+                      summary.totalRealizedPL >= 0
+                        ? "success.main"
+                        : "error.main",
+                  }}
+                >
+                  {summary.totalRealizedPL >= 0 ? "+" : ""}
+                  {formatAmount(summary.totalRealizedPL, true)}
+                </Typography>
+                <Typography variant="caption" color="text.secondary">
+                  Profit/Loss from sales
+                </Typography>
+              </CardContent>
+            </Card>
+          </Grid>
+
+          <Grid item xs={12} sm={6} md={3}>
+            <Card>
+              <CardContent>
+                <Box sx={{ display: "flex", alignItems: "center", mb: 1 }}>
+                  <ShowChartIcon sx={{ mr: 1, color: "secondary.main" }} />
+                  <Typography variant="body2" color="text.secondary">
+                    Current Holdings
+                  </Typography>
+                </Box>
+                <Typography variant="h6" fontWeight="bold">
+                  {summary.totalSharesHeld}
+                </Typography>
+                <Typography variant="caption" color="text.secondary">
+                  Total shares owned
+                  {summary.avgCostBasis > 0 && (
+                    <> (Avg: {formatAmount(summary.avgCostBasis, true)})</>
+                  )}
+                </Typography>
+              </CardContent>
+            </Card>
+          </Grid>
+        </Grid>
+      )}
+
+      <Paper sx={{ p: 3, maxHeight: "calc(100vh - 350px)", overflow: "auto" }}>
         <TransactionTimeline
           transactions={transactions}
+          summary={summary}
           onEdit={handleEditTransaction}
           onDelete={handleDeleteTransaction}
           isLoading={isLoading}
@@ -162,4 +272,3 @@ const TransactionHistory: React.FC = () => {
 };
 
 export default TransactionHistory;
-

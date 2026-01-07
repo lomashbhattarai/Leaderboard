@@ -337,6 +337,14 @@ export interface StockTransaction {
   }
 }
 
+export interface StockTransactionWithBalance extends StockTransaction {
+  capitalBalance: number       // Running capital invested
+  sharesBalance: number        // Shares held after this transaction
+  realizedPL: number          // Cumulative realized P/L
+  avgCostBasis: number        // Weighted average cost per share
+  transactionPL?: number      // P/L for this transaction (SELL only)
+}
+
 export interface StockTransactionDTO {
   portfolioStockId: number
   transactionType: TransactionType
@@ -366,11 +374,29 @@ export interface TransactionStats {
   avgSellPrice: number
 }
 
+export interface TransactionSummary {
+  totalCapitalInvested: number    // Total money put into buys
+  currentCapitalBalance: number   // Current capital (after sells)
+  totalRealizedPL: number         // Total realized profit/loss
+  totalSharesHeld: number         // Current shares owned
+  avgCostBasis: number            // Average cost per share
+}
+
 export interface StockTransactionsResponse {
   status: string
   data: {
     stock: Stock
-    transactions: StockTransaction[]
+    transactions: StockTransactionWithBalance[]
     stats: TransactionStats
+    summary: TransactionSummary
+  }
+}
+
+export interface PortfolioTransactionsResponse {
+  status: string
+  data: {
+    portfolio: Portfolio
+    transactions: StockTransactionWithBalance[]
+    summary: TransactionSummary
   }
 }

@@ -43,6 +43,7 @@ import type {
   PortfolioStock,
   PortfolioStockDTO,
   StockTransaction,
+  StockTransactionWithBalance,
   StockTransactionDTO,
   StockTransactionWithStockDTO,
 } from "../types/api";
@@ -66,7 +67,7 @@ const Portfolio: React.FC = () => {
   const [selectedStock, setSelectedStock] =
     React.useState<PortfolioStock | null>(null);
   const [selectedTransaction, setSelectedTransaction] =
-    React.useState<StockTransaction | null>(null);
+    React.useState<StockTransactionWithBalance | null>(null);
 
   const createStock = useCreatePortfolioStock(portfolioId);
   const updateStock = useUpdatePortfolioStock(
@@ -206,7 +207,7 @@ const Portfolio: React.FC = () => {
     setIsDrawerOpen(true);
   };
 
-  const handleEditTransaction = (transaction: StockTransaction) => {
+  const handleEditTransaction = (transaction: StockTransactionWithBalance) => {
     setSelectedTransaction(transaction);
     setIsTransactionFormOpen(true);
   };
@@ -312,7 +313,9 @@ const Portfolio: React.FC = () => {
                   variant="outlined"
                   color="primary"
                   startIcon={<HistoryIcon />}
-                  onClick={() => navigate(`/portfolio/${portfolioId}/transactions`)}
+                  onClick={() =>
+                    navigate(`/portfolio/${portfolioId}/transactions`)
+                  }
                   sx={{
                     borderColor: currentTheme.accent.primary,
                     color: currentTheme.accent.primary,
@@ -509,6 +512,7 @@ const Portfolio: React.FC = () => {
           ) : (
             <TransactionTimeline
               transactions={transactionsData?.data.transactions || []}
+              summary={transactionsData?.data.summary}
               onEdit={handleEditTransaction}
               onDelete={handleDeleteTransaction}
               onAddNew={handleAddTransaction}
