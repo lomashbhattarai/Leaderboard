@@ -91,8 +91,8 @@ export function useTriggerNepseFetch() {
   const queryClient = useQueryClient();
   
   return useMutation({
-    mutationFn: async () => {
-      const response = await apiClient.post(ENDPOINTS.ADMIN.NEPSE_TRIGGER);
+    mutationFn: async (params?: { force?: boolean }) => {
+      const response = await apiClient.post(ENDPOINTS.ADMIN.NEPSE_TRIGGER, params || {});
       return response.data;
     },
     onSuccess: () => {

@@ -73,14 +73,18 @@ export default function NepseFetchMonitor() {
   const { data: logs, isLoading: logsLoading } = useNepseLogs(10);
   const triggerFetch = useTriggerNepseFetch();
 
-  const handleTriggerFetch = async () => {
+  const isFetchInProgress =
+    latestStatus?.status === "pending" || latestStatus?.status === "retrying";
+
+  const handleTriggerFetch = async (force: boolean = false) => {
     try {
-      await triggerFetch.mutateAsync();
+      await triggerFetch.mutateAsync({ force });
       toast.success("NEPSE data fetch triggered successfully!");
     } catch (error: any) {
       const errorMsg =
         error.response?.data?.error || "Failed to trigger NEPSE data fetch";
-      toast.error(errorMsg);
+      const hint = error.response?.data?.hint;
+      toast.error(errorMsg + (hint ? `\n${hint}` : ""));
     }
   };
 
@@ -107,21 +111,32 @@ export default function NepseFetchMonitor() {
               Monitor and control NEPSE stock data fetching
             </Typography>
           </Box>
-          <Button
-            variant="contained"
-            color="primary"
-            startIcon={
-              triggerFetch.isPending ? (
-                <CircularProgress size={20} color="inherit" />
-              ) : (
-                <RefreshIcon />
-              )
-            }
-            onClick={handleTriggerFetch}
-            // disabled={triggerFetch.isPending || latestStatus?.status === 'pending' || latestStatus?.status === 'retrying'}
-          >
-            {triggerFetch.isPending ? "Triggering..." : "Manual Trigger"}
-          </Button>
+          <Box display="flex" gap={1} alignItems="center">
+            <Button
+              variant="outlined"
+              color="error"
+              startIcon={<ErrorIcon />}
+              onClick={() => handleTriggerFetch(true)}
+              disabled={triggerFetch.isPending}
+            >
+              Force Trigger
+            </Button>
+            <Button
+              variant="contained"
+              color="primary"
+              startIcon={
+                triggerFetch.isPending ? (
+                  <CircularProgress size={20} color="inherit" />
+                ) : (
+                  <RefreshIcon />
+                )
+              }
+              onClick={() => handleTriggerFetch(false)}
+              disabled={triggerFetch.isPending || isFetchInProgress}
+            >
+              {triggerFetch.isPending ? "Triggering..." : "Manual Trigger"}
+            </Button>
+          </Box>
         </Box>
 
         {/* Latest Status */}
