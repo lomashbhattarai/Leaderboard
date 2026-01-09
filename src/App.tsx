@@ -27,6 +27,7 @@ import { Toaster } from "react-hot-toast";
 import NewPortfolio from "./pages/NewPortfolio";
 import Journals from "./pages/Journals";
 import TransactionHistory from "./pages/TransactionHistory";
+import AdminDashboard from "./pages/AdminDashboard";
 import { WatchListProvider } from "./contexts/WatchListContext";
 import { ShowAmountsProvider } from "./contexts/ShowAmountsContext";
 const theme = createTheme();
@@ -108,6 +109,14 @@ const AppContent = () => {
               element={
                 <ProtectedRoute>
                   <TransactionHistory />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/admin/dashboard"
+              element={
+                <ProtectedRoute requireAdmin={true}>
+                  <AdminDashboard />
                 </ProtectedRoute>
               }
             />

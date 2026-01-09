@@ -15,7 +15,9 @@ import EmojiEventsIcon from "@mui/icons-material/EmojiEvents";
 import BookIcon from "@mui/icons-material/Book";
 import UserMenu from "./UserMenu";
 import { useTheme } from "../contexts/ThemeContext";
+import { useAuthContext } from "../contexts/AuthContext";
 import Logo from "./Logo";
+import AdminPanelSettingsIcon from "@mui/icons-material/AdminPanelSettings";
 
 const logoAssetSrc = "/assets/branding/nepse-leader-transparent.png";
 
@@ -28,9 +30,13 @@ const NAVBAR_BG = {
 
 const Navbar = () => {
   const { currentTheme, setTheme, availableThemes } = useTheme();
+  const { user } = useAuthContext();
   const [mobileMenu, setMobileMenu] = React.useState<null | HTMLElement>(null);
   const muiTheme = useMuiTheme();
   const isMobile = useMediaQuery(muiTheme.breakpoints.down("sm"));
+  
+  // Check if user is admin
+  const isAdmin = user?.role === 'admin' || user?.role === 'superadmin';
 
   const navStyle = {
     "& a": {
@@ -84,6 +90,15 @@ const Navbar = () => {
     // { to: "/earnings-tracker", label: "Earnings Tracker" },
     { to: "/wealth-tracker", label: "Wealth Tracker" },
   ];
+
+  // Add admin dashboard link for admin users
+  if (isAdmin) {
+    navLinks.push({
+      to: "/admin/dashboard",
+      label: "Admin",
+      icon: <AdminPanelSettingsIcon />,
+    });
+  }
 
   if (isMobile) {
     navLinks = navLinks.slice(0, 5); // Show all items on mobile with icons

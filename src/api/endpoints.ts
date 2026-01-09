@@ -69,6 +69,13 @@ export const ENDPOINTS = {
     UPDATE: (id: number) => `/transactions/${id}`,
     DELETE: (id: number) => `/transactions/${id}`,
   },
+  ADMIN: {
+    DASHBOARD_STATS: '/admin/dashboard/stats',
+    TOP_ACTIVE_USERS: '/admin/dashboard/users/top-active',
+    NEPSE_LOGS: '/admin/dashboard/nepse/logs',
+    NEPSE_LATEST: '/admin/dashboard/nepse/latest',
+    NEPSE_TRIGGER: '/admin/dashboard/nepse/trigger',
+  },
 } as const;
 
 export const API_URL = "http://localhost:3333/api"; 
