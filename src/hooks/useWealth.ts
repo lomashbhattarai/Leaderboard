@@ -72,8 +72,6 @@ export const useWealth = () => {
 
   const netWorth = useMemo(() => {
     return wealthEntries.reduce((sum, entry) => {
-      console.log('entry', entry);
-      console.log('sum', sum);
       if (entry.type === 'liability') {
         return sum - parseFloat(entry.amount.toString());
       } else {

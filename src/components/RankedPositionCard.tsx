@@ -36,9 +36,9 @@ export default function RankedPositionCard({
   const navigate = useNavigate();
 
   const getPerformanceColor = (value: number) => {
-    if (value > 0) return "text-green-600";
-    if (value < 0) return "text-red-600";
-    return currentTheme.text.secondary;
+    if (value > 0) return "text-app-positive";
+    if (value < 0) return "text-app-negative";
+    return "text-app-muted";
   };
 
   const getPerformanceIcon = (value: number) => {

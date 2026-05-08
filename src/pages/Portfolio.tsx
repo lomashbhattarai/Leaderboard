@@ -268,7 +268,7 @@ const Portfolio: React.FC = () => {
           <PortfolioInfo />
         </Box>
 
-        <Stack spacing={3}>
+        <Stack spacing={3} data-testid="portfolio-summary">
           <Stack
             direction={{ xs: "column", md: "row" }}
             spacing={4}
@@ -337,13 +337,15 @@ const Portfolio: React.FC = () => {
           </Stack>
 
           <Box sx={{ mb: 2, mt: 2.5 }}>
-            <PortfolioTable
-              portfolioStocksFromDb={portfolioStocksFromDb}
-              onEdit={handleEdit}
-              onDelete={handleDelete}
-              onJournal={handleJournalClick}
-              onViewTransactions={handleViewTransactions}
-            />
+            <div data-testid="portfolio-stocks-table">
+              <PortfolioTable
+                portfolioStocksFromDb={portfolioStocksFromDb}
+                onEdit={handleEdit}
+                onDelete={handleDelete}
+                onJournal={handleJournalClick}
+                onViewTransactions={handleViewTransactions}
+              />
+            </div>
           </Box>
           <Box sx={{ order: 3 }}>
             <PortfolioChart portfolioStocksFromDb={portfolioStocksFromDb} />

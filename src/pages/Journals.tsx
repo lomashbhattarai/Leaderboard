@@ -130,29 +130,30 @@ const Journals: React.FC = () => {
       <div className="min-h-screen py-12">
         <div className="max-w-3xl mx-auto">
           <header className="text-center mb-6">
-            <h1 className="text-2xl font-serif font-medium text-gray-900 mb-2 flex items-center justify-center">
+            <h1 className="text-2xl font-serif font-medium text-app-text mb-2 flex items-center justify-center">
               <MenuBookIcon className="mr-2" fontSize="inherit" />
               Trading Journal
             </h1>
-            <p className="text-sm text-gray-600 font-light">
+            <p className="text-sm text-app-muted font-light">
               Your reflections and insights on the market
             </p>
           </header>
-          <div className="space-y-4">
+          <div className="space-y-4" data-testid="journal-list">
             {journals.map((journal) => (
               <Card
+                data-testid="journal-row"
                 key={journal.id}
-                className="overflow-hidden border border-gray-200 shadow-sm hover:shadow-md transition-shadow duration-300"
+                className="overflow-hidden border border-app-border shadow-sm hover:shadow-md transition-shadow duration-300"
                 sx={{
                   borderRadius: "0.75rem",
-                  backgroundColor: "#fcfcfc",
+                  backgroundColor: currentTheme.surface.paper,
                 }}
               >
                 <CardContent className="p-3">
                   <div className="flex justify-between items-start mb-2">
                     <Typography
                       variant="subtitle2"
-                      className="text-lg font-semibold text-gray-800"
+                      className="text-lg font-semibold text-app-text"
                     >
                       {journal.title || "Untitled"}
                     </Typography>
@@ -162,8 +163,8 @@ const Journals: React.FC = () => {
                         label={journal.tags}
                         size="small"
                         sx={{
-                          backgroundColor: "#e0f2ff",
-                          color: "#0369a1",
+                          backgroundColor: currentTheme.accent.soft,
+                          color: currentTheme.accent.primary,
                           fontWeight: 600,
                           fontSize: "0.625rem",
                           height: "1rem",
@@ -175,7 +176,7 @@ const Journals: React.FC = () => {
 
                   <Typography
                     variant="body2"
-                    className="text-sm text-gray-700 leading-relaxed mb-2 max-w-prose"
+                    className="text-sm text-app-text leading-relaxed mb-2 max-w-prose"
                   >
                     {expandedId === journal.id
                       ? journal.content
@@ -200,14 +201,16 @@ const Journals: React.FC = () => {
                     <IconButton
                       size="small"
                       onClick={() => handleEdit(journal)}
-                      sx={{ color: "#6b7280" }}
+                      aria-label={`edit ${journal.title || "journal"}`}
+                      sx={{ color: currentTheme.text.secondary }}
                     >
                       <EditIcon fontSize="small" />
                     </IconButton>
                     <IconButton
                       size="small"
                       onClick={() => handleDelete(journal.id)}
-                      sx={{ color: "#6b7280" }}
+                      aria-label={`delete ${journal.title || "journal"}`}
+                      sx={{ color: currentTheme.text.secondary }}
                     >
                       <DeleteIcon fontSize="small" />
                     </IconButton>
@@ -219,7 +222,7 @@ const Journals: React.FC = () => {
 
           {journals.length === 0 && (
             <div className="text-center py-12">
-              <Typography variant="body1" className="text-gray-500 italic">
+              <Typography variant="body1" className="text-app-muted italic">
                 No journal entries yet. Start documenting your trading journey.
               </Typography>
             </div>

@@ -9,7 +9,7 @@ const SpaceBackground: React.FC<SpaceBackgroundProps> = ({ theme }) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
   useEffect(() => {
-    if (theme.name === "Default Theme") return;
+    if (theme.stars.density === 0) return;
 
     const canvas = canvasRef.current;
     if (!canvas) return;
@@ -70,8 +70,8 @@ const SpaceBackground: React.FC<SpaceBackgroundProps> = ({ theme }) => {
     };
   }, [theme]);
 
-  if (theme.name === "Default Theme") {
-    return null; // Don't render canvas for default theme
+  if (theme.stars.density === 0) {
+    return null;
   }
 
   return (

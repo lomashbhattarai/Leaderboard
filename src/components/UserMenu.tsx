@@ -81,25 +81,6 @@ const UserMenu: React.FC = () => {
               {settings?.isAnonymous ? "Anonymous User" : user.fullName}
             </MenuItem>
             <MenuItem disabled>{user.email}</MenuItem>
-            {/* <MenuItem
-              onClick={() => {
-                toggleTheme();
-                handleClose();
-              }}
-            >
-              Change Theme
-              <PaletteIcon
-                sx={{
-                  ml: 1,
-                  color:
-                    currentTheme.name === "Default Theme"
-                      ? "rgba(0, 0, 0, 0.87)"
-                      : "#ffffff",
-                  stroke: "rgba(0, 0, 0, 0.87)",
-                  strokeWidth: 1,
-                }}
-              />
-            </MenuItem> */}
             <MenuItem onClick={handleToggleAnonymous}>
               {settings?.isAnonymous ? "Show Identity" : "Go Anonymous"}
               {settings?.isAnonymous ? (

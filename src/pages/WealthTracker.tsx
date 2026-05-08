@@ -124,6 +124,7 @@ const WealthTracker: React.FC = () => {
       </Stack>
 
       <TableView
+        data-testid="wealth-entries-table"
         isCompact
         tableData={wealthEntries}
         columns={columns}

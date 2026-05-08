@@ -3,83 +3,60 @@ import { alpha } from '@mui/material/styles';
 
 export const getCommonStyles = (theme: SpaceTheme) => ({
   paper: {
-    ...(theme.name === 'Default Theme' ? {
-      background: '#ffffff',
-      color: 'rgba(0, 0, 0, 0.87)',
-      boxShadow: '0 1px 3px rgba(0, 0, 0, 0.12)',
-    } : {
-      background: alpha(theme.background.secondary, 0.85),
-      color: theme.accent.primary,
-      backdropFilter: 'blur(8px)',
-      boxShadow: `0 4px 20px ${alpha(theme.background.primary, 0.3)}`,
-    }),
-    transition: 'transform 0.2s ease, box-shadow 0.2s ease',
+    background: theme.surface.paper,
+    color: theme.text.primary,
+    border: `1px solid ${theme.border.subtle}`,
+    boxShadow: theme.shadow.sm,
+    transition: `transform ${theme.motion.base} ${theme.motion.easing}, box-shadow ${theme.motion.base} ${theme.motion.easing}, border-color ${theme.motion.base} ${theme.motion.easing}`,
     '&:hover': {
       transform: 'translateY(-2px)',
-      boxShadow: theme.name === 'Default Theme' 
-        ? '0 4px 6px rgba(0, 0, 0, 0.15)'
-        : `0 6px 25px ${alpha(theme.background.primary, 0.4)}`,
+      borderColor: theme.border.default,
+      boxShadow: theme.shadow.md,
     },
   },
   table: {
     container: {
-      ...(theme.name === 'Default Theme' ? {
-        background: '#ffffff',
-        boxShadow: '0 1px 3px rgba(0, 0, 0, 0.12)',
-      } : {
-        background: alpha(theme.background.secondary, 0.85),
-        backdropFilter: 'blur(8px)',
-        boxShadow: `0 4px 20px ${alpha(theme.background.primary, 0.2)}`,
-      }),
-      borderRadius: '12px',
+      background: theme.surface.paper,
+      border: `1px solid ${theme.border.subtle}`,
+      boxShadow: theme.shadow.sm,
+      borderRadius: `${theme.shape.borderRadius}px`,
       overflow: 'hidden',
     },
     header: {
-      ...(theme.name === 'Default Theme' ? {
-        background: '#f5f5f5',
-        color: 'rgba(0, 0, 0, 0.87)',
-      } : {
-        background: alpha(theme.background.primary, 0.95),
-        color: theme.accent.secondary,
-      }),
-      fontWeight: 600,
+      background: theme.surface.inset,
+      color: theme.text.secondary,
+      fontWeight: theme.typography.fontWeights.subheading,
       fontSize: '0.95rem',
-      borderBottom: theme.name === 'Default Theme'
-        ? '1px solid rgba(0, 0, 0, 0.12)'
-        : `2px solid ${alpha(theme.accent.secondary, 0.2)}`,
+      borderBottom: `1px solid ${theme.border.default}`,
     },
     row: {
       background: 'transparent',
-      borderBottom: `1px solid ${alpha(theme.background.primary, 0.1)}`,
-      transition: 'background-color 0.2s ease',
+      borderBottom: `1px solid ${theme.border.subtle}`,
+      transition: `background-color ${theme.motion.base} ${theme.motion.easing}`,
       '&:hover': {
-        background: alpha(theme.background.primary, 0.15),
+        background: alpha(theme.accent.primary, 0.06),
       },
       '&:last-child': {
         borderBottom: 'none',
       },
     },
     cell: {
-      ...(theme.name === 'Default Theme' ? {
-        color: 'rgba(0, 0, 0, 0.87)',
-      } : {
-        color: theme.accent.primary,
-      }),
+      color: theme.text.primary,
       padding: '12px 16px',
       fontSize: '0.9rem',
       lineHeight: 1.5,
     },
     footer: {
-      background: alpha(theme.background.primary, 0.05),
-      borderTop: `2px solid ${alpha(theme.accent.secondary, 0.1)}`,
+      background: theme.surface.inset,
+      borderTop: `1px solid ${theme.border.default}`,
       fontWeight: 500,
     },
   },
   tooltip: {
-    background: alpha(theme.background.primary, 0.98),
-    color: theme.accent.primary,
-    border: `1px solid ${alpha(theme.accent.secondary, 0.15)}`,
-    boxShadow: `0 4px 15px ${alpha(theme.background.primary, 0.3)}`,
+    background: theme.surface.overlay,
+    color: theme.text.primary,
+    border: `1px solid ${theme.border.default}`,
+    boxShadow: theme.shadow.md,
     fontSize: '0.85rem',
     padding: '8px 12px',
     maxWidth: '250px',
@@ -88,11 +65,11 @@ export const getCommonStyles = (theme: SpaceTheme) => ({
   // Add specific styles for interactive elements
   interactive: {
     button: {
-      background: alpha(theme.accent.primary, 0.15),
+      background: alpha(theme.accent.primary, 0.1),
       color: theme.accent.primary,
-      transition: 'all 0.2s ease',
+      transition: `all ${theme.motion.base} ${theme.motion.easing}`,
       '&:hover': {
-        background: alpha(theme.accent.primary, 0.25),
+        background: alpha(theme.accent.primary, 0.16),
       },
       '&:active': {
         transform: 'scale(0.98)',
@@ -100,7 +77,7 @@ export const getCommonStyles = (theme: SpaceTheme) => ({
     },
     icon: {
       color: alpha(theme.accent.primary, 0.7),
-      transition: 'color 0.2s ease',
+      transition: `color ${theme.motion.base} ${theme.motion.easing}`,
       '&:hover': {
         color: theme.accent.primary,
     },
@@ -108,10 +85,10 @@ export const getCommonStyles = (theme: SpaceTheme) => ({
   },
   // Add styles for content grouping
   contentGroup: {
-    background: alpha(theme.background.secondary, 0.4),
-    borderRadius: '8px',
+    background: theme.surface.inset,
+    borderRadius: `${theme.shape.borderRadius}px`,
     padding: '16px',
     margin: '8px 0',
-    border: `1px solid ${alpha(theme.accent.secondary, 0.1)}`,
+    border: `1px solid ${theme.border.subtle}`,
   },
 }); 

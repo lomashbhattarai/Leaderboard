@@ -8,8 +8,7 @@ import {
   Legend,
 } from "recharts";
 import { Skeleton } from "@mui/material";
-
-const COLORS = ["#5C6BC0", "#3949AB", "#283593", "#9FA8DA", "#7986CB"];
+import { useTheme } from "../../contexts/ThemeContext";
 
 // Sample allocation data
 const data = [
@@ -27,6 +26,9 @@ interface AllocationChartProps {
 const AllocationChart: React.FC<AllocationChartProps> = ({
   loading = false,
 }) => {
+  const { currentTheme } = useTheme();
+  const chartPalette = currentTheme.chart.palette;
+
   if (loading) {
     return <Skeleton variant="circular" width="100%" height="100%" />;
   }
@@ -41,12 +43,15 @@ const AllocationChart: React.FC<AllocationChartProps> = ({
           labelLine={false}
           outerRadius="80%"
           innerRadius="40%"
-          fill="#8884d8"
+          fill={chartPalette[0]}
           dataKey="value"
           paddingAngle={2}
         >
           {data.map((entry, index) => (
-            <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+            <Cell
+              key={`cell-${index}`}
+              fill={chartPalette[index % chartPalette.length]}
+            />
           ))}
         </Pie>
         <Tooltip formatter={(value) => [`${value}%`, "Allocation"]} />
@@ -57,7 +62,9 @@ const AllocationChart: React.FC<AllocationChartProps> = ({
           iconSize={8}
           iconType="circle"
           formatter={(value) => (
-            <span style={{ fontSize: "10px", color: "#616E7C" }}>{value}</span>
+            <span style={{ fontSize: "10px", color: currentTheme.text.secondary }}>
+              {value}
+            </span>
           )}
         />
       </PieChart>

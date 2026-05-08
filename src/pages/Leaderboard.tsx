@@ -29,17 +29,17 @@ import LeaderboardIcon from "@mui/icons-material/Leaderboard";
 
 export const formatPerformance = (value: number | string) => {
   if (!value && value !== 0) {
-    return <span className="text-gray-500">N/A</span>;
+    return <span className="text-app-muted">N/A</span>;
   }
 
   const numValue = typeof value === "string" ? parseFloat(value) : value;
 
   if (numValue === 0) {
-    return <span className="text-gray-500">–</span>;
+    return <span className="text-app-muted">–</span>;
   }
 
   const isPositive = numValue > 0;
-  const color = isPositive ? "text-green-600" : "text-red-600";
+  const color = isPositive ? "text-app-positive" : "text-app-negative";
   const symbol = isPositive ? "▲" : "▼";
 
   return (
@@ -66,7 +66,7 @@ const columns: ColumnConfig[] = [
           >
             <EmojiEventsIcon
               sx={{
-                color: "#FFD700", // Gold color
+                color: "warning.main",
                 animation: "bounce 2s infinite",
                 "@keyframes bounce": {
                   "0%, 100%": { transform: "translateY(0)" },
@@ -427,6 +427,7 @@ const Leaderboard: React.FC<{ rowLimit?: number; isCompact?: boolean }> = ({
         ) : (
           <div>
             <TableView
+              data-testid="leaderboard-list"
               columns={columns}
               tableData={filteredData || []}
               customCardComponent={(row, index) => (

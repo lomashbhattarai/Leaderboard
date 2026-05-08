@@ -6,6 +6,7 @@ import {
   Paper,
   InputAdornment,
 } from "@mui/material";
+import { alpha } from "@mui/material/styles";
 import {
   LineChart,
   Line,
@@ -19,6 +20,7 @@ import {
 import { formatAmount } from "../utils/helper";
 import { useShowAmounts } from "../contexts/ShowAmountsContext";
 import MaskedAmount from "./common/MaskedAmount";
+import { useTheme } from "../contexts/ThemeContext";
 
 interface WealthProjectionChartProps {
   amount: number;
@@ -28,6 +30,7 @@ const WealthProjectionChart: React.FC<WealthProjectionChartProps> = ({
   amount,
 }) => {
   const { showAmounts } = useShowAmounts();
+  const { currentTheme } = useTheme();
   const [annualRate, setAnnualRate] = useState<number>(7);
   const [monthlyContribution, setMonthlyContribution] = useState<number>(0);
 
@@ -106,8 +109,10 @@ const WealthProjectionChart: React.FC<WealthProjectionChartProps> = ({
         p: 2,
         mt: 3,
         borderRadius: 2,
-        background:
-          "linear-gradient(135deg, rgba(168, 224, 99, 0.4) 0%, rgba(168, 224, 99, 0.1) 100%)",
+        background: `linear-gradient(135deg, ${alpha(
+          currentTheme.status.positive,
+          0.18
+        )} 0%, ${alpha(currentTheme.accent.soft, 0.36)} 100%)`,
       }}
     >
       <Box sx={{ mb: 1.5 }}>
@@ -147,7 +152,7 @@ const WealthProjectionChart: React.FC<WealthProjectionChartProps> = ({
               sx={{
                 width: { xs: "100%", sm: 180 },
                 "& .MuiOutlinedInput-root": {
-                  backgroundColor: "white",
+                  backgroundColor: currentTheme.surface.paper,
                   borderRadius: 1,
                 },
               }}
@@ -170,7 +175,7 @@ const WealthProjectionChart: React.FC<WealthProjectionChartProps> = ({
               sx={{
                 width: { xs: "100%", sm: 180 },
                 "& .MuiOutlinedInput-root": {
-                  backgroundColor: "white",
+                  backgroundColor: currentTheme.surface.paper,
                   borderRadius: 1,
                 },
               }}
@@ -186,16 +191,22 @@ const WealthProjectionChart: React.FC<WealthProjectionChartProps> = ({
             data={projectionData}
             margin={{ top: 5, right: 30, left: 20, bottom: 40 }}
           >
-            <CartesianGrid strokeDasharray="3 3" stroke="#e0e0e0" />
+            <CartesianGrid
+              strokeDasharray="3 3"
+              stroke={currentTheme.border.default}
+            />
             <XAxis
               dataKey="year"
               label={{
                 value: "Years",
                 position: "insideBottom",
                 offset: -5,
-                style: { textAnchor: "middle", fill: "#666" },
+                style: {
+                  textAnchor: "middle",
+                  fill: currentTheme.text.secondary,
+                },
               }}
-              stroke="#666"
+              stroke={currentTheme.text.secondary}
             />
             <YAxis
               label={{
@@ -203,9 +214,12 @@ const WealthProjectionChart: React.FC<WealthProjectionChartProps> = ({
                 angle: -90,
                 position: "insideLeft",
                 offset: -14,
-                style: { textAnchor: "middle", fill: "#666" },
+                style: {
+                  textAnchor: "middle",
+                  fill: currentTheme.text.secondary,
+                },
               }}
-              stroke="#666"
+              stroke={currentTheme.text.secondary}
               tickFormatter={(value) => {
                 if (!showAmounts) return "••••";
                 if (value >= 1000000) {
@@ -227,8 +241,8 @@ const WealthProjectionChart: React.FC<WealthProjectionChartProps> = ({
                 return `Year ${label}`;
               }}
               contentStyle={{
-                backgroundColor: "rgba(255, 255, 255, 0.95)",
-                border: "1px solid #ccc",
+                backgroundColor: currentTheme.surface.overlay,
+                border: `1px solid ${currentTheme.border.default}`,
                 borderRadius: "4px",
               }}
             />
@@ -247,10 +261,10 @@ const WealthProjectionChart: React.FC<WealthProjectionChartProps> = ({
             <Line
               type="monotone"
               dataKey="amount"
-              stroke="#1976d2"
+              stroke={currentTheme.accent.primary}
               strokeWidth={1.5}
               dot={false}
-              activeDot={{ r: 5, fill: "#1976d2" }}
+              activeDot={{ r: 5, fill: currentTheme.accent.primary }}
               name="Projected Wealth"
             />
           </LineChart>
@@ -262,7 +276,7 @@ const WealthProjectionChart: React.FC<WealthProjectionChartProps> = ({
           sx={{
             p: 1,
             borderRadius: 1,
-            backgroundColor: "rgba(255, 255, 255, 0.7)",
+            backgroundColor: alpha(currentTheme.surface.paper, 0.72),
           }}
         >
           <Typography variant="caption" color="text.secondary">
@@ -276,7 +290,7 @@ const WealthProjectionChart: React.FC<WealthProjectionChartProps> = ({
           sx={{
             p: 1.5,
             borderRadius: 1,
-            backgroundColor: "rgba(255, 255, 255, 0.7)",
+            backgroundColor: alpha(currentTheme.surface.paper, 0.72),
           }}
         >
           <Typography variant="caption" color="text.secondary">
@@ -290,7 +304,7 @@ const WealthProjectionChart: React.FC<WealthProjectionChartProps> = ({
           sx={{
             p: 1.5,
             borderRadius: 1,
-            backgroundColor: "rgba(255, 255, 255, 0.7)",
+            backgroundColor: alpha(currentTheme.surface.paper, 0.72),
           }}
         >
           <Typography variant="caption" color="text.secondary">

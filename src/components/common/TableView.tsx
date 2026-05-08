@@ -67,6 +67,7 @@ interface TableViewProps {
   isCompact?: boolean;
   defaultEmptyMessage?: string;
   rowActions?: (row: any, rowIndex: number) => React.ReactNode;
+  "data-testid"?: string;
 }
 
 const TableView = ({
@@ -91,6 +92,7 @@ const TableView = ({
   isCompact = false,
   defaultEmptyMessage = "No Data found",
   rowActions,
+  "data-testid": dataTestId,
 }: TableViewProps) => {
   const { currentTheme } = useTheme();
   const styles = getCommonStyles(currentTheme);
@@ -119,6 +121,7 @@ const TableView = ({
     <Stack spacing={1}>
       {tableData.map((row, rowIndex) => (
         <Card
+          data-testid={dataTestId ? `${dataTestId}-row` : undefined}
           key={row.id || rowIndex}
           sx={{
             backgroundColor: currentTheme.background.secondary,
@@ -188,7 +191,7 @@ const TableView = ({
                         <IconButton
                           onClick={() => onEdit?.(row)}
                           size="small"
-                          aria-label="edit"
+                          aria-label={`edit ${row.name || row.symbol || row.id || "row"}`}
                           sx={{
                             color: currentTheme.accent.primary,
                             padding: isCompact ? "2px" : "4px",
@@ -205,7 +208,7 @@ const TableView = ({
                         <IconButton
                           onClick={() => onDelete?.(row.id)}
                           size="small"
-                          aria-label="delete"
+                          aria-label={`delete ${row.name || row.symbol || row.id || "row"}`}
                           sx={{
                             color: currentTheme.accent.primary,
                             padding: isCompact ? "2px" : "4px",
@@ -272,7 +275,7 @@ const TableView = ({
   );
 
   return (
-    <Box sx={{ width: "100%", position: "relative" }}>
+    <Box sx={{ width: "100%", position: "relative" }} data-testid={dataTestId}>
       {title && (
         <Typography
           variant={isCompact ? "h6" : "h5"}
@@ -627,6 +630,7 @@ const TableView = ({
               {tableData.map((row, rowIndex) => (
                 <>
                   <TableRow
+                    data-testid={dataTestId ? `${dataTestId}-row` : undefined}
                     key={row.id || rowIndex}
                     onMouseEnter={() => setHoveredRow(rowIndex)}
                     onMouseLeave={() => setHoveredRow(null)}
@@ -679,7 +683,7 @@ const TableView = ({
                             <IconButton
                               onClick={() => onEdit?.(row)}
                               size="small"
-                              aria-label="edit"
+                              aria-label={`edit ${row.name || row.symbol || row.id || "row"}`}
                               sx={{
                                 color: currentTheme.accent.primary,
                                 padding: isCompact ? "2px" : "4px",
@@ -696,7 +700,7 @@ const TableView = ({
                             <IconButton
                               onClick={() => onDelete?.(row.id)}
                               size="small"
-                              aria-label="delete"
+                              aria-label={`delete ${row.name || row.symbol || row.id || "row"}`}
                               sx={{
                                 color: currentTheme.accent.primary,
                                 padding: isCompact ? "2px" : "4px",

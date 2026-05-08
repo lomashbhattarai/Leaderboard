@@ -30,7 +30,11 @@
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
-    "test": "react-scripts test",
+    "test": "react-scripts test --watchman=false",
+    "test:unit": "JEST_HTML_REPORTERS_PUBLIC_PATH=./test-reports/jest JEST_HTML_REPORTERS_FILE_NAME=index.html JEST_HTML_REPORTERS_EXPAND=true JEST_HTML_REPORTERS_PAGE_TITLE=\"Wealth Tracker Jest Test Report\" JEST_HTML_REPORTERS_TEST_COMMAND=\"npm run test:unit\" react-scripts test --watchman=false --watchAll=false --runInBand --reporters=default --reporters=jest-html-reporters",
+    "test:e2e": "playwright test",
+    "test:e2e:report": "playwright show-report",
+    "test:all": "npm run test:unit && npm run test:e2e",
     "eject": "react-scripts eject",
     "predeploy": "npm run build",
     "deploy": "gh-pages -d build -r git@github.com:lomashbhattarai/nepseleader-public.git -b main"
@@ -40,6 +44,14 @@
       "react-app",
       "react-app/jest"
     ]
+  },
+  "jest": {
+    "moduleNameMapper": {
+      "^axios$": "axios/dist/node/axios.cjs",
+      "^react-router-dom$": "react-router-dom/dist/index.js",
+      "^react-router$": "react-router/dist/development/index.js",
+      "^react-router/dom$": "react-router/dist/development/dom-export.js"
+    }
   },
   "browserslist": {
     "production": [
@@ -58,6 +70,7 @@
     "@tanstack/react-query-devtools": "^5.64.1",
     "autoprefixer": "^10.4.20",
     "gh-pages": "^6.3.0",
+    "jest-html-reporters": "^3.1.7",
     "postcss": "^8.4.47",
     "tailwindcss": "^3.4.11"
   },

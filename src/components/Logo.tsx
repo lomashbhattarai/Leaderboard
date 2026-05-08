@@ -1,7 +1,10 @@
 import React from "react";
 import { Typography, Box } from "@mui/material";
+import { useTheme } from "../contexts/ThemeContext";
 
 const Logo = () => {
+  const { currentTheme } = useTheme();
+
   return (
     <Box
       sx={{
@@ -16,9 +19,10 @@ const Logo = () => {
         variant="h5"
         sx={{
           fontSize: "20px",
-          fontFamily: "'Poppins', sans-serif",
-          fontWeight: 600,
-          color: "#2e7d32",
+          fontFamily: currentTheme.typography.fontFamily,
+          fontWeight: currentTheme.typography.fontWeights.heading,
+          color: currentTheme.text.primary,
+          letterSpacing: 0,
         }}
       >
         NEPSE
@@ -27,9 +31,10 @@ const Logo = () => {
         variant="h6"
         sx={{
           fontSize: "16px",
-          fontFamily: "'Poppins', sans-serif",
-          fontWeight: 600,
-          color: "#2e7d32",
+          fontFamily: currentTheme.typography.fontFamily,
+          fontWeight: currentTheme.typography.fontWeights.heading,
+          color: currentTheme.accent.primary,
+          letterSpacing: 0,
           marginTop: "-8px",
         }}
       >

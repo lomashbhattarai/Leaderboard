@@ -78,6 +78,7 @@ const Stocks = () => {
         </div>
         <div className="mb-4">
           <TextField
+            inputProps={{ "data-testid": "stock-search-input" }}
             fullWidth
             variant="outlined"
             size="small"
@@ -97,6 +98,7 @@ const Stocks = () => {
       </Box>
 
       <TableView
+        data-testid="stocks-list"
         isCompact
         columns={[
           {

@@ -41,112 +41,6 @@ import {
   Public as PublicIcon,
   ShowChart as ShowChartIcon,
 } from "@mui/icons-material";
-import { ThemeProvider, createTheme } from "@mui/material/styles";
-
-// Create a custom theme with finance-focused colors
-const theme = createTheme({
-  palette: {
-    primary: {
-      main: "#10b981", // emerald-500
-      light: "#34d399", // emerald-400
-      dark: "#059669", // emerald-600
-      contrastText: "#ffffff",
-    },
-    secondary: {
-      main: "#f43f5e", // red-500
-      light: "#fb7185", // red-400
-      dark: "#e11d48", // red-600
-      contrastText: "#ffffff",
-    },
-    error: {
-      main: "#ef4444", // red-500
-    },
-    success: {
-      main: "#10b981", // emerald-500
-    },
-    background: {
-      default: "#f8fafc", // slate-50
-      paper: "#ffffff",
-    },
-    text: {
-      primary: "#0f172a", // slate-900
-      secondary: "#64748b", // slate-500
-    },
-  },
-  typography: {
-    fontFamily: '"Inter", "Roboto", "Helvetica", "Arial", sans-serif',
-    h1: {
-      fontWeight: 700,
-    },
-    h2: {
-      fontWeight: 700,
-    },
-    h3: {
-      fontWeight: 600,
-    },
-    h4: {
-      fontWeight: 600,
-    },
-    h5: {
-      fontWeight: 600,
-    },
-    h6: {
-      fontWeight: 600,
-    },
-    button: {
-      textTransform: "none",
-      fontWeight: 500,
-    },
-  },
-  shape: {
-    borderRadius: 8,
-  },
-  components: {
-    MuiButton: {
-      styleOverrides: {
-        root: {
-          borderRadius: 8,
-          padding: "8px 16px",
-        },
-        contained: {
-          boxShadow: "none",
-          "&:hover": {
-            boxShadow: "none",
-          },
-        },
-      },
-    },
-    MuiCard: {
-      styleOverrides: {
-        root: {
-          boxShadow:
-            "0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1)",
-          borderRadius: 12,
-        },
-      },
-    },
-    MuiPaper: {
-      styleOverrides: {
-        root: {
-          boxShadow:
-            "0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1)",
-          borderRadius: 12,
-        },
-      },
-    },
-    MuiTableCell: {
-      styleOverrides: {
-        root: {
-          padding: "16px",
-        },
-        head: {
-          fontWeight: 600,
-          backgroundColor: "#f8fafc", // slate-50
-        },
-      },
-    },
-  },
-});
 
 // Sample data based on the screenshot
 const portfolioStocks = [
@@ -330,7 +224,7 @@ export default function PortfolioPage() {
   };
 
   return (
-    <ThemeProvider theme={theme}>
+    <>
       <Box sx={{ minHeight: "100vh", bgcolor: "background.default" }}>
         {/* Header */}
         <AppBar
@@ -797,6 +691,6 @@ export default function PortfolioPage() {
           </Paper>
         </Container>
       </Box>
-    </ThemeProvider>
+    </>
   );
 }

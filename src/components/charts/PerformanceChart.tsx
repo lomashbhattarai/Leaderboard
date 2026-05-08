@@ -10,6 +10,7 @@ import {
   ResponsiveContainer,
   ReferenceLine,
 } from "recharts";
+import { useTheme } from "../../contexts/ThemeContext";
 
 // Generate sample data
 const generateData = (days: number, ticker?: string) => {
@@ -42,6 +43,7 @@ const PerformanceChart: React.FC<PerformanceChartProps> = ({
   loading = false,
   ticker,
 }) => {
+  const { currentTheme } = useTheme();
   const [timeRange, setTimeRange] = useState<"1W" | "1M" | "3M" | "1Y" | "5Y">(
     "1M"
   );
@@ -78,7 +80,7 @@ const PerformanceChart: React.FC<PerformanceChartProps> = ({
       <div className="mb-3 flex justify-between items-center">
         <div>
           <h3 className="text-sm font-medium">Performance</h3>
-          <p className="text-xs text-neutral-500">
+          <p className="text-xs text-app-muted">
             {ticker ? ticker : "Portfolio"} - {isPositive ? "Up" : "Down"}{" "}
             {isPositive ? "+" : ""}
             {(
@@ -109,12 +111,12 @@ const PerformanceChart: React.FC<PerformanceChartProps> = ({
                 fontSize: "0.75rem",
                 ...(timeRange === range
                   ? {
-                      bgcolor: "primary.100",
-                      color: "primary.800",
-                      borderColor: "primary.300",
+                      bgcolor: currentTheme.accent.soft,
+                      color: currentTheme.accent.primary,
+                      borderColor: currentTheme.accent.primary,
                     }
                   : {
-                      color: "neutral.600",
+                      color: currentTheme.text.secondary,
                     }),
               }}
               onClick={() => setTimeRange(range)}
@@ -136,10 +138,14 @@ const PerformanceChart: React.FC<PerformanceChartProps> = ({
               bottom: 5,
             }}
           >
-            <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
+            <CartesianGrid
+              strokeDasharray="3 3"
+              stroke={currentTheme.border.subtle}
+            />
             <XAxis
               dataKey="date"
-              tick={{ fontSize: 10 }}
+              stroke={currentTheme.text.secondary}
+              tick={{ fontSize: 10, fill: currentTheme.text.secondary }}
               tickMargin={10}
               tickFormatter={(value, index) => {
                 // Show fewer labels on smaller time ranges
@@ -151,7 +157,8 @@ const PerformanceChart: React.FC<PerformanceChartProps> = ({
             />
             <YAxis
               domain={["dataMin - 5", "dataMax + 5"]}
-              tick={{ fontSize: 10 }}
+              stroke={currentTheme.text.secondary}
+              tick={{ fontSize: 10, fill: currentTheme.text.secondary }}
               tickFormatter={(value) => `$${value.toFixed(0)}`}
               width={40}
             />
@@ -161,13 +168,17 @@ const PerformanceChart: React.FC<PerformanceChartProps> = ({
             />
             <ReferenceLine
               y={Number(data[0].value)}
-              stroke="#888"
+              stroke={currentTheme.text.tertiary}
               strokeDasharray="3 3"
             />
             <Line
               type="monotone"
               dataKey="value"
-              stroke={isPositive ? "#2E7D32" : "#D32F2F"}
+              stroke={
+                isPositive
+                  ? currentTheme.status.positive
+                  : currentTheme.status.negative
+              }
               strokeWidth={2}
               dot={false}
               activeDot={{ r: 6 }}

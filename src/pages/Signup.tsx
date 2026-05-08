@@ -143,7 +143,7 @@ export default function Signup() {
             sx={{
               mt: 2,
               backgroundColor: currentTheme.accent.primary,
-              color: "#fff",
+              color: currentTheme.text.inverse,
               '&:hover': {
                 backgroundColor: currentTheme.accent.secondary,
               },

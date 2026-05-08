@@ -12,12 +12,14 @@ import {
 } from "recharts";
 import { Paper, Typography } from "@mui/material";
 import { Transaction } from "../hooks/useEarningsCalculator";
+import { useTheme } from "../contexts/ThemeContext";
 
 interface WealthChartProps {
   transactions: Transaction[];
 }
 
 const WealthChart: React.FC<WealthChartProps> = ({ transactions }) => {
+  const { currentTheme } = useTheme();
   const chartData = transactions
     .sort((a, b) => a.startDate?.getTime() - b.startDate?.getTime())
     .reduce((acc, transaction) => {
@@ -42,7 +44,14 @@ const WealthChart: React.FC<WealthChartProps> = ({ transactions }) => {
   }: TooltipProps<number, string>) => {
     if (active && payload && payload.length) {
       return (
-        <div className="custom-tooltip bg-white p-2 border border-gray-300 rounded">
+        <div
+          className="custom-tooltip p-2 rounded"
+          style={{
+            backgroundColor: currentTheme.surface.overlay,
+            border: `1px solid ${currentTheme.border.default}`,
+            color: currentTheme.text.primary,
+          }}
+        >
           <p className="label">{`Date: ${label}`}</p>
           <p className="intro">{`Wealth: NPR ${payload[0].value?.toFixed(
             2
@@ -61,12 +70,19 @@ const WealthChart: React.FC<WealthChartProps> = ({ transactions }) => {
       </Typography>
       <ResponsiveContainer width="100%" height={300}>
         <LineChart data={chartData}>
-          <CartesianGrid strokeDasharray="3 3" />
-          <XAxis dataKey="date" />
-          <YAxis />
+          <CartesianGrid
+            strokeDasharray="3 3"
+            stroke={currentTheme.border.subtle}
+          />
+          <XAxis dataKey="date" stroke={currentTheme.text.secondary} />
+          <YAxis stroke={currentTheme.text.secondary} />
           <Tooltip content={<CustomTooltip />} />
           <Legend />
-          <Line type="monotone" dataKey="wealth" stroke="#8884d8" />
+          <Line
+            type="monotone"
+            dataKey="wealth"
+            stroke={currentTheme.chart.palette[0]}
+          />
         </LineChart>
       </ResponsiveContainer>
     </Paper>

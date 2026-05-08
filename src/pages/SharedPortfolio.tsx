@@ -164,7 +164,12 @@ const SharedPortfolio: React.FC = () => {
         }
       >
         {publicPortfolio?.portfolioStocks?.map((entry, index) => (
-          <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+          <Cell
+            key={`cell-${index}`}
+            fill={
+              currentTheme.chart.palette[index % currentTheme.chart.palette.length]
+            }
+          />
         ))}
       </Pie>
       <RechartTooltip />
@@ -259,7 +264,7 @@ const SharedPortfolio: React.FC = () => {
                       width: `${stock.percentage}%`,
                       backgroundColor: alpha(
                         currentTheme.accent.primary,
-                        currentTheme.name === "Dark Theme" ? 0.4 : 0.2
+                        currentTheme.name.includes("Dark") ? 0.4 : 0.2
                       ),
                     }}
                   />
@@ -348,19 +353,6 @@ const getPrivacyInfo = (privacy: string) => {
       return { icon: <PublicIcon />, text: "Public Portfolio" };
   }
 };
-
-const COLORS = [
-  "#0088FE",
-  "#00C49F",
-  "#FFBB28",
-  "#FF8042",
-  "#8884D8",
-  "#82CA9D",
-  "#FFC658",
-  "#FF6B6B",
-  "#4ECDC4",
-  "#45B7D1",
-];
 
 export default SharedPortfolio;
 

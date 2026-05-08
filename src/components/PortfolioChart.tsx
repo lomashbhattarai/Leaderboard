@@ -15,23 +15,16 @@ import {
 import { formatAmount } from "../utils/helper";
 import { PortfolioStock } from "../types/api";
 import { useShowAmounts } from "../contexts/ShowAmountsContext";
+import { useTheme } from "../contexts/ThemeContext";
 
 interface Props {
   portfolioStocksFromDb: PortfolioStock[];
 }
 
-const COLORS = [
-  "#0088FE",
-  "#00C49F",
-  "#FFBB28",
-  "#FF8042",
-  "#8884d8",
-  "#82ca9d",
-  "#ffc658",
-];
-
 const PortfolioChart: React.FC<Props> = ({ portfolioStocksFromDb }) => {
   const { showAmounts } = useShowAmounts();
+  const { currentTheme } = useTheme();
+  const chartPalette = currentTheme.chart.palette;
 
   // Transform portfolio data for the pie chart
   const chartData = portfolioStocksFromDb.map((item) => ({
@@ -101,9 +94,13 @@ const PortfolioChart: React.FC<Props> = ({ portfolioStocksFromDb }) => {
             data={barChartData}
             margin={{ top: 20, right: 30, left: 0, bottom: 5 }}
           >
-            <CartesianGrid strokeDasharray="3 3" />
-            <XAxis dataKey="name" />
+            <CartesianGrid
+              strokeDasharray="3 3"
+              stroke={currentTheme.border.subtle}
+            />
+            <XAxis dataKey="name" stroke={currentTheme.text.secondary} />
             <YAxis
+              stroke={currentTheme.text.secondary}
               tickFormatter={(value) => {
                 if (!showAmounts) return "••••";
                 if (value >= 1000000) {
@@ -120,8 +117,12 @@ const PortfolioChart: React.FC<Props> = ({ portfolioStocksFromDb }) => {
               }
             />
             <Legend />
-            <Bar dataKey="totalCost" fill="#8884d8" name="Total Cost" />
-            <Bar dataKey="currentValue" fill="#82ca9d" name="Current Value" />
+            <Bar dataKey="totalCost" fill={chartPalette[4]} name="Total Cost" />
+            <Bar
+              dataKey="currentValue"
+              fill={currentTheme.status.positive}
+              name="Current Value"
+            />
           </BarChart>
         </ResponsiveContainer>
       </div>
@@ -146,7 +147,7 @@ const PortfolioChart: React.FC<Props> = ({ portfolioStocksFromDb }) => {
                 `${name} (${(percent * 100).toFixed(1)}%)`
               }
               outerRadius={chartDimensions.outerRadius}
-              fill="#8884d8"
+              fill={chartPalette[0]}
               nameKey="name"
               dataKey="value"
               minAngle={3}
@@ -154,7 +155,7 @@ const PortfolioChart: React.FC<Props> = ({ portfolioStocksFromDb }) => {
               {chartData.map((entry, index) => (
                 <Cell
                   key={`cell-${index}`}
-                  fill={COLORS[index % COLORS.length]}
+                  fill={chartPalette[index % chartPalette.length]}
                 />
               ))}
             </Pie>

@@ -59,7 +59,7 @@ const LeaderboardCard: React.FC<LeaderboardCardProps> = ({
           {index === 0 ? (
             <EmojiEventsIcon
               sx={{
-                color: "#FFD700",
+                color: currentTheme.status.warning,
                 animation: "bounce 2s infinite",
                 "@keyframes bounce": {
                   "0%, 100%": { transform: "translateY(0)" },
@@ -74,7 +74,7 @@ const LeaderboardCard: React.FC<LeaderboardCardProps> = ({
                 py: 0.25,
                 borderRadius: 1,
                 backgroundColor: currentTheme.accent.primary,
-                color: "white",
+                color: currentTheme.text.inverse,
                 fontSize: "0.75rem",
                 fontWeight: 600,
                 minWidth: 28,

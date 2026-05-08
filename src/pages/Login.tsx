@@ -60,8 +60,9 @@ export default function Login() {
         >
           Login
         </Typography>
-        <form onSubmit={handleSubmit}>
+        <form onSubmit={handleSubmit} data-testid="login-form">
           <TextField
+            inputProps={{ "data-testid": "email-input" }}
             fullWidth
             margin="normal"
             label="Email"
@@ -87,6 +88,7 @@ export default function Login() {
             }}
           />
           <TextField
+            inputProps={{ "data-testid": "password-input" }}
             fullWidth
             margin="normal"
             label="Password"
@@ -112,13 +114,14 @@ export default function Login() {
             }}
           />
           <Button
+            data-testid="login-submit"
             fullWidth
             variant="contained"
             type="submit"
             sx={{
               mt: 2,
               backgroundColor: currentTheme.accent.primary,
-              color: "#fff",
+              color: currentTheme.text.inverse,
               '&:hover': {
                 backgroundColor: currentTheme.accent.secondary,
               },

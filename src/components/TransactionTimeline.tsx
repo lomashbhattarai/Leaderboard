@@ -87,6 +87,7 @@ const TransactionTimeline: React.FC<TransactionTimelineProps> = ({
         <Stack spacing={2}>
           {transactions.map((transaction) => (
             <Card
+              data-testid="transaction-row"
               key={transaction.id}
               variant="outlined"
               sx={{
@@ -315,6 +316,7 @@ const TransactionTimeline: React.FC<TransactionTimelineProps> = ({
           <TableBody>
             {transactions.map((transaction) => (
               <TableRow
+                data-testid="transaction-row"
                 key={transaction.id}
                 sx={{
                   "&:hover": { bgcolor: "action.hover" },

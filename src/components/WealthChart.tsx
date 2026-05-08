@@ -3,15 +3,16 @@ import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip } from "recharts";
 import { WealthEntry } from "../types/wealth";
 import { formatAmount } from "../utils/helper";
 import { useShowAmounts } from "../contexts/ShowAmountsContext";
+import { useTheme } from "../contexts/ThemeContext";
 
 interface WealthChartProps {
   wealthEntries: WealthEntry[];
 }
 
-const COLORS = ["#0088FE", "#00C49F", "#FFBB28", "#FF8042", "#8884D8"];
-
 const WealthChart: React.FC<WealthChartProps> = ({ wealthEntries }) => {
   const { showAmounts } = useShowAmounts();
+  const { currentTheme } = useTheme();
+  const chartPalette = currentTheme.chart.palette;
 
   // Group and sum amounts by asset type
   const chartData = wealthEntries.reduce(
@@ -46,7 +47,10 @@ const WealthChart: React.FC<WealthChartProps> = ({ wealthEntries }) => {
           }
         >
           {chartData.map((entry, index) => (
-            <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+            <Cell
+              key={`cell-${index}`}
+              fill={chartPalette[index % chartPalette.length]}
+            />
           ))}
         </Pie>
         <Tooltip

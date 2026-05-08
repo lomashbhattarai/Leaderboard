@@ -1,13 +1,11 @@
 import React from "react";
 import { Link, NavLink } from "react-router-dom";
 import {
-  IconButton,
   Box,
   useMediaQuery,
   useTheme as useMuiTheme,
   Tooltip,
 } from "@mui/material";
-import MenuIcon from "@mui/icons-material/Menu";
 import HomeIcon from "@mui/icons-material/Home";
 import AccountBalanceWalletIcon from "@mui/icons-material/AccountBalanceWallet";
 import TrendingUpIcon from "@mui/icons-material/TrendingUp";
@@ -19,19 +17,9 @@ import { useAuthContext } from "../contexts/AuthContext";
 import Logo from "./Logo";
 import AdminPanelSettingsIcon from "@mui/icons-material/AdminPanelSettings";
 
-const logoAssetSrc = "/assets/branding/nepse-leader-transparent.png";
-
-// Navbar background color options for branding
-const NAVBAR_BG = {
-  solidLightGreen: "#e8f5e9", // Light green (default)
-  solidDeeperGreen: "#c8e6c9", // Slightly deeper green
-  gradient: "linear-gradient(90deg, #e8f5e9 60%, #c8e6c9 100%)", // Subtle gradient
-};
-
 const Navbar = () => {
-  const { currentTheme, setTheme, availableThemes } = useTheme();
+  const { currentTheme } = useTheme();
   const { user } = useAuthContext();
-  const [mobileMenu, setMobileMenu] = React.useState<null | HTMLElement>(null);
   const muiTheme = useMuiTheme();
   const isMobile = useMediaQuery(muiTheme.breakpoints.down("sm"));
   
@@ -41,12 +29,9 @@ const Navbar = () => {
   const navStyle = {
     "& a": {
       color: currentTheme.text.primary,
-      transition: "all 0.2s ease",
-      padding: "4px 0",
+      transition: `color ${currentTheme.motion.base} ${currentTheme.motion.easing}, background-color ${currentTheme.motion.base} ${currentTheme.motion.easing}`,
       position: "relative",
-      backgroundColor: currentTheme.background.secondary,
       "&:hover": {
-        opacity: 0.8,
         color: currentTheme.accent.primary,
       },
       "&.active": {
@@ -58,8 +43,9 @@ const Navbar = () => {
           left: 0,
           right: 0,
           height: "2px",
+          borderRadius: "999px",
           backgroundColor: currentTheme.accent.primary,
-          animation: "slideIn 0.2s ease-out",
+          animation: `slideIn ${currentTheme.motion.fast} ${currentTheme.motion.easing}`,
         },
       },
     },
@@ -106,7 +92,7 @@ const Navbar = () => {
 
   const renderNavLinks = () => (
     <ul
-      className="flex space-x-0 sm:space-x-4"
+      className="flex space-x-0 sm:space-x-2"
       style={{
         color: currentTheme.text.primary,
       }}
@@ -120,12 +106,13 @@ const Navbar = () => {
                 color: currentTheme.text.primary,
                 backgroundColor:
                   isActive && isMobile
-                    ? currentTheme.background.primary
+                    ? currentTheme.surface.inset
                     : "transparent",
                 display: "flex",
                 alignItems: "center",
-                padding: isMobile ? "8px 10px" : "4px 0",
-                borderRadius: isMobile ? "4px" : "0",
+                padding: isMobile ? "8px 10px" : "8px 10px",
+                borderRadius: currentTheme.shape.borderRadius,
+                fontWeight: isActive ? 650 : 550,
               })}
             >
               {isMobile ? (
@@ -147,19 +134,19 @@ const Navbar = () => {
         className="flex justify-between items-center w-full"
         sx={{
           padding: "0.5rem 1rem",
-          borderBottom: `1px solid ${currentTheme.background.primary}`,
+          borderBottom: `1px solid ${currentTheme.border.subtle}`,
+          color: currentTheme.text.primary,
           position: "sticky",
           top: 0,
           left: 0,
           right: 0,
           zIndex: 1000,
-          backgroundColor: NAVBAR_BG.solidDeeperGreen,
-          // background: NAVBAR_BG.gradient,
-          backdropFilter: "blur(10px)",
+          background: currentTheme.surface.nav,
+          backdropFilter: "blur(18px)",
           width: "100%",
           maxWidth: "100vw",
           overflow: "hidden",
-          boxShadow: "0 2px 8px 0 rgba(44, 62, 80, 0.07)", // Subtle shadow at the bottom
+          boxShadow: currentTheme.shadow.sm,
           ...navStyle,
         }}
       >
@@ -190,39 +177,6 @@ const Navbar = () => {
           </div>
         </>
       </Box>
-
-      {/* Mobile Navigation Menu */}
-      {/* <Menu
-        anchorEl={mobileMenu}
-        open={Boolean(mobileMenu)}
-        onClose={() => setMobileMenu(null)}
-        PaperProps={{
-          style: {
-            width: "100%",
-            maxWidth: "300px",
-            marginTop: "8px",
-            backgroundColor:
-              currentTheme.name === "Default Theme"
-                ? "#fff"
-                : currentTheme.background.primary,
-            color:
-              currentTheme.name === "Default Theme"
-                ? "rgba(0, 0, 0, 0.87)"
-                : "#ffffff",
-          },
-        }}
-        MenuListProps={{
-          style: {
-            color:
-              currentTheme.name === "Default Theme"
-                ? "rgba(0, 0, 0, 0.87)"
-                : "#ffffff",
-            padding: "8px 16px",
-          },
-        }}
-      >
-        {isMobile && renderNavLinks()}
-      </Menu> */}
     </>
   );
 };

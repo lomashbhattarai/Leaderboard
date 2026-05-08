@@ -336,7 +336,7 @@ const PortfolioTable: React.FC<PortfolioTableProps> = ({
                 transform: "translateY(-50%)",
                 display: "flex",
                 gap: 1,
-                backgroundColor: "#f5f5f5",
+                backgroundColor: currentTheme.surface.inset,
                 borderRadius: 1,
                 p: 1,
               }),

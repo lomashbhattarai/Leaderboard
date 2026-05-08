@@ -7,6 +7,7 @@ import {
   SwapHoriz as SwapHorizIcon 
 } from '@mui/icons-material';
 import { useAdminDashboardStats } from '../api/queries/useAdmin';
+import { useTheme } from '../contexts/ThemeContext';
 
 const StatCard: React.FC<{
   title: string;
@@ -41,7 +42,9 @@ const StatCard: React.FC<{
 );
 
 export default function AdminStatsCards() {
+  const { currentTheme } = useTheme();
   const { data: stats, isLoading, error } = useAdminDashboardStats();
+  const palette = currentTheme.chart.palette;
 
   if (isLoading) {
     return (
@@ -68,7 +71,7 @@ export default function AdminStatsCards() {
           title="Active Users (30 days)"
           value={stats.activeUsers}
           icon={<PeopleIcon />}
-          color="#4caf50"
+          color={currentTheme.status.positive}
         />
       </Grid>
       <Grid item xs={12} sm={6} md={3}>
@@ -76,7 +79,7 @@ export default function AdminStatsCards() {
           title="Weekly Logins"
           value={stats.weeklyLogins}
           icon={<TrendingUpIcon />}
-          color="#2196f3"
+          color={currentTheme.status.info}
         />
       </Grid>
       <Grid item xs={12} sm={6} md={3}>
@@ -84,7 +87,7 @@ export default function AdminStatsCards() {
           title="Total Users"
           value={stats.totalUsers}
           icon={<PeopleIcon />}
-          color="#ff9800"
+          color={currentTheme.status.warning}
         />
       </Grid>
       <Grid item xs={12} sm={6} md={3}>
@@ -92,7 +95,7 @@ export default function AdminStatsCards() {
           title="Total Portfolios"
           value={stats.totalPortfolios}
           icon={<AccountBalanceIcon />}
-          color="#9c27b0"
+          color={palette[2]}
         />
       </Grid>
     </Grid>
