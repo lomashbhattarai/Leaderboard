@@ -43,6 +43,25 @@ describe("Leaderboard page", () => {
     expect(screen.getByText("Income Portfolio")).toBeInTheDocument();
   });
 
+  it("shows landing feature demos on the signed-out dashboard", () => {
+    mockedUseLeaderboard.mockReturnValue({
+      data: mockLeaderboardRows,
+      isLoading: false,
+      isError: false,
+    } as any);
+
+    renderWithProviders(<Leaderboard rowLimit={10} />);
+
+    expect(screen.getByTestId("signed-out-landing")).toBeInTheDocument();
+    expect(screen.getByText(/manage your nepse portfolio/i)).toBeInTheDocument();
+    expect(screen.getByText(/track your wealth/i)).toBeInTheDocument();
+    expect(screen.getByText(/5 yr projection/i)).toBeInTheDocument();
+    expect(screen.queryByText(/\+12\.4%/i)).not.toBeInTheDocument();
+    expect(screen.getByText(/journal your thoughts/i)).toBeInTheDocument();
+    expect(screen.queryByText(/your position/i)).not.toBeInTheDocument();
+    expect(screen.queryByText(/today's top gainer/i)).not.toBeInTheDocument();
+  });
+
   it("handles empty leaderboard state", () => {
     mockedUseLeaderboard.mockReturnValue({
       data: [],

@@ -11,7 +11,7 @@ import {
 } from "@mui/material";
 import { ColumnConfig } from "../components/common/TableView";
 import TableView from "../components/common/TableView";
-import { useUsers, useLeaderboard } from "../api/queries";
+import { useLeaderboard } from "../api/queries";
 import { Link as RouterLink, useNavigate } from "react-router-dom";
 import { usePortfolio } from "../hooks/usePortfolio";
 import { useAuthContext } from "../contexts/AuthContext";
@@ -26,6 +26,7 @@ import RankedPositionCard from "../components/RankedPositionCard";
 import type { LeaderboardEntry } from "../types/api";
 import WatchListTable from "../components/WatchListTable";
 import LeaderboardIcon from "@mui/icons-material/Leaderboard";
+import LandingHero from "../components/LandingHero";
 
 export const formatPerformance = (value: number | string) => {
   if (!value && value !== 0) {
@@ -221,25 +222,12 @@ const Leaderboard: React.FC<{ rowLimit?: number; isCompact?: boolean }> = ({
   const { currentTheme } = useTheme();
   const [searchQuery, setSearchQuery] = useState("");
 
-  const [filterAnchorEl, setFilterAnchorEl] = useState<null | HTMLElement>(
-    null
-  );
-
-  const handleFilterClose = () => {
-    setFilterAnchorEl(null);
-  };
-
-  const handleFilterClick = (event: React.MouseEvent<HTMLButtonElement>) => {
-    setFilterAnchorEl(event.currentTarget);
-  };
-
   const {
     data: leaderboardData,
-    isLoading: isLeaderboardLoading,
     isError: isLeaderboardError,
   } = useLeaderboard();
 
-  const { addPortfolio, portfolioId } = usePortfolio();
+  const { portfolioId } = usePortfolio();
   const { user } = useAuthContext();
   const navigate = useNavigate();
 
@@ -286,8 +274,10 @@ const Leaderboard: React.FC<{ rowLimit?: number; isCompact?: boolean }> = ({
 
   return (
     <div className="mb-10 mt-5">
+      {!user && isRenderedInDashboard && <LandingHero />}
+
       <div className="px-4 sm:px-0">
-        {!portfolioId && (
+        {user && !portfolioId && (
           <Alert severity="info" className="mb-4">
             Participate in the leaderboard by adding your portfolio.
           </Alert>
@@ -309,7 +299,7 @@ const Leaderboard: React.FC<{ rowLimit?: number; isCompact?: boolean }> = ({
               Add Your Portfolio
             </Button>
           )
-        ) : (
+        ) : !isRenderedInDashboard ? (
           <Button
             variant="contained"
             color="primary"
@@ -323,11 +313,11 @@ const Leaderboard: React.FC<{ rowLimit?: number; isCompact?: boolean }> = ({
           >
             Sign up to participate
           </Button>
-        )}
+        ) : null}
       </div>
 
       <div className="mt-4">
-        {isRenderedInDashboard && (
+        {isRenderedInDashboard && user && (
           <Stack
             direction={{ xs: "column", sm: "row" }}
             sx={{ borderTop: { xs: "1px solid black", sm: "none" } }}
@@ -338,17 +328,21 @@ const Leaderboard: React.FC<{ rowLimit?: number; isCompact?: boolean }> = ({
               portfolio={userPortfolio}
               rank={userRank}
             />
-            <Divider
-              orientation="vertical"
-              flexItem
-              sx={{ color: "text.secondary", height: "1px" }}
-            />
+            {topGainer && (
+              <Divider
+                orientation="vertical"
+                flexItem
+                sx={{ color: "text.secondary", height: "1px" }}
+              />
+            )}
 
-            <RankedPositionCard
-              label="Today's Top Gainer"
-              portfolio={topGainer}
-              rank={topGainerRank}
-            />
+            {topGainer && (
+              <RankedPositionCard
+                label="Today's Top Gainer"
+                portfolio={topGainer}
+                rank={topGainerRank}
+              />
+            )}
           </Stack>
         )}
       </div>
