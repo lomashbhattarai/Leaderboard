@@ -10,7 +10,27 @@ jest.mock("../api/queries/useUserSettings", () => ({
   useToggleAnonymous: () => ({ mutateAsync: jest.fn() }),
 }));
 
+const setMobileViewport = (matches: boolean) => {
+  Object.defineProperty(window, "matchMedia", {
+    writable: true,
+    value: jest.fn().mockImplementation((query) => ({
+      matches,
+      media: query,
+      onchange: null,
+      addListener: jest.fn(),
+      removeListener: jest.fn(),
+      addEventListener: jest.fn(),
+      removeEventListener: jest.fn(),
+      dispatchEvent: jest.fn(),
+    })),
+  });
+};
+
 describe("Navbar and protected navigation links", () => {
+  beforeEach(() => {
+    setMobileViewport(false);
+  });
+
   it("shows public links and login action when logged out", () => {
     renderWithProviders(<Navbar />);
 
@@ -45,5 +65,20 @@ describe("Navbar and protected navigation links", () => {
     });
 
     expect(screen.getByRole("link", { name: /admin/i })).toBeInTheDocument();
+  });
+
+  it("keeps wealth tracker visible in the mobile bottom navigation", async () => {
+    setMobileViewport(true);
+
+    renderWithProviders(<Navbar />);
+
+    expect(screen.getByRole("link", { name: /wealth/i })).toBeInTheDocument();
+    expect(screen.getByRole("link", { name: /portfolio/i })).toBeInTheDocument();
+    expect(screen.getByRole("link", { name: /stocks/i })).toBeInTheDocument();
+
+    await userEvent.click(screen.getByRole("button", { name: /more/i }));
+
+    expect(screen.getByRole("menuitem", { name: /leaderboard/i })).toBeInTheDocument();
+    expect(screen.getByRole("menuitem", { name: /journals/i })).toBeInTheDocument();
   });
 });

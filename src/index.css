@@ -59,6 +59,12 @@ code {
   color: var(--app-text);
 }
 
+@media (max-width: 599.95px) {
+  .app-shell main {
+    padding-bottom: calc(5.5rem + env(safe-area-inset-bottom));
+  }
+}
+
 ::selection {
   background: var(--app-accent-soft);
   color: var(--app-text);

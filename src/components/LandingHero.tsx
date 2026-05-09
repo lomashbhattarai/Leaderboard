@@ -223,7 +223,7 @@ const features: DemoFeature[] = [
     title: "Manage your NEPSE portfolio",
     eyebrow: "Portfolio",
     description:
-      "Import holdings, watch allocation, and understand what is carrying your returns.",
+      "Import holdings, watch allocation, add stock stop-loss rules, and understand what is carrying your returns.",
     icon: <AccountBalanceWalletIcon fontSize="small" />,
     accent: "var(--app-accent)",
     demo: <PortfolioDemo />,
