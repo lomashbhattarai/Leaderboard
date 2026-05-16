@@ -1,7 +1,6 @@
 import React from "react";
 import {
   Box,
-  Container,
   Typography,
   Stack,
   Button,
@@ -11,6 +10,9 @@ import {
   Card,
   CardContent,
   Chip,
+  Tooltip,
+  Divider,
+  Link,
 } from "@mui/material";
 import {
   Add as AddIcon,
@@ -26,9 +28,192 @@ import {
   useCreateJournal,
   useUpdateJournal,
   useDeleteJournal,
+  useStocksWithPerformance,
 } from "../api/queries";
 import { showToast } from "../utils/toast";
-import type { Journal, JournalDTO } from "../types/api";
+import { formatAmount } from "../utils/helper";
+import type { Journal, JournalDTO, StockWithPerformance } from "../types/api";
+
+const escapeRegex = (value: string) =>
+  value.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+
+const stockDetailHref = (symbol: string) =>
+  `${window.location.origin}${window.location.pathname}#/stock/${symbol}`;
+
+const findSymbolsInText = (
+  content: string,
+  stocks: StockWithPerformance[]
+) => {
+  const stockBySymbol = new Map(
+    stocks.map((stock) => [stock.symbol.toUpperCase(), stock])
+  );
+  const words = content.match(/\b[A-Z][A-Z0-9]{1,11}\b/gi) || [];
+
+  return words
+    .map((word) => word.toUpperCase())
+    .filter((symbol, index, all) => all.indexOf(symbol) === index)
+    .filter((symbol) => stockBySymbol.has(symbol));
+};
+
+const StockTooltipCard = ({
+  stock,
+}: {
+  stock?: StockWithPerformance;
+}) => {
+  if (!stock) {
+    return null;
+  }
+
+  const toFiniteNumber = (value: unknown) => {
+    if (value === null || value === undefined || value === "") {
+      return null;
+    }
+
+    const numberValue = Number(value);
+    return Number.isFinite(numberValue) ? numberValue : null;
+  };
+
+  const latestPrice = toFiniteNumber(stock.latestPrice);
+  const performance1D = toFiniteNumber(stock.performance1D);
+  const performance1W = toFiniteNumber(stock.performance1W);
+  const performance1M = toFiniteNumber(stock.performance1M);
+  const performanceColor =
+    performance1D !== null && performance1D > 0
+      ? "text-app-positive"
+      : performance1D !== null && performance1D < 0
+      ? "text-app-negative"
+      : "text-app-muted";
+
+  return (
+    <Box sx={{ minWidth: 220, p: 0.25 }}>
+      <Typography sx={{ fontSize: "0.75rem", opacity: 0.72 }}>
+        {stock.name}
+      </Typography>
+      <Typography sx={{ fontWeight: 800, fontSize: "1rem", lineHeight: 1.2 }}>
+        {stock.symbol}
+      </Typography>
+      <Divider sx={{ my: 1 }} />
+      <Stack spacing={0.75}>
+        <Stack direction="row" justifyContent="space-between" spacing={2}>
+          <Typography sx={{ fontSize: "0.75rem", opacity: 0.72 }}>
+            Current price
+          </Typography>
+          <Typography sx={{ fontSize: "0.8rem", fontWeight: 700 }}>
+            {latestPrice !== null ? formatAmount(latestPrice) : "N/A"}
+          </Typography>
+        </Stack>
+        <Stack direction="row" justifyContent="space-between" spacing={2}>
+          <Typography sx={{ fontSize: "0.75rem", opacity: 0.72 }}>
+            1D move
+          </Typography>
+          <Typography
+            className={performanceColor}
+            sx={{ fontSize: "0.8rem", fontWeight: 800 }}
+          >
+            {performance1D !== null
+              ? `${performance1D > 0 ? "+" : ""}${performance1D.toFixed(2)}%`
+              : "N/A"}
+          </Typography>
+        </Stack>
+        <Stack direction="row" justifyContent="space-between" spacing={2}>
+          <Typography sx={{ fontSize: "0.75rem", opacity: 0.72 }}>
+            1W / 1M
+          </Typography>
+          <Typography sx={{ fontSize: "0.8rem", fontWeight: 700 }}>
+            {performance1W !== null && performance1M !== null
+              ? `${performance1W.toFixed(2)}% / ${performance1M.toFixed(2)}%`
+              : "N/A"}
+          </Typography>
+        </Stack>
+      </Stack>
+    </Box>
+  );
+};
+
+const JournalContent = ({
+  content,
+  stocks,
+}: {
+  content: string;
+  stocks: StockWithPerformance[];
+}) => {
+  const symbols = findSymbolsInText(content, stocks);
+
+  if (symbols.length === 0) {
+    return <>{content}</>;
+  }
+
+  const stocksBySymbol = new Map(
+    stocks.map((stock) => [stock.symbol.toUpperCase(), stock])
+  );
+  const regex = new RegExp(
+    `\\b(${symbols.map(escapeRegex).join("|")})\\b`,
+    "gi"
+  );
+
+  return (
+    <>
+      {content.split(regex).map((part, index) => {
+        const symbol = part.toUpperCase();
+        const stock = stocksBySymbol.get(symbol);
+
+        if (!stock) {
+          return <React.Fragment key={`${part}-${index}`}>{part}</React.Fragment>;
+        }
+
+        return (
+          <Tooltip
+            key={`${part}-${index}`}
+            arrow
+            enterDelay={250}
+            title={<StockTooltipCard stock={stock} />}
+            componentsProps={{
+              tooltip: {
+                sx: {
+                  bgcolor: "background.paper",
+                  color: "text.primary",
+                  border: "1px solid",
+                  borderColor: "divider",
+                  boxShadow: 4,
+                  p: 1,
+                },
+              },
+              arrow: {
+                sx: {
+                  color: "background.paper",
+                },
+              },
+            }}
+          >
+            <Link
+              href={stockDetailHref(symbol)}
+              target="_blank"
+              rel="noopener noreferrer"
+              underline="none"
+              onClick={(event) => event.stopPropagation()}
+              sx={{
+                display: "inline",
+                px: 0,
+                py: 0,
+                mx: 0,
+                fontWeight: 800,
+                color: "var(--app-accent)",
+                backgroundColor: "transparent",
+                border: 0,
+                transition: "color 160ms ease",
+                "&:hover": {
+                  color: "var(--app-info)",
+                },
+              }}
+            >
+              {part}
+            </Link>
+          </Tooltip>
+        );
+      })}
+    </>
+  );
+};
 
 const Journals: React.FC = () => {
   const { currentTheme } = useTheme();
@@ -42,6 +227,7 @@ const Journals: React.FC = () => {
   const createJournal = useCreateJournal();
   const updateJournal = useUpdateJournal();
   const deleteJournal = useDeleteJournal();
+  const { data: stocks = [] } = useStocksWithPerformance();
 
   const handleDrawerClose = () => {
     setIsDrawerOpen(false);
@@ -125,6 +311,7 @@ const Journals: React.FC = () => {
         <JournalForm
           initialData={selectedJournal || undefined}
           onSubmit={handleJournalSubmit}
+          stocks={stocks}
         />
       </Drawer>
       <div className="min-h-screen py-12">
@@ -178,11 +365,16 @@ const Journals: React.FC = () => {
                     variant="body2"
                     className="text-sm text-app-text leading-relaxed mb-2 max-w-prose"
                   >
-                    {expandedId === journal.id
-                      ? journal.content
-                      : journal.content.length > 200
-                      ? `${journal.content.slice(0, 200)}...`
-                      : journal.content}
+                    <JournalContent
+                      content={
+                        expandedId === journal.id
+                          ? journal.content
+                          : journal.content.length > 200
+                          ? `${journal.content.slice(0, 200)}...`
+                          : journal.content
+                      }
+                      stocks={stocks}
+                    />
                   </Typography>
                   {journal.content.length > 200 && (
                     <Button

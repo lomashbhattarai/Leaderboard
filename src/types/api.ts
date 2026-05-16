@@ -290,6 +290,7 @@ export type JournalDTO = {
   journalType: 'general' | 'stock' | 'stop_loss'
   portfolioStockId?: number
   stopLossId?: number
+  stockSymbol?: string
 }
 
 export interface WatchListEntry {

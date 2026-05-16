@@ -6,6 +6,7 @@ import {
   useCreateJournal,
   useDeleteJournal,
   useJournals,
+  useStocksWithPerformance,
   useUpdateJournal,
 } from "../../api/queries";
 import { renderWithProviders } from "../../test-utils/render";
@@ -16,12 +17,14 @@ jest.mock("../../api/queries", () => ({
   useCreateJournal: jest.fn(),
   useUpdateJournal: jest.fn(),
   useDeleteJournal: jest.fn(),
+  useStocksWithPerformance: jest.fn(),
 }));
 
 const mockedUseJournals = jest.mocked(useJournals);
 const mockedUseCreateJournal = jest.mocked(useCreateJournal);
 const mockedUseUpdateJournal = jest.mocked(useUpdateJournal);
 const mockedUseDeleteJournal = jest.mocked(useDeleteJournal);
+const mockedUseStocksWithPerformance = jest.mocked(useStocksWithPerformance);
 
 describe("Journals page", () => {
   const createJournal = jest.fn();
@@ -33,6 +36,32 @@ describe("Journals page", () => {
     mockedUseCreateJournal.mockReturnValue({ mutateAsync: createJournal } as any);
     mockedUseUpdateJournal.mockReturnValue({ mutateAsync: updateJournal } as any);
     mockedUseDeleteJournal.mockReturnValue({ mutateAsync: deleteJournal } as any);
+    mockedUseStocksWithPerformance.mockReturnValue({
+      data: [
+        {
+          id: 11,
+          name: "Nabil Bank Limited",
+          symbol: "NABIL",
+          createdAt: "2024-01-01",
+          updatedAt: "2024-01-01",
+          latestPrice: 520,
+          performance1D: 1.2,
+          performance1W: 3.4,
+          performance1M: 5.6,
+        },
+        {
+          id: 12,
+          name: "NIC Asia Bank Limited",
+          symbol: "NICA",
+          createdAt: "2024-01-01",
+          updatedAt: "2024-01-01",
+          latestPrice: null,
+          performance1D: null,
+          performance1W: null,
+          performance1M: null,
+        },
+      ],
+    } as any);
   });
 
   it("renders journal list", () => {
@@ -41,7 +70,11 @@ describe("Journals page", () => {
     expect(screen.getByTestId("journal-list")).toBeInTheDocument();
     expect(screen.getByTestId("journal-row")).toBeInTheDocument();
     expect(screen.getByText("Market Review")).toBeInTheDocument();
-    expect(screen.getByText(/nabil strength/i)).toBeInTheDocument();
+    expect(screen.getByRole("link", { name: "NABIL" })).toHaveAttribute(
+      "href",
+      expect.stringContaining("#/stock/NABIL")
+    );
+    expect(screen.getByText(/strength and/i)).toBeInTheDocument();
   });
 
   it("can submit a journal entry with mocked mutation", async () => {
